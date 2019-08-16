@@ -1,0 +1,68 @@
+package io.siddhi.langserver.completion;
+
+import io.siddhi.langserver.completion.providers.DefinitionStreamContextProvider;
+import io.siddhi.langserver.completion.spi.LSCompletionProvider;
+import io.siddhi.query.compiler.SiddhiQLParser;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ServiceLoader;
+
+public class LSCompletionProviderFactory  {
+    private static final LSCompletionProviderFactory INSTANCE = new LSCompletionProviderFactory();
+
+    private Map<Class, LSCompletionProvider> providers;
+
+    private boolean isInitialized = false;
+
+    private LSCompletionProviderFactory() {
+        initiate();
+    }
+
+    public static LSCompletionProviderFactory getInstance() {
+        return INSTANCE;
+    }
+
+    public void initiate() {
+        if (isInitialized) {
+            return;
+        }
+        this.providers = new HashMap<>();
+        ServiceLoader<LSCompletionProvider> providerServices = ServiceLoader.load(LSCompletionProvider.class);
+        for (LSCompletionProvider provider : providerServices) {
+           if (provider != null) {
+               for (Class attachmentPoint : provider.getAttachmentPoints()) {
+                   this.providers.put(attachmentPoint, provider);
+                }
+            }
+        }
+        //this.providers.put(SiddhiQLParser.Definition_streamContext.class,new DefinitionStreamContextProvider());
+        isInitialized = true;
+    }
+    public void register(LSCompletionProvider provider) {
+        for (Class attachmentPoint : provider.getAttachmentPoints()) {
+            this.providers.put(attachmentPoint, provider);
+        }
+    }
+    public void unregister(LSCompletionProvider provider) {
+        for (Class attachmentPoint : provider.getAttachmentPoints()) {
+            this.providers.remove(attachmentPoint, provider);
+        }
+    }
+
+    public Map<Class, LSCompletionProvider> getProviders() {
+        return this.providers;
+    }
+
+
+    public LSCompletionProvider getProvider(Class key) {
+        return this.providers.get(key);
+    }
+
+
+
+
+}

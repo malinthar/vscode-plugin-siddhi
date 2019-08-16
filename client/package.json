@@ -1,0 +1,70 @@
+{
+  "name": "siddhi-plugin",
+  "version": "0.0.1",
+  "publisher": "Malintha1996",
+  "description": "VScode plugin for siddhi",
+  "engines": {
+    "vscode": "^1.35.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "siddhi",
+      "properties": {
+        "javahome": {
+          "type": "string",
+          "default": "",
+          "description": "Specifies the path to the java home directory"
+        }
+      }
+    },
+    "languages": [
+      {
+        "id": "siddhi",
+        "aliases": [
+          "siddhi"
+        ],
+        "extensions": [
+          ".siddhi"
+        ]
+      }
+    ]
+  },
+  "activationEvents": [
+    "onLanguage:siddhi"
+  ],
+  "main": "out/extension",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "build:grammar": "tsc -p syntaxes/build && node syntaxes/build/build.js",
+    "test": "npm run compile && node ./node_modules/vscode/bin/test",
+    "clean": "rimraf server-build target",
+    "package": "npm run compile && vsce package"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Malintha1996/Siddhi-Plugin.git"
+  },
+  "author": "Malintha1996",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Malintha1996/Siddhi-Plugin/issues"
+  },
+  "homepage": "https://github.com/Malintha1996/Siddhi-Plugin#readme",
+  "devDependencies": {
+    "@types/node": "^12.0.12",
+    "typescript": "^3.5.2",
+    "vsce": "^1.64.0",
+    "vscode": "^1.1.5",
+    "tslint": "^5.8.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^4.1.4"
+  }
+}

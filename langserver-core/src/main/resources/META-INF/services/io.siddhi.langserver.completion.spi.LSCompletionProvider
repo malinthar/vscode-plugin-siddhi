@@ -1,0 +1,7 @@
+io.siddhi.langserver.completion.providers.AttributeTypeContextProvider
+io.siddhi.langserver.completion.providers.DefinitionStreamContextProvider
+io.siddhi.langserver.completion.providers.NameContextProvider
+io.siddhi.langserver.completion.providers.TriggerNameContextProvider
+io.siddhi.langserver.completion.providers.AttributeNameContextProvider
+io.siddhi.langserver.completion.providers.IdContextProvider
+io.siddhi.langserver.completion.providers.DefinitionAggregationContextProvider

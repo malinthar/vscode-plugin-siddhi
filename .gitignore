@@ -1,0 +1,37 @@
+*.class
+*.log
+
+# Package Files #
+*.jar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.idea
+*.iml
+*.ipr
+*.iws
+
+# generated files
+target
+results
+*.vsix
+
+# mac
+.DS_Store
+
+.classpath
+.project
+.settings
+.vscode
+.vscode-test
+
+#directories
+client/out
+client/.vscode-test
+client/node_modules
+node_modules/
+client/.vscode/
+client/node_modules/
+client/.vscode-test/
+
