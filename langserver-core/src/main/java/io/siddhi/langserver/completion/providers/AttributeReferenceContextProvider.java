@@ -1,6 +1,7 @@
 package io.siddhi.langserver.completion.providers;
 
 import io.siddhi.langserver.LSContext;
+import io.siddhi.langserver.completion.snippet.SinppetGenerator;
 import io.siddhi.langserver.completion.snippet.Snippet;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -18,21 +19,8 @@ public class AttributeReferenceContextProvider extends LSCompletionProvider {
         this.attachmentPoints.add(SiddhiQLParser.Attribute_referenceContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
-        List<CompletionItem> completionItems=new ArrayList<>();
-        ParserRuleContext currcontext=lsContext.getCurrentContext();
-        int st=currcontext.invokingState;
-        Snippet snippet=new Snippet();
-
-        ((SiddhiQLParser.Attribute_referenceContext)lsContext.getCurrentContext()).attribute_name();
-        List<String> refs= (ArrayList)snippet.getAttributeReference(lsContext);
-        for(String atr:refs){
-            CompletionItem completionItem = new CompletionItem();
-            completionItem.setInsertText(atr);
-            completionItem.setLabel(atr);
-            completionItem.setKind(CompletionItemKind.Text);
-            completionItem.setDetail("AttributeTypeContext");
-            completionItems.add(completionItem);
-        }
-        return completionItems;
+        SinppetGenerator sinppetGenerator=new SinppetGenerator();
+        return (ArrayList)sinppetGenerator.getSnippets((SiddhiQLParser.Attribute_referenceContext) lsContext.getCurrentContext(),lsContext);
     }
 }
+

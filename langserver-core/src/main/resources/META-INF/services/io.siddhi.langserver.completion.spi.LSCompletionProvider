@@ -10,6 +10,7 @@ io.siddhi.langserver.completion.providers.AnnotationElementContextProvider
 io.siddhi.langserver.completion.providers.AttributeReferenceContextProvider
 io.siddhi.langserver.completion.providers.QueryInputContextProvider
 io.siddhi.langserver.completion.providers.QuerySectionContextProvider
+io.siddhi.langserver.completion.providers.QueryContextProvider
 
 
 

@@ -20,13 +20,6 @@ public class AnnotationElementContextProvider extends LSCompletionProvider {
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
         List<CompletionItem> completionItems=new ArrayList<>();
-        ParserRuleContext currcontext=lsContext.getCurrentContext();
-        int st=currcontext.invokingState;
-        IntervalSet expectedtokens=SiddhiQLParser._ATN.getExpectedTokens(st,currcontext);
-        TerminalNode node=currcontext.getToken(expectedtokens.get(0),0);
-        //ATNState stt=SiddhiQLParser._ATN.
-        //IntervalSet  nexttokens=SiddhiQLParser._ATN.nextTokens(st);
-
         Snippet snippet=new Snippet();
         String[] atrtypes= snippet.getAnnotationElements(lsContext);
         for(String atr:atrtypes){
@@ -34,7 +27,7 @@ public class AnnotationElementContextProvider extends LSCompletionProvider {
             completionItem.setInsertText(atr);
             completionItem.setLabel(atr);
             completionItem.setKind(CompletionItemKind.Text);
-            completionItem.setDetail("AttributeTypeContext");
+            completionItem.setDetail("AnnotationElementContext");
             completionItems.add(completionItem);
         }
         return completionItems;

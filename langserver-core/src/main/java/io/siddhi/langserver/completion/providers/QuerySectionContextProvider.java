@@ -1,6 +1,7 @@
 package io.siddhi.langserver.completion.providers;
 
 import io.siddhi.langserver.LSContext;
+import io.siddhi.langserver.completion.snippet.SinppetGenerator;
 import io.siddhi.langserver.completion.snippet.Snippet;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -16,18 +17,7 @@ public class QuerySectionContextProvider extends LSCompletionProvider {
         this.attachmentPoints.add(SiddhiQLParser.Query_sectionContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
-        List<CompletionItem> completionItems=new ArrayList<>();
-        ParserRuleContext currcontext=lsContext.getCurrentContext();
-        Snippet snippet=new Snippet();
-        List<String> refs= (ArrayList)snippet.getQuerySection(lsContext);
-        for(String atr:refs){
-            CompletionItem completionItem = new CompletionItem();
-            completionItem.setInsertText(atr);
-            completionItem.setLabel(atr);
-            completionItem.setKind(CompletionItemKind.Text);
-            completionItem.setDetail("QuerySectionContext");
-            completionItems.add(completionItem);
-        }
-        return completionItems;
+        SinppetGenerator sinppetGenerator=new SinppetGenerator();
+        return (ArrayList)sinppetGenerator.getSnippets((SiddhiQLParser.Query_sectionContext) lsContext.getCurrentContext(),lsContext);
     }
 }

@@ -9,15 +9,22 @@ import io.siddhi.query.compiler.internal.ErrorNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Snippet {
     private String[] ruleNames=SiddhiQLLexer.ruleNames;
     private ContextTreeVisitor visitor=new ContextTreeVisitor();
-    public String[] getAttributetype(LSContext lsContext) {
-        String types=((ErrorNode)lsContext.getCurrentErrorNode()).getExpectedSymbols();
-        types=types.toLowerCase();
-        String[] atrtypes = types.split("\\s*,\\s*");
-        return atrtypes;
+    public Object getDefalutKeyWords(LSContext lsContext){
+
+        String defaultKeyWordstring=(((ErrorNode)lsContext.getCurrentErrorNode()).getExpectedSymbols()).replaceAll("\\{", "").replaceAll("\\}", "");;
+        defaultKeyWordstring=defaultKeyWordstring.toLowerCase();
+        String[] defualtKeyWords = defaultKeyWordstring.split("\\s*,\\s*");
+
+        List<String> list = new ArrayList<>(Arrays.asList(defualtKeyWords));
+        return list;
+    }
+    public Object getAttributetype(LSContext lsContext) {
+        return getDefalutKeyWords(lsContext);
     }
     public String[] getAnnotationElements(LSContext lsContext){
         String[] arr=this.ruleNames;
@@ -33,7 +40,11 @@ public class Snippet {
             }
 
         }
-        return refs;
+        if(refs.size()!=0)
+         return refs;
+        else{
+            return this.getDefalutKeyWords(lsContext);
+        }
     }
     public Object getQueryInput(LSContext lsContext){
         List<String> instreams=new ArrayList<>();
@@ -41,7 +52,12 @@ public class Snippet {
         for(ParserRuleContext ctx:sourceContexts){
             instreams.add(((SiddhiQLParser.SourceContext) ctx).getText());
         }
-        return instreams;
+        if(instreams.size()!=0){
+            return instreams;
+        }
+        else{
+            return this.getDefalutKeyWords(lsContext);
+        }
 
     }
     public Object getQuerySection(LSContext lsContext){
@@ -50,7 +66,14 @@ public class Snippet {
         for(ParserRuleContext ctx:attributeContexts){
             refs.add(ctx.getText());
         }
-        return refs;
+        if(refs.size()!=0)
+            return refs;
+        else{
+            return this.getDefalutKeyWords(lsContext);
+        }
+    }
+    public Object getQueryContext(LSContext lsContext){
+        return this.getDefalutKeyWords(lsContext);
     }
 
 }
