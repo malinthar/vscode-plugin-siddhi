@@ -20,7 +20,7 @@ export function activate(context:ExtensionContext){
    //args to server options
    const args: string[] = ['-cp', classPath];
 
-   //process.env.LSDEBUG="true";
+   process.env.LSDEBUG="true";
    
    //'-Xdebug','-Xnoagent','-Djava.compiler=NONE','-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005,quiet=y',
    if (process.env.LSDEBUG === "true") {

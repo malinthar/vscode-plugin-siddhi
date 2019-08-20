@@ -80,9 +80,7 @@ public class CompletionUtil
        SiddhiCompiler compiler=new SiddhiCompiler();
        LSContext.getInstance().setPosition(position);
        LSContext.getInstance().setSourceContent(sourceContent);
-      
        ContextTreeGenerator.getInstance().generateContextTree();
-
        LSCompletionProviderFactory factory=LSCompletionProviderFactory.getInstance();
        Map<Class,LSCompletionProvider> providers=new HashMap<>();
        providers=factory.getProviders();
@@ -92,7 +90,7 @@ public class CompletionUtil
            return completionitems;
        }
        else{
-           return null;
+           return completionitems;
        }
 
 

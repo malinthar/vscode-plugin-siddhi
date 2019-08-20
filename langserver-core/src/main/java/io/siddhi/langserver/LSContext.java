@@ -11,7 +11,7 @@ import java.util.List;
 public class LSContext {
     private  int[] position;
     private  List<Object> parserContextTree=new ArrayList<>();
-    private  ParserRuleContext currentContext;
+    private CurrentContext currentContext=new CurrentContext();
     private  String sourceContent;
     private static LSContext INSTANCE=new LSContext();
 
@@ -34,11 +34,18 @@ public class LSContext {
     }
 
     public void setCurrentParserContext(Object currentContext){
-        this.currentContext=(ParserRuleContext)currentContext;
+        this.currentContext.context=(ParserRuleContext)currentContext;
+
+    }
+    public void setCurrentErrorNode(Object currentErrorNode){
+        this.currentContext.errorNode=(ParserRuleContext)currentErrorNode;
     }
 
     public ParserRuleContext getCurrentContext(){
-        return this.currentContext;
+        return this.currentContext.context;
+    }
+    public ParserRuleContext getCurrentErrorNode(){
+        return this.currentContext.errorNode;
     }
 
     public static LSContext getInstance(){
@@ -53,6 +60,10 @@ public class LSContext {
     public String getSourceContent(){
 
         return this.sourceContent;
+    }
+    public  class CurrentContext{
+        ParserRuleContext context;
+        ParserRuleContext errorNode;
     }
 }
 

@@ -39,7 +39,6 @@ public class LSCompletionProviderFactory  {
                 }
             }
         }
-        //this.providers.put(SiddhiQLParser.Definition_streamContext.class,new DefinitionStreamContextProvider());
         isInitialized = true;
     }
     public void register(LSCompletionProvider provider) {

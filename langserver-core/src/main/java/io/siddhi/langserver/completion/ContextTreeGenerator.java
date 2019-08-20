@@ -34,7 +34,8 @@ public class ContextTreeGenerator {
         else{
             lsContext.setParserContextTree(Ptree);
             Ptree=(ArrayList)Ptree;
-            lsContext.setCurrentParserContext(((ArrayList) Ptree).get(((ArrayList) Ptree).size()-1));
+            lsContext.setCurrentParserContext(((ArrayList) Ptree).get(((ArrayList) Ptree).size()-2));
+            lsContext.setCurrentErrorNode(((ArrayList) Ptree).get(((ArrayList) Ptree).size()-1));
         }
 
     }

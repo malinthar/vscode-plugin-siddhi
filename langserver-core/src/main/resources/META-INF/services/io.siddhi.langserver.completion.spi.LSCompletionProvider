@@ -1,3 +1,4 @@
+io.siddhi.langserver.completion.providers.AppAnnotationContextProvider
 io.siddhi.langserver.completion.providers.AttributeTypeContextProvider
 io.siddhi.langserver.completion.providers.DefinitionStreamContextProvider
 io.siddhi.langserver.completion.providers.NameContextProvider
@@ -5,3 +6,11 @@ io.siddhi.langserver.completion.providers.TriggerNameContextProvider
 io.siddhi.langserver.completion.providers.AttributeNameContextProvider
 io.siddhi.langserver.completion.providers.IdContextProvider
 io.siddhi.langserver.completion.providers.DefinitionAggregationContextProvider
+io.siddhi.langserver.completion.providers.AnnotationElementContextProvider
+io.siddhi.langserver.completion.providers.AttributeReferenceContextProvider
+io.siddhi.langserver.completion.providers.QueryInputContextProvider
+io.siddhi.langserver.completion.providers.QuerySectionContextProvider
+
+
+
+
