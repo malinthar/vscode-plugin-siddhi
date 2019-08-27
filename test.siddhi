@@ -1,9 +1,11 @@
-@app:n
+@app:name('Temperature-Analytics')
 define stream TempStream (deviceID long, roomNo int,temp double);
 @name('Avg5im')
 from TempStream#window.time(5 min)
-select roomNo, avg(temp) as avgTemp
-group by 
+select 
+
+
+
 
 
 

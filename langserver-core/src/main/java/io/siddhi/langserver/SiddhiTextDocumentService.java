@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
     /**
-     * Swagger Text Document Service.
+     * SiddhiQL Text Document Service
      */
     public class SiddhiTextDocumentService implements TextDocumentService {
 

@@ -3,39 +3,35 @@ package io.siddhi.langserver.completion;
 import io.siddhi.langserver.LSContext;
 import io.siddhi.query.compiler.SiddhiCompiler;
 import io.siddhi.query.compiler.SiddhiQLParser;
+import io.siddhi.query.compiler.internal.ErrorNode;
 import io.siddhi.query.compiler.internal.SiddhiQLLangServerBaseVisitorImpl;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ContextTreeGenerator {
-    private static  ContextTreeGenerator INSTANCE=new ContextTreeGenerator();
+    public static final  ContextTreeGenerator INSTANCE=new ContextTreeGenerator();
     private static SiddhiCompiler compiler=new SiddhiCompiler();
     private static SiddhiQLLangServerBaseVisitorImpl visitor=new SiddhiQLLangServerBaseVisitorImpl();
     private ContextTreeGenerator(){
 
     }
-    public static ContextTreeGenerator getInstance(){
-        return INSTANCE;
-    }
     public void generateContextTree(){
-        LSContext lsContext=LSContext.getInstance();
-        Object Ptree=compiler.parse(lsContext.getSourceContent());
-        if(Ptree instanceof SiddhiQLParser.ParseContext) {
+        LSContext lsContext=LSContext.INSTANCE;
+        Object parseTree=compiler.parse(lsContext.getSourceContent());
+        if(parseTree instanceof SiddhiQLParser.ParseContext) {
             visitor.setPosition(lsContext.getPosition());
-            Object outputarray=visitor.visit((ParseTree) Ptree);
-            ArrayList<Object>  ctxarray= (ArrayList) (outputarray);
-            lsContext.setParserContextTree(ctxarray);
-            lsContext.setCurrentParserContext((ParserRuleContext)ctxarray.get(ctxarray.size()-2));
+            Map<String,Object> contextTree=(HashMap)visitor.visit((ParseTree) parseTree);
+            lsContext.setContextTree(contextTree);
+            lsContext.setCurrentParserContext((ParserRuleContext)((TerminalNodeImpl)contextTree.get(TerminalNodeImpl.class.toString())).parent);
         }
         else{
-            lsContext.setParserContextTree(Ptree);
-            Ptree=(ArrayList)Ptree;
-            lsContext.setCurrentParserContext(((ArrayList) Ptree).get(((ArrayList) Ptree).size()-2));
-            lsContext.setCurrentErrorNode(((ArrayList) Ptree).get(((ArrayList) Ptree).size()-1));
+            lsContext.setContextTree((HashMap)parseTree);
+            lsContext.setCurrentParserContext((ParserRuleContext)((ErrorNode)(((HashMap)parseTree).get(ErrorNode.class.toString()))).parent);
+            lsContext.setCurrentErrorNode(((HashMap) parseTree).get(ErrorNode.class.toString()));
         }
 
     }

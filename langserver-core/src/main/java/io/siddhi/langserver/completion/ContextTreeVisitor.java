@@ -1,20 +1,20 @@
 package io.siddhi.langserver.completion;
-import io.siddhi.query.compiler.SiddhiQLParser;
+
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
+
 
 import java.util.ArrayList;
 import java.util.List;
 public class ContextTreeVisitor {
     private List<ParserRuleContext> ruleContexts;
     private Class context;
+    public static final ContextTreeVisitor INSTANCE=new ContextTreeVisitor();
     public List<ParserRuleContext> findRuleContexts(ParserRuleContext rootContext, Class context){
           ruleContexts=new ArrayList<>();
           this.context=context;
           if(rootContext.getChildCount()!=0){
               visitChildren(rootContext);
           }
-
           return this.ruleContexts;
     }
     public void visitChildren(ParserRuleContext ctx){

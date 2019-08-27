@@ -9,12 +9,12 @@ import org.eclipse.lsp4j.CompletionItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnnotationContextProvider extends LSCompletionProvider{
-    public AnnotationContextProvider(){
-        this.attachmentPoints.add(SiddhiQLParser.App_annotationContext.class);
+public class OutputAttributeContextProvider  extends LSCompletionProvider {
+    public OutputAttributeContextProvider(){
+        this.attachmentPoints.add(SiddhiQLParser.Output_attributeContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
         SinppetProvider sinppetProvider=new SinppetProvider();
-        return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.AnnotationContext) lsContext.getCurrentContext(),lsContext);
+        return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.Output_attributeContext) lsContext.getCurrentContext(),lsContext);
     }
 }

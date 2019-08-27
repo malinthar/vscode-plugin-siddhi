@@ -1,57 +1,50 @@
 package io.siddhi.langserver;
 
-
-import io.siddhi.langserver.completion.ContextTreeGenerator;
-import io.siddhi.query.compiler.internal.SiddhiQLLangServerBaseVisitorImpl;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ParseTree;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 public class LSContext {
-    private  int[] position;
-    private  List<Object> parserContextTree=new ArrayList<>();
-    private CurrentContext currentContext=new CurrentContext();
+    private  int[] position={1,0};
+    private  Map<String,Object> ContextTree=new HashMap<>();
+    private CurrentContext currentParserContext=new CurrentContext();
     private  String sourceContent;
-    private static LSContext INSTANCE=new LSContext();
+    public static final LSContext INSTANCE=new LSContext();
 
-    public void setPosition(int[] position) {
-
-        this.position = position;
+    public void setPosition(int line,int col) {
+        this.position[0]=line;
+        this.position[1]=col;
     }
-
 
     public int[] getPosition() {
         return position;
     }
 
-    public void setParserContextTree(Object tree) {
-       this.parserContextTree=(ArrayList)tree;
+    public void setContextTree(Map<String,Object> tree) {
+       this.ContextTree=tree;
     }
 
-    public List<Object> getParserContextTree(){
-        return this.parserContextTree;
+    public Map<String,Object> getContextTree(){
+        return this.ContextTree;
     }
 
     public void setCurrentParserContext(Object currentContext){
-        this.currentContext.context=(ParserRuleContext)currentContext;
+        this.currentParserContext.context=(ParserRuleContext)currentContext;
 
     }
     public void setCurrentErrorNode(Object currentErrorNode){
-        this.currentContext.errorNode=(ParserRuleContext)currentErrorNode;
+        this.currentParserContext.errorNode=(ParserRuleContext)currentErrorNode;
     }
 
     public ParserRuleContext getCurrentContext(){
-        return this.currentContext.context;
+        return this.currentParserContext.context;
     }
     public ParserRuleContext getCurrentErrorNode(){
-        return this.currentContext.errorNode;
+        return this.currentParserContext.errorNode;
     }
 
-    public static LSContext getInstance(){
-
-        return INSTANCE;
-    }
 
     public void setSourceContent(String sourceContent){
         this.sourceContent=sourceContent;

@@ -1,10 +1,11 @@
 package io.siddhi.langserver.completion.providers;
 
 import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.snippet.SinppetGenerator;
+
+import io.siddhi.langserver.completion.snippet.SinppetProvider;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
-import io.siddhi.langserver.completion.snippet.Snippet;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -24,8 +25,8 @@ public class AttributeTypeContextProvider extends LSCompletionProvider {
         this.attachmentPoints.add(SiddhiQLParser.Attribute_typeContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
-        SinppetGenerator sinppetGenerator=new SinppetGenerator();
-        return (ArrayList)sinppetGenerator.getSnippets((SiddhiQLParser.Attribute_typeContext) lsContext.getCurrentContext(),lsContext);
+        SinppetProvider sinppetProvider=new SinppetProvider();
+        return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.Attribute_typeContext) lsContext.getCurrentContext(),lsContext);
     }
 }
 

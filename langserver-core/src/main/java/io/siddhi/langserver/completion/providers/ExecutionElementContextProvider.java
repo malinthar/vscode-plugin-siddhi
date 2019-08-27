@@ -15,7 +15,6 @@ public class ExecutionElementContextProvider extends LSCompletionProvider {
         this.attachmentPoints.add(SiddhiQLParser.Execution_elementContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
-        Object tree=lsContext.getParserContextTree();
         ParserRuleContext currctx=lsContext.getCurrentContext();
         CompletionItem completionItem = new CompletionItem();
         completionItem.setInsertText(currctx.getClass().toString());

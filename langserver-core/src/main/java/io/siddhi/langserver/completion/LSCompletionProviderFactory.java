@@ -1,12 +1,6 @@
 package io.siddhi.langserver.completion;
 
-import io.siddhi.langserver.completion.providers.DefinitionStreamContextProvider;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
-import io.siddhi.query.compiler.SiddhiQLParser;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;

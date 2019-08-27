@@ -18,7 +18,6 @@ public class DefinitionStreamContextProvider extends LSCompletionProvider {
         this.attachmentPoints.add(Definition_streamContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
-        Object tree=lsContext.getParserContextTree();
         ParserRuleContext currctx=lsContext.getCurrentContext();
         CompletionItem completionItem = new CompletionItem();
         completionItem.setInsertText(currctx.getClass().toString());
