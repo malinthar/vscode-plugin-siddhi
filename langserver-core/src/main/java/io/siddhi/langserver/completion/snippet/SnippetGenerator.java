@@ -35,6 +35,7 @@ public class SnippetGenerator {
     }
     /**attribute type context snippets*/
     public Object getAttributetype(LSContext lsContext) {
+        SnippetBlock.getBuiltInFuncions();
         return SnippetBlock.getAttributeTypeContextKWs();
     }
     /**annotation element context snippets*/
@@ -104,6 +105,7 @@ public class SnippetGenerator {
         List<String[]> snips=new ArrayList<>();
         snips.addAll((ArrayList)this.getQuerySection(lsContext));
         snips.addAll(SnippetBlock.getQueryContextKWs());
+        SnippetBlock.getBuiltInFuncions();
         return snips;
     }
     /**source context snippets*/

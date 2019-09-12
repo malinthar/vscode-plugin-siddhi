@@ -13,33 +13,32 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 
-/* To launche the language server 
+/** To launch the language server
    Language server is imported
-   It provides the capabilities it has
+   It provides its capabilities
 */
 public class StdioLauncher {
     public static void main(String args[]) throws InterruptedException, ExecutionException {
-        //Launcher is started by the trigger event of client
+        /**Launcher is started by the trigger event of client*/
         LogManager.getLogManager().reset();
         Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
         globalLogger.setLevel(Level.OFF);
-       // keyboard inputs System.in and System.out
+       /**stdio used as the transport*/
         startServer(System.in, System.out);
     }
 
-    public static void startServer(InputStream in, OutputStream out) throws InterruptedException, ExecutionException {
+    private static void startServer(InputStream in, OutputStream out) throws InterruptedException, ExecutionException {
         /**create server instance*/
         SiddhiLanguageServer server = new SiddhiLanguageServer();
         /**create server launcher (wire end points ).i.e:returns the initialted Builder<LanguageClient> which wires up all
         components for JSON-RPC communication.*/ 
-        Launcher<LanguageClient> l = LSPLauncher.createServerLauncher(server, in, out);
+        Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(server, in, out);
         /**client instance*/
-        LanguageClient client = l.getRemoteProxy();
+        LanguageClient client = launcher.getRemoteProxy();
         /**connect the server and client/set the stream up*/
         server.connect(client);
-        //;i.e: Future Object(CompletableFuture)for asyncrhonous process is returned
-        Future<?> startListening = l.startListening();
-        //returns the resul from the actual computation occurs on the thread
+        /**promise*/
+        Future<?> startListening = launcher.startListening();
         startListening.get();
     }
 

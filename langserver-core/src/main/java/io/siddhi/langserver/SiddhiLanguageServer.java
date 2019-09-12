@@ -1,6 +1,6 @@
 package io.siddhi.langserver;
 
-import org.eclipse.lsp4j.CompletionOptions;
+import  org.eclipse.lsp4j.CompletionOptions;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.ServerCapabilities;
@@ -11,11 +11,9 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import java.util.concurrent.CompletableFuture;
 
-
-
 public class SiddhiLanguageServer implements LanguageServer{
 
-    /**client returned by the launcher*/
+    /**reference to client returned by the launcher*/
     private LanguageClient client;
     /**from textDocumentService interface of lsp4j*/
     private SiddhiTextDocumentService textDocumentService;
@@ -31,10 +29,6 @@ public class SiddhiLanguageServer implements LanguageServer{
     public void connect(LanguageClient languageClient) {
         this.client = languageClient;
     }
-
-
-    /**abstarct method implementations*/
-
 
     //capabilities of the server 
     @Override

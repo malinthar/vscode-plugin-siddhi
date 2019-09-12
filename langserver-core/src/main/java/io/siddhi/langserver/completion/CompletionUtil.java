@@ -12,10 +12,9 @@ import io.siddhi.langserver.LSContext;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 
-/** */
+/** completionUtil class*/
 
 public class CompletionUtil
 {
@@ -26,20 +25,18 @@ public class CompletionUtil
        Path path = Paths.get(new URI(completionParams.getTextDocument().getUri()));
        String sourceContent = DocumentManagerImpl.getInstance().getFileContent(path);
        Position cursorPosition = completionParams.getPosition();
-       List<CompletionItem> completionitems=new ArrayList<>();
+       List<CompletionItem> completionItems=new ArrayList<>();
 
        /** retrieve the completions from siddhi completion engine */
        LSContext.INSTANCE.setPosition(cursorPosition.getLine()+1,cursorPosition.getCharacter());
        LSContext.INSTANCE.setSourceContent(sourceContent);
        ContextTreeGenerator.INSTANCE.generateContextTree();
-       LSCompletionProviderFactory factory=LSCompletionProviderFactory.getInstance();
-       Map<Class,LSCompletionProvider> providers=new HashMap<>();
-       providers=factory.getProviders();
+       Map<Class,LSCompletionProvider> providers=LSContext.INSTANCE.factory.getProviders();
        LSCompletionProvider contextProvider=providers.get(LSContext.INSTANCE.getCurrentContext().getClass());
        if(contextProvider!=null) {
-           completionitems = contextProvider.getCompletions(LSContext.INSTANCE);
+           completionItems = contextProvider.getCompletions(LSContext.INSTANCE);
        }
-       return completionitems;
+       return completionItems;
 
 
    }

@@ -1,7 +1,7 @@
 package io.siddhi.langserver.completion.providers;
 
 import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.snippet.SinppetProvider;
+import io.siddhi.langserver.completion.snippet.SnippetProvider;
 import io.siddhi.langserver.completion.snippet.SnippetGenerator;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -23,7 +23,7 @@ public class AppAnnotationContextProvider extends LSCompletionProvider {
         this.attachmentPoints.add(SiddhiQLParser.App_annotationContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
-         SinppetProvider sinppetProvider=new SinppetProvider();
+         SnippetProvider sinppetProvider=new SnippetProvider();
          return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.App_annotationContext) lsContext.getCurrentContext(),lsContext);
     }
 

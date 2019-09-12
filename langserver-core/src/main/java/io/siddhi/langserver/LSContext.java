@@ -1,5 +1,7 @@
 package io.siddhi.langserver;
 
+import io.siddhi.langserver.completion.LSCompletionProviderFactory;
+import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import org.antlr.v4.runtime.ParserRuleContext;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +14,7 @@ public class LSContext {
     private CurrentContext currentParserContext=new CurrentContext();
     private  String sourceContent;
     public static final LSContext INSTANCE=new LSContext();
+    public static final LSCompletionProviderFactory factory=LSCompletionProviderFactory.getInstance();
 
     public void setPosition(int line,int col) {
         this.position[0]=line;

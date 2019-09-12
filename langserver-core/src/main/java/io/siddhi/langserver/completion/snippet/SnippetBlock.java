@@ -1,6 +1,14 @@
 package io.siddhi.langserver.completion.snippet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.langserver.completion.snippet.util.SnippetProviderUtil;
+import io.siddhi.langserver.completion.snippet.util.metadata.MetaData;
+
 public class SnippetBlock {
     /**snippets*/
     public static final String[] APP_ANNOTATION={"@app:name('SiddhiAppName')","app-annotation","@app:name($name)","@app"};
@@ -181,5 +189,14 @@ public class SnippetBlock {
         kws.add(FUNC_SUM);
         return kws;
     }
+    public static void getBuiltInFuncions(){
+        SiddhiManager manger=new SiddhiManager();
+        Map<String, Class> extensionsMap = manger.getExtensions();
+        //Map<String,MetaData> metadataMap=generateExtensionsMetaData(extensionsMap);
+        MetaData metaData=SnippetProviderUtil.getInBuiltProcessorMetaData();
+        Map<String, MetaData> metaDataMap =SnippetProviderUtil.getExtensionProcessorMetaData();
+        String app="tets";
+    }
+
 }
 

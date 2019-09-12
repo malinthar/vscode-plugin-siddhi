@@ -1,7 +1,7 @@
 package io.siddhi.langserver.completion.providers;
 
 import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.snippet.SinppetProvider;
+import io.siddhi.langserver.completion.snippet.SnippetProvider;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -16,7 +16,7 @@ public class QueryInputContextProvider extends LSCompletionProvider {
         this.attachmentPoints.add(SiddhiQLParser.Query_inputContext.class);
     }
     public List<CompletionItem> getCompletions(LSContext lsContext){
-        SinppetProvider sinppetProvider=new SinppetProvider();
+        SnippetProvider sinppetProvider=new SnippetProvider();
         return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.Query_inputContext) lsContext.getCurrentContext(),lsContext);
     }
 }

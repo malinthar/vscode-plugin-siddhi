@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Implementation of Swagger Workspace Service.
+ * Implementation of LS$J Workspace Service
  */
 public class SiddhiWorkspaceService implements WorkspaceService {
     @Override

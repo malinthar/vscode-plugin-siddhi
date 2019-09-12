@@ -7,7 +7,7 @@ import org.eclipse.lsp4j.CompletionItemKind;
 import java.util.ArrayList;
 import  java.util.List;
 
-public class SinppetProvider {
+public class SnippetProvider {
     public Object getSnippets(SiddhiQLParser.QueryContext context, LSContext lsContext){
         SnippetGenerator snippet=new SnippetGenerator();
         List<String[]> snips= (ArrayList)snippet.getQueryContext(lsContext);
