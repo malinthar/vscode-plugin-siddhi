@@ -1,0 +1,44 @@
+@App:name(name ='testApp',var = "home" )
+@App:description(description = "Test app for syntax highlighting feature")
+
+@source(type="kafka", @info(fun="vfiv"))
+define stream  TempStream (roomNo string,rackNo int,temp float);
+
+@Store(type = "rdbms",jdbc.game.jak.url = "jdbc:mysql://localhost:3306/production?useSSL=false",
+	username = "user",
+	password = "password",
+	jdbc.driver.name = "com.mysql.jdbc.Driver")
+  
+@index("roomNo")
+define table TemperatureTable (roomNo string,rackNo int,temp float);
+
+define window TempWindow (roomNo string,rackNo int,temp float) str:func1(func('cvffv'),234344,4445)  output current events;
+
+define function  vfj [Yaml] {
+   var name = data[0];
+   var amount = data[1];
+   var res = "There are " + amount + "kg of " + name + " in the store";
+
+ return res;
+}; 
+define trigger trigger1 at every 1 seconds;
+
+define aggregation Tempaggregation from  TempStream post(#str:func()) select * group by roomNo aggregate by temp every seconds...years,months...years ; 
+
+--executionElement
+from source join    ;
+
+--patterns
+
+
+/* onDemandQuery
+from source as source1 on str:func(temp) within 10 per seconds select
+ group by rackNo having roomNo>005 order by roomNo limit 10 offset 5 insert into delete cfdjnvf set car=2;*/
+
+
+
+
+
+
+
+
