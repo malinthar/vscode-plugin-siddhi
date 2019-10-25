@@ -3,17 +3,18 @@
 name: Siddhi
 scopeName: source.siddhi
 fileTypes: [siddhi]
-variables:
-  identifier: "(?:'?(?:(?:{{letter}})|\\\\(?:{{nonLetter}})|\\\\)+)"
-  letter: "[^ (){}\\[\\]\\-?*=><?;\"',.\\s\\\\]"
-  nonLetter: "[ (){}\\[\\]\\-?*=><?;\"',.\\s]"
+# variables:
+#   identifier: "(?:'?(?:(?:{{letter}})|\\\\(?:{{nonLetter}})|\\\\)+)"
+#   letter: "[^ (){}\\[\\]\\-?*=><?;\"',.\\s\\\\]"
+#   nonLetter: "[ (){}\\[\\]\\-?*=><?;\"',.\\s]"
 patterns:
   - include: '#siddhiApp'
   - include: '#onDemandQuery'
+  - include: '#comment'
   
 repository:
   siddhiApp:
-    begin: '(?i)(?=@\s*APP)'
+    begin: '(?i)(?=@\s*app\s*:\s*name)'
     name: siddhiapp.siddhi
     patterns:
       - include: '#appAnnotation'
@@ -54,8 +55,8 @@ repository:
      '0': {name: support.constant.punctuation.paren.close.siddhi}
     name: annotation.siddhi
     patterns:
+      - include: '#annotation'
       - include: '#annotationElement'
-      - include: '$self'
 
   annotationElement:
     begin: '(?<=\()|(?=((([a-zA-Z_][a-zA-Z_0-9]*[.])*[a-zA-Z_][a-zA-Z_0-9]*))(?=\s*\=))'
@@ -66,7 +67,7 @@ repository:
       - include: '#propertyValue'
   
   propertyName:
-    name: entity.other.attribute-name.property.name.siddhi
+    name: variable.parameter.property.name.siddhi
     match: '(([a-zA-Z_][a-zA-Z_0-9]*[.])*[a-zA-Z_][a-zA-Z_0-9]*)(?=\s*\=)'  
 
   propertyValue:
@@ -129,29 +130,40 @@ repository:
     patterns:
       - include: '#attributeType'
       - include: '#attributeName'
+  
+  attribute:
+    patterns:
+      - include: '#mathOperation'
 
   attributeType:
       name: storage.type.attributetype.siddhi
       match: '\b((?i)string|(?i)int|(?i)long|(?i)float|(?i)double|(?i)bool|(?i)object)\b'
 
+
   attributeName:
-    name: entity.other.attribute-name.siddhi
+    name: variable.parameter.attributename.siddhi
     match: '([a-zA-Z_][a-zA-Z_0-9]*)'  
 
   source:
     patterns:
-      - name: variable.parameter.streamid.source.siddhi
-        match: '(?i)(?<= table|window|stream|from)(\s*)([a-zA-Z_][a-zA-Z_0-9]*)' 
+      - name: entity.other.attribute-name.streamid.source.siddhi
+        match: '\b(?i)(?<=^table$)\b\s*[a-zA-Z_][a-zA-Z_0-9]*'
+      - name: entity.other.attribute-name.streamid.source.siddhi
+        match: '(?i)(?<=^stream$)\s*[a-zA-Z_][a-zA-Z_0-9]*'
+      - name: entity.other.attribute-name.streamid.source.siddhi
+        match: '(?i)(?<=^window$)\s*[a-zA-Z_][a-zA-Z_0-9]*'
+      - name: entity.other.attribute-name.streamid.source.siddhi
+        match: '(?i)(?<=^from$)\s*[a-zA-Z_][a-zA-Z_0-9]*'
       - name: streamid.innserstream.source.siddhi
         match: '(#)(\W*)([a-zA-Z_][a-zA-Z_0-9]*)'
         captures:
           '1': {name: support.constant.siddhi }
-          '3': {name: variable.parameter.siddhi }
+          '3': {name: entity.other.attribute-name }
       - name:  streamid.faultstream.source.siddhi
         match: '(!)(\W*)([a-zA-Z_][a-zA-Z_0-9]*)' 
         captures:
           '1': {name: support.constant.siddhi }
-          '3': {name: variable.parameter.siddhi }     
+          '3': {name: entity.other.attribute-name }     
 
   outputEventType:
     name: keyword.control.output.event.type.siddhi
@@ -184,7 +196,7 @@ repository:
       '0': {name: support.constant.punctuation.paren.open.siddhi}
     name: attributelist.siddhi
     patterns:
-      - include: '$self'
+      - include: '#attributeList'
       - include: '#mathOperation'
 
   mathOperation:
@@ -219,7 +231,7 @@ repository:
     patterns:
      - name: support.constant.siddhi
        match: '#|!'
-     - name: entity.other.attribute-name.attributereference.siddhi
+     - name: variable.parameter.attributereference.siddhi
        match:  '[a-zA-Z_][a-zA-Z_0-9]*'
      - include: '#attributeIndex'
 
@@ -228,9 +240,9 @@ repository:
       - name: constant.language.boolean.siddhi
         match: '(?i)(true|false)'
       - name: constant.numeric.double.siddhi
-        match: '(\d*\.?\d*)(\W*)(?i)d'
+        match: '(\d*\.?\d*)(?i)d'
       - name: constant.numeric.long.siddhi
-        match: '(\d)(\W*)(?i)l'
+        match: '(\d)(?i)l'
       - name: constant.numeric.int.siddhi
         match: \d
       - name: constant.numeric.float.siddhi
@@ -269,6 +281,7 @@ repository:
       - include: '#attributeType'
       - include: '#functionBody'
   
+  #provide javascript syntax highlighting
   functionBody:
     begin: '\{'
     beginCaptures:
@@ -352,20 +365,10 @@ repository:
     patterns:
       - name: support.constant.siddhi
         match: '\*'
-      - include: '#outputAttributeList'
       - include: '#groupBy'
-  
-  outputAttributeList:
-    begin: '\('
-    end: '\)'
-    begincaptures:
-      '0': {name: support.constant.siddhi}
-    endCaptures:
-      '0': { name: support.constant.siddhi}
-    name: outputattributelist.siddhi
-    patterns:
-      - include : '#outputAttribute'
+      - include: '#outputAttribute'
 
+  
   aggregationTime:
     begin: \b(?i)every\b
     end: '(?=;)'
@@ -375,36 +378,9 @@ repository:
     patterns:
       - name: constant.other.timevalue.siddhi
         match: '\b((?i)years|(?i)months|(?i)hours|(?i)minutes|(?i)seconds)\b'
-    
-  preWindowHandlers: 
-    name: prewindowhandlers.siddhi
-    patterns:
-      - include: '#basicSourceStreamHandlers'
-
-  postWindowHandlers:
-    begin: '((?i)post)(\s*)(\()'
-    end: '\)'
-    beginCaptures: 
-      '1': { name: keyword.control.siddhi}
-      '3': { name: support.constant.siddhi}
-    endCaptures:
-      '0': { name: support.constant.siddhi}
-    name: postwindow.handlers.siddhi
-    patterns: 
-      - include: '#basicSourceStreamHandlers'
-
-  basicSourceStreamHandlers:
-    name: basicsourcestreamhandlers.siddhi
-    patterns:
-      - include: '#basicSourceStreamHandler'
-  basicSourceStreamHandler:
-    name: basicsourcestreamhandler.siddhi
-    patterns:
-      - include: '#filter'
-      - include: '#streamFunction'
 
   filter:
-    begin: '(#)(\s*)(\[)'
+    begin: '(#?)(\s*)(\[)'
     end: '\]'
     beginCaptures:
       '1': {name: support.constant.siddhi}
@@ -428,7 +404,7 @@ repository:
   # can't include parenthesis inside function opration 
   streamFunction:
     begin: '#'
-    end: '(?=\))'
+    end: '(?<=\))'
     beginCaptures:
       '0': {name: support.constant.siddhi}
     endCaptures:
@@ -449,18 +425,18 @@ repository:
   triggerName:
     name: variable.parameter.name.trigger.siddhi 
     match: '[a-zA-Z_][a-zA-Z_0-9]*'
-  
       
   timeValue:
     patterns:
      - include: '#integerLiteral'
   
+  #look into this attribute(mathoperation should be prioritised)
   outputAttribute:
     patterns:
       - include: '#attribute'
       - include: '#attributeName'
       - include: '#attributeReference'
-
+    
   idQuotes:
     name: idquotes.siddhi
     patterns:
@@ -561,7 +537,7 @@ repository:
         match: '\(|\)'
   
   executionElement:
-    begin: '((?i)from)'
+    begin: '((?i)from|((?i)partition)(\s*)((?i)with))'
     end: ';'
     beginCaptures:
       '0': { name: keyword.control.siddhi}
@@ -570,6 +546,7 @@ repository:
     name: executionelement.siddhi
     patterns:
       - include: '#query'
+      - include: '#partition'
   
   query:
     begin: '(?i)(?<=from)'
@@ -583,55 +560,70 @@ repository:
 
   queryInput:
     begin: '(?i)(?<=from)'
-    end: '(?i)(?=select)'
+    end: '(?i)(?=select|update|delete|return|insert)'
     name: input.query.siddhi
     patterns:
-      - name: keyword.control.siddhi
+      - name: keyword.other.siddhi
         match: '(?i)per'
-      - name: keyword.control.siddhi
+      - name: keyword.other.siddhi
+        match: '(?i)for'
+      - name: keyword.other.siddhi
         match: '(?i)unidirectional'
-      - name: keyword.control.siddhi
-        match: '(?i)as'
+      - name: keyword.other.siddhi
+        match: '(?i)\bas\b'
       - name: keyword.control.siddhi
         match: '(?i)every'
       - name: keyword.operator.logical.siddhi
         match: '(?i)(and|or|not)'
-      - name: keyword.operator.siddhi
-      - include: '#integerLiteral'
+      - name: keyword.other.siddhi
+        match: '(?i)on'
+      - name: constant.other.timevalue.siddhi
+        match: '\b((?i)years|(?i)months|(?i)hours|(?i)minutes|(?i)seconds)\b'
+      - name: keyword.operator.logical.math.operation.siddhi
+        match: '\b(?i)(not|or|and)\b'
+      - name: support.constant.siddhi
+        match: '\?'
+      - name: support.constant.siddhi
+        match: '\*'
       - include: '#join'
+      - include: '#onCondition'
+      - name: entity.other.attribute-name.alias.siddhi
+        match: '(?i)(?<=as)\s*[a-zA-Z_][a-zA-Z_0-9]*'
+      - name: entity.other.attribute-name.joinsource.right.siddhi
+        match: '(?i)(?<=join)\s*[a-zA-Z_][a-zA-Z_0-9]*'
+      - include: '#withinTimeRange'
+      - include: '#perExpression'
       - include: '#window'
       - include: '#filter'
-      - include: '#condition'
-      - include: '#withinTimeRange'
+      - include: '#streamFunction'
       - include: '#anonymousStream'
-      - include: '#postWindowHandlers'
-      - include: '#joinSource'
+      - include: '#sequenceSource'
       - include: '#source'
+      - include: '#propertyName'
+      - include: '#integerLiteral'
   
-  #can't distinguish between inner source and strean function 
+  #can't distinguish between inner source and stream function 
   standardStream:
     begin: '(?i)(?<=from)'
     end: '(?i)(?=select)'
     name: standardstream.siddhi
     patterns:
       - include: '#filter'
+      - include: '#streamFunction'
       - include: '#source'
-      - include: '#postWindowHandlers'
-      - include: '#preWindowHandlers'
 
-  joinSource:
+  sequenceSource:
     patterns:
-      - name: variable.parameter.joinsource.right.siddhi
-        match: '(?i)(?<=join)(\s*)[a-zA-Z_][a-zA-Z_0-9]*'
-      - name: variable.parameter.name.alias.joinsource.siddhi
-        match: '(?i)(?<=as)(\s*)[a-zA-Z_][a-zA-Z_0-9]*'
-      - include: '#source'
-    
+      - name: variable.parameter.sequence.source.siddhi
+        match: '(?<=\=)(\s*)[a-zA-Z_][a-zA-Z_0-9]*'
   anonymousStream:
-    begin: '(?i)(?<=from)(\s*)((?i)from)'
+    begin: '(\()(\s*)((?i)from)'
     beginCaptures:
-      '2': {name: keyword.control.siddhi }
-    end: '(?i)(?=select)'
+      '1': {name: support.constant.siddhi }
+      '3': {name: keyword.control.siddhi }
+    end: '\)'
+    endCaptures:
+      '0': {name: support.constant.siddhi}
     name: anonymousstream.siddhi 
     patterns:
       - name: keyword.control.siddhi
@@ -641,13 +633,19 @@ repository:
       - include: '#outputRate'
       - include: '#outputEventType'
 
-  condition:
-    begin: '(?i)on'
-    end: '(?=;|(?i)within)'
-    beginCaptures:
-      '0': {name: keyword.control.siddhi}
+  onCondition:
+    begin: '(?i)(?<=on)'
+    end: '(?i)(?=select|within|;)'
+    name: on.expression.siddhi
     patterns:
-      include: '#expression'
+      - include: '#expression'
+
+  perExpression:
+    begin: '(?i)(?<=per)'
+    end: '(?i)(?=select|output|insert|delete|update|return|;)'
+    name: on.expression.siddhi
+    patterns:
+      - include: '#expression'
 
   join:
     patterns:
@@ -666,11 +664,11 @@ repository:
     begin: '(?i)output'
     beginCaptures:
       '0': {name: keyword.control.siddhi}
-    end: '(?i)(=?return|insert|delete|update|;)'
+    end: '(?i)(?=return|insert|delete|update|;)'
     name: outputrate.siddhi
     patterns:
       - include: '#outputRateType'
-      - include: 'integerLiteral'
+      - include: '#integerLiteral'
       - name: keyword.control.siddhi
         match: '(?i)EVENTS'
       - name: keyword.control.siddhi
@@ -686,25 +684,28 @@ repository:
         match: '(?i)(ALL|LAST|FIRST)'
 
   queryOutput:
-    begin: '(?=insert|delete|update|retrun)'
+    begin: '(?i)(insert\s*into|delete|update\s*or\s*insert\s*into|update|delete)'
     end: '(?=;)'
-    include:
-      - name: keyword.control.siddhi
-        match: '(?i)(insert|into|or|update|return|for)'
-      - name: '#condition'
-      - name: '#setClause'
-      - name: '#outputEventType'
-      - name: '#target'
- 
-  patition:
-    begin: '(?i)(?<=partition\s*with)'
-    end: '((?i)END)(\s*)(;)'
-    endCaptures:
-      '1': {name: keyword.control.siddhi}
-      '3': {name: support.constant.siddhi}
+    beginCaptures:
+      '1' : {name: keyword.control.siddhi}
+    name: output.query.siddhi
     patterns:
-     #- include: '#partitonWithStreamList'
-     - include: '#query'
+      - name: keyword.control.siddhi
+        match: '(?i)for'
+      - name: keyword.control.siddhi
+        match: '(?i)on'
+      - include: '#onCondition'
+      - include: '#setClause'
+      - include: '#outputEventType'
+      - include: '#target'
+ 
+  partition:
+    begin: '(?i)(?<=with)'
+    end: '(?=;)'
+    name: partition.siddhi
+    patterns:
+      - include: '#partitionWithStreamList'
+      - include: '#queryBlock'
 
   partitionWithStreamList:
     begin: '\('
@@ -713,17 +714,35 @@ repository:
       '0': { name: support.constant.siddhi}
     endCaptures:
       '0': { name: support.constant.siddhi}
+    name: partitionwithstreamlist.siddhi
     patterns:
-      - include: '#partitonWithStream'
+      - include: '#partitionWithStream'
     
-  # partitionWithStream:
-  #   begin:
-  #   end:
-  #   name:
-  #   patterns:
-  
-  # conditionRange:
+  partitionWithStream:
+    patterns: 
+      - name: keyword.other.siddhi
+        match: '(?i)of'
+      - name: keyword.other.siddhi
+        match: '(?i)as'
+      - include: '#attribute'
+      - name: variable.parameter.streamid.siddhi
+        match: '(?i)(?<=of)\s*[a-zA-Z_][a-zA-Z_0-9]*'
+      - include: '#stringValue'
+      - include: '#expression'
 
+  queryBlock:
+    begin: '(?i)begin'
+    end: '(?i)end'
+    beginCaptures:
+      '0': {name: keyword.other.siddhi}
+    endCaptures:
+      '0': {name: keyword.other.sidhdi}
+    patterns:
+      - name: keyword.control.siddhi
+        match: '(?i)from'
+      - name: support.constant.siddhi
+        match: ';'
+      - include: '#query'
 
   onDemandQuery:
     begin: '(?i)from'
@@ -781,31 +800,35 @@ repository:
   #change instert-> insert_into , update-> update or insert_into
   querySection:
     begin: '(?i)select'
-    end: '(?=(?i)insert|(?i)update|(?i)output|;)'
+    end: '(?i)(?=insert|update|output|\)|;)'
     beginCaptures:
       '0': {name: 'keyword.control.siddhi'}
-    name: querysection.ondemand.siddhi
+    name: querysection.siddhi
     patterns:
-      - include: '#outputAtrributeList'
+      - name: support.constant.sddhi
+        match: '\*'
+      - name: keyword.other.siddhi
+        match: '(?i)\bas\b'
       - include: '#groupBy'
       - include: '#having'
       - include: '#orderBy'
       - include: '#limit'
       - include: '#offset'
+      - include: '#outputAttribute'
   
   groupBy:
     begin: '((?i)group)(\s*)((?i)by)'
     beginCaptures:
       '1': { name: keyword.control.siddhi}
       '3': { name: keyword.control.siddhi}
-    end: '(?=(?i)aggregate|having|(?i)order(\s*)(?i)by|(?i)limit|(?i)offset|(?i)insert|(?i)update|(?i)output|;)'
+    end: '(?=(?i)\baggregate\b|\bhaving\b|(?i)\border\b(\s*)(?i)by|(?i)limit|(?i)offset|(?i)insert|(?i)update|(?i)output|;)'
     name: phrase.groupby.siddhi
     patterns:
       - include: '#attributeReference'
 
   having:
     begin: '(?i)having'
-    end: '(?=(?i)order(\s*)(?i)by|(?i)limit|(?i)offset|(?i)insert|(?i)update|(?i)output|;)'
+    end: '(?i)(?=order\s*by|limit|offset|insert|update|output|;)'
     beginCaptures:
       '0': { name: keyword.control.siddhi}
     name: phrase.having.siddhi
@@ -833,7 +856,7 @@ repository:
 
   offset:
     begin: '(?i)offset'
-    end: '(?i)(?=insert|update|output|;)'
+    end: '(?i)(?=insert|update|output|\)|;)'
     beginCaptures:
       '0': {name: keyword.control.siddhi}
     name: phrase.offset.siddhi
@@ -843,7 +866,7 @@ repository:
   #attribute reference stream reference being the same
   setClause:
     begin: '(?i)set'
-    end: '(?i)(?=on)'
+    end: '(?i)(?=on|update|delete)'
     beginCaptures:
       '0': {name: keyword.control.siddhi}
     name: setclause.ondemand.siddhi
@@ -859,30 +882,23 @@ repository:
       - include: '#target'
       - include: '#expression'
 
-  #fix doesn't work
   target:
     patterns:
-      - name: variable.parameter.source.target.siddhi
+      - name: entity.other.attribute-name.source.target.siddhi
         match: '(?i)(?<=into|update|delete)(\s*)([a-zA-Z_][a-zA-Z_0-9]*)' 
       - name: source.target.siddhi
         match: '(?i)(?<=into|update|delete)(\s*)(#)(\W*)([a-zA-Z_][a-zA-Z_0-9]*)'
         captures:
           '2': {name: support.constant.siddhi }
-          '4': {name: variable.parameter.siddhi }
+          '4': {name: entity.other.attribute-name.siddhi }
       - name:  source.target.siddhi
         match: '(?i)(?<=into|update|delete)(\s*)(!)(\W*)([a-zA-Z_][a-zA-Z_0-9]*)' 
         captures:
           '2': {name: support.constant.siddhi }
-          '4': {name: variable.parameter.siddhi }   
+          '4': {name: entity.other.attribute-name.siddhi}   
   
-
-#fix target 
-# brackets issue in function operation 
-# double d
-#long l
-#Ondemandquery is wrong
-
-
 ...
 
 
+#alias problem in query input
+#onCondition is not also recognized

@@ -1,0 +1,57 @@
+@App:name("App5-NotificationApp")
+@App:description("Send notifications via email")
+
+@source(type='inMemory', topic='summary-request') 
+define stream SummaryRequestStream (generate string);
+
+define stream RideInputEndStream (taxiId string, userId string, dropoffLocation string, fare double, currentTime long);
+
+@store(type="rdbms", jdbc.url="jdbc:mysql://${MYSQL_HOST}:3306/taxianalysis?useSSL=false",
+       username="root", password="root",
+       jdbc.driver.name="com.mysql.jdbc.Driver")
+define aggregation RidePaymentAggregation
+from RideInputEndStream
+select taxiId, count() as rides, sum(fare) as totalFare, avg(fare) as avgFare
+    group by taxiId
+    aggregate by currentTime every sec ... year;
+
+@sink(ref = 'email-sink', subject = 'Taxi ride info for {{date}}', to = 'suhothayan@gmail.com', content.type = 'text/html',
+    @map(type = 'text',
+        @payload("""
+            Hi, <br/><br/>
+            Information on taxi rides for the day <b>{{date}}</b> is as follows,<br/><br/>
+            <table>
+              <tr>
+                <th> Taxi_ID </th>
+                <th> Total_Rides </th>
+                <th> Tatal_Fare </th>
+              </tr>
+              {{taxiInfo}}
+            </table>
+            <br/><br/>
+            Thank you""")))
+@sink(type='log')
+define stream TaxiReportStream(taxiInfo string, date string);
+
+define trigger SummaryTrigger at every 30 sec;
+
+from SummaryTrigger
+select "true" as generate
+insert into SummaryRequestStream;
+
+from SummaryRequestStream[generate=='true']
+select str:concat(time:dateFormat(eventTimestamp(), 'yyyy-MM-dd'), " **:**:** +00:00") as dateRange,
+       time:dateFormat(eventTimestamp(), 'yyyy-MM-dd') as date
+insert into TaxiReportReqestStream;
+
+-- bug
+from TaxiReportReqestStream#window.batch() as R join RidePaymentAggregation as P
+    within R.dateRange
+    per 'days'
+select P.taxiId, rides, totalFare, avgFare, R.date
+insert into TaxiPaymentInfoStream;
+
+from TaxiPaymentInfoStream#window.batch()
+select str:groupConcat(
+       str:fillTemplate("<tr><td>{{1}}</td><td>{{2}}</td><td>{{3}}</td></tr>", taxiId, rides, totalFare) , "") as taxiInfo, date
+insert into TaxiReportStream;

@@ -1,39 +1,90 @@
 @App:name(name ='testApp',var = "home" )
 @App:description(description = "Test app for syntax highlighting feature")
 
-@source(type="kafka", @info(fun="vfiv"))
-define stream  TempStream (roomNo string,rackNo int,temp float);
-
-@Store(type = "rdbms",jdbc.game.jak.url = "jdbc:mysql://localhost:3306/production?useSSL=false",
-	username = "user",
-	password = "password",
-	jdbc.driver.name = "com.mysql.jdbc.Driver")
-  
-@index("roomNo")
-define table TemperatureTable (roomNo string,rackNo int,temp float);
-
-define window TempWindow (roomNo string,rackNo int,temp float) str:func1(func('cvffv'),234344,4445)  output current events;
-
-define function  vfj [Yaml] {
+/*define function  maxTemp [JavaScript] (temp1,temp2){
    var name = data[0];
    var amount = data[1];
    var res = "There are " + amount + "kg of " + name + " in the store";
+   return res;
+}; */
 
- return res;
-}; 
-define trigger trigger1 at every 1 seconds;
+@source(type="kafka", @info(fun="vfiv"))
+define stream  TempStream (roomNo string,rackNo int,temp float);
 
-define aggregation Tempaggregation from  TempStream post(#str:func()) select * group by roomNo aggregate by temp every seconds...years,months...years ; 
+define stream SearchTempStream (roomNo string,rackNo int);
 
---executionElement
-from source join source #[vcfnbvf] as filter ;
+define stream StateStream (id string, state string);
 
---patterns
+define stream TempStream1(roomId int, temp double);
 
 
-/* onDemandQuery
-from source as source1 on str:func(temp) within 10 per seconds select
- group by rackNo having roomNo>005 order by roomNo limit 10 offset 5 insert into delete cfdjnvf set car=2;*/
+@sink(type = 'log')
+define stream AlertStream (roomNo int, initialTemp double, finalTemp double);
+
+@Store(type = "rdbms",jdbc.url = "jdbc:mysql://localhost:3306/production?useSSL=false",
+	username = "user",
+	password = "password",
+	jdbc.driver.name = "com.mysql.jdbc.Driver")
+@index("roomNo")
+define Table TemperatureTable (roomNo string,rackNo int,temp float);
+
+@sink(type="log")
+define stream LogStream (roomNumber string,rackNumber int,temperature float);
+
+@sink(type="log")
+define stream StatePatternStream (id string, lastState string, state string, transitionProbability double, notify bool);
+
+@sink(type = 'log')
+define stream AlertStream1(initialTemp double, finalTemp double);
+
+
+define window TempWindow (roomNo string,rackNo int,temp float) str:func1(func('parameter1'),234344,4445)  output current events;
+
+define Trigger TempTrigger at every 2 hours;
+
+define aggregation Tempaggregation from  TempStream #str:func() select * group by roomNo aggregate by temp every seconds...years,months...years ; 
+
+@info(name='standardStream')
+from TempStream select * insert into LogStream ;
+
+--bug
+@info(name='joinStream')
+from  TempStream  as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
+select roomNo as roomNumber, rackNo as rackNumber, temp as temperature
+group by  roomNo having roomNo< 0010 limit 10 offset 2 output all every 10 events
+update or insert into LogStream for all events set temperature=0 on temperature<10 ;
+
+@info(name= "patternStream")
+from StateStream#markov:markovChain(id, state, 60 min, 0.3, 
+'{SiddhiHome}/wso2/tooling/deployment/csv-files/MarkovChainMatrix.csv', false ) 
+select id, lastState, state, transitionProbability, notify
+insert into StatePatternStream;
+
+@info(name= "sequenceStream")
+from every e1 = TempStream, e2 = TempStream[temp > e1.temp + 1]
+select e1.temp as initialTemp, e2.temp as finalTemp
+insert into AlertStream1 ;
+
+@info(name="anonymousStream")
+from (from  TempStream  as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
+select roomNo as roomNumber, rackNo as rackNumber, temp as temperature
+group by  roomNo having roomNo< 0010 limit 10 offset 2 ) insert into LogStream;
+
+@info(name="partition")
+partition with  (roomNo >= 1030 as 'serverRoom' or  roomNo < 1030 and roomNo >= 330 as 'officeRoom' or 
+roomNo < 330 as 'lobby' of TempStream) 
+
+begin
+
+from  TempStream  as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
+select roomNo as roomNumber, rackNo as rackNumber, temp as temperature
+group by  roomNo having roomNo< 0010 limit 10 offset 2 output all every 10 events
+update or insert into LogStream for all events set temperature=0 on temperature<10 ;
+
+end    
+ ;
+
+
 
 
 

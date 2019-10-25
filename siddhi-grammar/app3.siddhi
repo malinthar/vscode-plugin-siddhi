@@ -1,0 +1,30 @@
+@App:name("App3-StartRideEnrichmentApp")
+@App:description("Enrich start ride information with estimated time and cost.")
+
+@source(type = 'inMemory', topic = 'ride-start')
+define stream RideStartStream (taxiId string, userId string, pickupLocation string, dropoffLocation string);
+
+@sink(type='http-call', publisher.url='http://${SERVICE_HOST}:9080/rides/estimate', sink.id='time-estimate-call', @map(type="json")) 
+define stream TimeEstimateCallStream(taxiId string, userId string, pickupLocation string, dropoffLocation string, datetime string);
+
+-- trp:userId... not highlihted
+@source(type='http-call-response', sink.id='time-estimate-call', 
+@map(type="json", @attributes('trp:taxiId', 'trp:userId', 'trp:pickupLocation', 'trp:dropoffLocation', "$.rideEstimate")))
+@sink(type='log') 
+define stream TimeEstimateCallResponseStream(taxiId string, userId string, pickupLocation string, dropoffLocation string, timeEstimate string);
+
+@sink(type = 'http', publisher.url = 'http://${SERVICE_HOST}:8080/logger', @map(type = 'json'))
+@sink(type='log') 
+define stream RideStartInfoStream(type string, taxiId string, userId string, pickupLocation string, dropoffLocation string, timeEstimate string, costEstimate double);
+
+from RideStartStream
+select taxiId, userId, pickupLocation, dropoffLocation, time:currentTime() as datetime
+insert into TimeEstimateCallStream;
+
+from TimeEstimateCallResponseStream
+select taxiId, userId, timeEstimate, pickupLocation as pickUp, dropoffLocation as dropOff, time:dayOfWeek(time:currentDate(), 'yyyy-MM-dd') as dayOfWeek, time:dateFormat(time:currentTime(), 'HH', 'HH:mm:ss')  as hourOfDay
+insert into TaxiFarePredictionStream;
+
+from TaxiFarePredictionStream#pmml:predict('${PMML_MODEL_PATH}/taxi_fare_predicting_model.pmml', str:lower(pickUp), str:lower(dropOff), dayOfWeek, hourOfDay)
+select "RideStartInfo" as type, taxiId, userId, pickUp as pickupLocation, dropOff as dropoffLocation, timeEstimate, cast(math:round(Predicted_cost*100)/100, 'double') as costEstimate
+insert into RideStartInfoStream;

@@ -1,0 +1,46 @@
+@App:name("App1-InputProcessorApp")
+@App:description("App to consume the inputs.")
+
+@source(type='http', receiver.url='http://0.0.0.0:8009/taxi/request', @map(type='json', enclosing.element='$', @attributes('$.users','$.from'))) 
+@sink(type='log')
+define stream BulkRideRequestStream (userIds string, pickupLocation string);
+
+@sink(type='inMemory', topic='ride-request') 
+@sink(type='log')
+define stream RideRequestStream (userId string, pickupLocation string);
+
+@source(type='http', receiver.url="http://0.0.0.0:8009/taxi/available", @map(type='json')) 
+@sink(type='log')
+define stream RawAvailableTaxiStream (taxiId string, location string);
+
+@sink(type='inMemory', topic='available-taxi') 
+define stream AvailableTaxiStream (taxiId string, location string);
+
+@source(type='http', receiver.url="http://0.0.0.0:8009/taxi/start", @map(type='json')) 
+@sink(type='log')
+@sink(type='inMemory', topic='ride-start') 
+define stream RideStartStream (taxiId string, userId string, pickupLocation string, dropoffLocation string);
+
+@source(type='http', receiver.url="http://0.0.0.0:8009/taxi/end", @map(type='json'))
+@sink(type='log')
+define stream RideEndStream (taxiId string, userId string, dropoffLocation string, fare double);
+
+@sink(type='inMemory', topic='ride-end') 
+define stream RideInputEndStream (taxiId string, userId string, dropoffLocation string, fare double, currentTime long);
+
+@source(type='http', receiver.url="http://0.0.0.0:8009/taxi/summary", @map(type='text', regex.A='(.+)', @attributes('A[1]')))
+@sink(type='log')
+@sink(type='inMemory', topic='summary-request') 
+define stream SummaryRequestStream (generate string);
+
+from BulkRideRequestStream#str:tokenize(userIds, ",", true)
+select str:trim(token) as userId, pickupLocation
+insert into  RideRequestStream;
+
+from RawAvailableTaxiStream
+select str:trim(taxiId) as taxiId, str:trim(location) as location
+insert into  AvailableTaxiStream;
+
+from RideEndStream
+select taxiId, userId, dropoffLocation, fare, currentTimeMillis() as currentTime
+insert into RideInputEndStream

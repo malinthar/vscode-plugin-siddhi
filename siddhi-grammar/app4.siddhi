@@ -1,0 +1,36 @@
+
+@App:name("App4-TaxiRideMatchApp")
+@App:description("App to match taxis and riders.")
+
+@source(type = 'inMemory', topic = 'ride-request') 
+define stream RideRequestStream (userId string, pickupLocation string);
+
+@source(type='inMemory', topic='available-taxi') 
+define stream AvailableTaxiStream (taxiId string, location string);
+
+@sink(type='http', publisher.url = 'http://${SERVICE_HOST}:8080/logger',
+      @map(type = 'json'))
+@sink(type='log')
+define stream TaxiRequestStream (type string, taxiId string, userId string, pickupLocation string);
+
+@primaryKey('taxiId') 
+define table AvailableTaxiTable (taxiId string, location string);
+
+from AvailableTaxiStream
+select str:trim(taxiId) as taxiId, str:trim(location) as location
+update or insert into AvailableTaxiTable 
+    on AvailableTaxiTable.taxiId== taxiId;
+
+from RideRequestStream as R left outer join AvailableTaxiTable as T
+    on R.pickupLocation == T.location
+select T.taxiId, R.userId, R.pickupLocation
+limit 5
+insert into PreTaxiRequestStream;
+
+from PreTaxiRequestStream[not(taxiId is null)]
+select "TaxiRequest" as type, taxiId, userId, pickupLocation
+insert into TaxiRequestStream;
+
+from PreTaxiRequestStream[taxiId is null]#window.delay(1 min)
+select userId, pickupLocation
+insert into RideRequestStream;
