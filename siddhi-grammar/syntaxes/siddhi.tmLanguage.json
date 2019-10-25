@@ -274,19 +274,19 @@
       "patterns": [
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
-          "match": "\\b(?i)(?<=^table$)\\b\\s*[a-zA-Z_][a-zA-Z_0-9]*"
+          "match": "(?i)(?<=\\Wtable)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
         },
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
-          "match": "(?i)(?<=^stream$)\\s*[a-zA-Z_][a-zA-Z_0-9]*"
+          "match": "(?i)(?<=\\Wstream)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
         },
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
-          "match": "(?i)(?<=^window$)\\s*[a-zA-Z_][a-zA-Z_0-9]*"
+          "match": "(?i)(?<=\\Wwindow)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
         },
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
-          "match": "(?i)(?<=^from$)\\s*[a-zA-Z_][a-zA-Z_0-9]*"
+          "match": "(?i)(?<=from)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
         },
         {
           "name": "streamid.innserstream.source.siddhi",
@@ -316,7 +316,7 @@
     },
     "outputEventType": {
       "name": "keyword.control.output.event.type.siddhi",
-      "match": "\\b(?i)(all(\\s\\s*)events|expired(\\s\\s*)events|current(\\s\\s*)events|events)\\b"
+      "match": "\\b(?i)(^all(\\s\\s*)events$|^expired(\\s\\s*)events$|^current(\\s\\s*)events$|^events$)\\b"
     },
     "functionOperation": {
       "begin": "(?=[a-zA-Z_][a-zA-Z_0-9]*\\s*:\\s*[a-zA-Z_][a-zA-Z_0-9]*\\(|[a-zA-Z_][a-zA-Z_0-9]*\\()",
@@ -377,11 +377,11 @@
         },
         {
           "name": "keyword.operator.is.math.operation.siddhi",
-          "match": "(?i)is"
+          "match": "\\b(?i)is\\b"
         },
         {
           "name": "keyword.operator.null.matoperation.siddhi",
-          "match": "(?i)null"
+          "match": "\\b(?i)null\\b"
         },
         {
           "name": "keyword.operator.in.math.operation.siddhi",
@@ -439,7 +439,7 @@
       "patterns": [
         {
           "name": "constant.language.boolean.siddhi",
-          "match": "(?i)(true|false)"
+          "match": "\\b(?i)(true|false)\\b"
         },
         {
           "name": "constant.numeric.double.siddhi",
@@ -447,7 +447,7 @@
         },
         {
           "name": "constant.numeric.long.siddhi",
-          "match": "(\\d)(?i)l"
+          "match": "(\\d)\\s*(?i)\\bl\\b"
         },
         {
           "name": "constant.numeric.int.siddhi",
@@ -485,7 +485,7 @@
       }
     },
     "functionDefinition": {
-      "begin": "(define)(\\s*)(function)",
+      "begin": "\\b(?i)(define)\\b(\\s*)\\b(function)\\b",
       "end": ";",
       "beginCaptures": {
         "1": {

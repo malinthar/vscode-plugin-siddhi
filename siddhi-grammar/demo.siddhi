@@ -1,12 +1,12 @@
 @App:name(name ='testApp',var = "home" )
 @App:description(description = "Test app for syntax highlighting feature")
 
-/*define function  maxTemp [JavaScript] (temp1,temp2){
+define function   maxTemp [JavaScript] (temp1,temp2){
    var name = data[0];
    var amount = data[1];
    var res = "There are " + amount + "kg of " + name + " in the store";
    return res;
-}; */
+}; 
 
 @source(type="kafka", @info(fun="vfiv"))
 define stream  TempStream (roomNo string,rackNo int,temp float);
@@ -38,7 +38,7 @@ define stream StatePatternStream (id string, lastState string, state string, tra
 define stream AlertStream1(initialTemp double, finalTemp double);
 
 
-define window TempWindow (roomNo string,rackNo int,temp float) str:func1(func('parameter1'),234344,4445)  output current events;
+define window TempWindow (roomNo string,rackNo int,temp float) str:func1(func('parameter1'),234344,4445,(cdndc))  output current events;
 
 define Trigger TempTrigger at every 2 hours;
 
@@ -66,7 +66,7 @@ select e1.temp as initialTemp, e2.temp as finalTemp
 insert into AlertStream1 ;
 
 @info(name="anonymousStream")
-from (from  TempStream  as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
+from (from TempStream  as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
 select roomNo as roomNumber, rackNo as rackNumber, temp as temperature
 group by  roomNo having roomNo< 0010 limit 10 offset 2 ) insert into LogStream;
 
@@ -76,7 +76,7 @@ roomNo < 330 as 'lobby' of TempStream)
 
 begin
 
-from  TempStream  as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
+from  TempStream as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
 select roomNo as roomNumber, rackNo as rackNumber, temp as temperature
 group by  roomNo having roomNo< 0010 limit 10 offset 2 output all every 10 events
 update or insert into LogStream for all events set temperature=0 on temperature<10 ;
