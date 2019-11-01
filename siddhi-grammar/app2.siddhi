@@ -27,7 +27,7 @@ define aggregation RidePaymentAggregation
 from RideInputEndStream
 select taxiId, count() as rides, sum(fare) as totalFare, avg(fare) as avgFare
 group by taxiId
-aggregate by currentTime every sec ... year;
+aggregate by currentTime every seconds ... years;
 
 from RideRequestStream#window.time(10 min)
 select "HighDemandLocation" as type, pickupLocation, count() as totalRequest
@@ -37,6 +37,6 @@ output first every 3 sec
 insert into HighDemandLocationStream;
 
 -- bug
-from every e1 = RideInputEndStream -> e2 = RideStartStream[e1.taxiId == taxiId and e1.userId == userId] within 15 seconds 
+from every e1 = RideInputEndStream -> e2 = RideStartStream[e1.taxiId == taxiId and e1.userId == userId] within 15 seconds  
 select "PotentialFraud" as type, e1.taxiId, e1.userId, e2.pickupLocation as location, "Ride split" as reason
 insert into PotentialFraudStream;

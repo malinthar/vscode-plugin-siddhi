@@ -29,8 +29,6 @@ import io.siddhi.core.stream.input.source.SourceMapper;
 import io.siddhi.core.stream.output.sink.Sink;
 import io.siddhi.core.stream.output.sink.SinkMapper;
 import io.siddhi.core.table.record.AbstractRecordTable;
-import org.wso2.carbon.utils.Utils;
-
 import java.util.HashMap;
 import java.util.Map;
 

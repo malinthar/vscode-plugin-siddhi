@@ -1,7 +1,10 @@
 package io.siddhi.langserver;
 
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.langserver.compiler.exception.SiddhiParserException;
 import io.siddhi.langserver.completion.LSCompletionProviderFactory;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
+import io.siddhi.langserver.diagnostic.DiagnosticProvider;
 import org.antlr.v4.runtime.ParserRuleContext;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +16,11 @@ public class LSContext {
     private  Map<String,Object> ContextTree=new HashMap<>();
     private CurrentContext currentParserContext=new CurrentContext();
     private  String sourceContent;
+    private  String fileUri;
     public static final LSContext INSTANCE=new LSContext();
+    private SiddhiLanguageServer siddhiLanguageServer;
+    private SiddhiManager siddhiManager;
+    private DiagnosticProvider diagnosticProvider;
     public static final LSCompletionProviderFactory factory=LSCompletionProviderFactory.getInstance();
 
     public void setPosition(int line,int col) {
@@ -60,6 +67,33 @@ public class LSContext {
     public  class CurrentContext{
         ParserRuleContext context;
         ParserRuleContext errorNode;
+    }
+
+    public void setSiddhiLanguageServer(SiddhiLanguageServer siddhiLanguageServer) {
+        this.siddhiLanguageServer = siddhiLanguageServer;
+    }
+    public SiddhiLanguageServer getSiddhiLanguageServer(){
+        return this.siddhiLanguageServer;
+    }
+    public void setFileUri(String  uri){
+        this.fileUri=fileUri;
+    }
+    public  String getFileUri(){
+        return this.fileUri;
+    }
+    public void setSiddhiManager(SiddhiManager siddhiManager){
+        this.siddhiManager=siddhiManager;
+    }
+    public SiddhiManager getSiddhiManager(){
+        return this.siddhiManager;
+    }
+
+    public DiagnosticProvider getDiagnosticProvider() {
+        return diagnosticProvider;
+    }
+
+    public void setDiagnosticProvider(DiagnosticProvider diagnosticProvider) {
+        this.diagnosticProvider = diagnosticProvider;
     }
 }
 

@@ -1,13 +1,12 @@
 @App:name("App3-StartRideEnrichmentApp")
 @App:description("Enrich start ride information with estimated time and cost.")
 
-@source(type = 'inMemory', topic = 'ride-start')
+@source(type = 'inMemory', topic = 'ride-start' ,'refrfr' )
 define stream RideStartStream (taxiId string, userId string, pickupLocation string, dropoffLocation string);
 
 @sink(type='http-call', publisher.url='http://${SERVICE_HOST}:9080/rides/estimate', sink.id='time-estimate-call', @map(type="json")) 
 define stream TimeEstimateCallStream(taxiId string, userId string, pickupLocation string, dropoffLocation string, datetime string);
 
--- trp:userId... not highlihted
 @source(type='http-call-response', sink.id='time-estimate-call', 
 @map(type="json", @attributes('trp:taxiId', 'trp:userId', 'trp:pickupLocation', 'trp:dropoffLocation', "$.rideEstimate")))
 @sink(type='log') 

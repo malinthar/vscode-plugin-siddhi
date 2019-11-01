@@ -1,7 +1,7 @@
 package io.siddhi.langserver.completion.snippet;
 
 import io.siddhi.langserver.LSContext;
-import io.siddhi.query.compiler.SiddhiQLParser;
+import io.siddhi.langserver.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
 import java.util.ArrayList;

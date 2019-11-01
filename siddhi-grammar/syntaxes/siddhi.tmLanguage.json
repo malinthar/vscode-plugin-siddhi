@@ -4,6 +4,9 @@
   "fileTypes": [
     "siddhi"
   ],
+  "variables": {
+    "identifier": "[a-zA-Z_][a-zA-Z_0-9]*"
+  },
   "patterns": [
     {
       "include": "#siddhiApp"
@@ -30,19 +33,19 @@
           "include": "#definitionStream"
         },
         {
-          "include": "#tableDefinition"
+          "include": "#definitionTable"
         },
         {
-          "include": "#windowDefinition"
+          "include": "#definitionWindow"
         },
         {
-          "include": "#functionDefinition"
+          "include": "#definitionFunction"
         },
         {
-          "include": "#aggregationDefinition"
+          "include": "#definitionAggregation"
         },
         {
-          "include": "#triggerDefinition"
+          "include": "#definitionTrigger"
         },
         {
           "include": "#comment"
@@ -60,16 +63,16 @@
       "end": "\\)",
       "beginCaptures": {
         "1": {
-          "name": "keyword.other.siddhi"
+          "name": "keyword.control.siddhi"
         },
         "3": {
-          "name": "keyword.other.siddhi"
+          "name": "keyword.control.siddhi"
         },
         "5": {
           "name": "support.constant.siddhi"
         },
         "7": {
-          "name": "keyword.other.siddhi"
+          "name": "keyword.control.siddhi"
         },
         "9": {
           "name": "support.constant.punctuation.paren.open.siddhi"
@@ -92,10 +95,10 @@
       "end": "\\)",
       "beginCaptures": {
         "1": {
-          "name": "keyword.other.siddhi"
+          "name": "keyword.control.siddhi"
         },
         "3": {
-          "name": "keyword.other.siddhi"
+          "name": "keyword.control.siddhi"
         },
         "5": {
           "name": "support.constant.punctuation.paren.open.siddhi"
@@ -117,10 +120,13 @@
       ]
     },
     "annotationElement": {
-      "begin": "(?<=\\()|(?=((([a-zA-Z_][a-zA-Z_0-9]*[.])*[a-zA-Z_][a-zA-Z_0-9]*))(?=\\s*\\=))",
-      "end": "(?=\\))|(?=,)",
+      "begin": "(?<=\\()|(?=((([a-zA-Z_][a-zA-Z_0-9]*[.])*[a-zA-Z_][a-zA-Z_0-9]*))(?=\\s*\\=)|(?<=,))",
+      "end": "(?=\\))",
       "name": "annotation.annotationelement.siddhi",
       "patterns": [
+        {
+          "include": "#annotation"
+        },
         {
           "include": "#propertyName"
         },
@@ -170,7 +176,7 @@
         }
       ]
     },
-    "tableDefinition": {
+    "definitionTable": {
       "begin": "((?i)define)(\\s*)((?i)table)",
       "beginCaptures": {
         "1": {
@@ -196,7 +202,7 @@
         }
       ]
     },
-    "windowDefinition": {
+    "definitionWindow": {
       "begin": "((?i)define)(\\s*)((?i)window)",
       "end": ";",
       "beginCaptures": {
@@ -274,15 +280,15 @@
       "patterns": [
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
-          "match": "(?i)(?<=\\Wtable)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
+          "match": "(?i)(?<=\\stable)(\\s*)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
         },
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
-          "match": "(?i)(?<=\\Wstream)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
+          "match": "(?i)(?<=\\sstream)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
         },
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
-          "match": "(?i)(?<=\\Wwindow)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
+          "match": "(?i)(?<=\\swindow)(\\s*[a-zA-Z_][a-zA-Z_0-9]*)"
         },
         {
           "name": "entity.other.attribute-name.streamid.source.siddhi",
@@ -290,7 +296,7 @@
         },
         {
           "name": "streamid.innserstream.source.siddhi",
-          "match": "(#)(\\W*)([a-zA-Z_][a-zA-Z_0-9]*)",
+          "match": "(#)(\\s*)([a-zA-Z_][a-zA-Z_0-9]*)",
           "captures": {
             "1": {
               "name": "support.constant.siddhi"
@@ -302,7 +308,7 @@
         },
         {
           "name": "streamid.faultstream.source.siddhi",
-          "match": "(!)(\\W*)([a-zA-Z_][a-zA-Z_0-9]*)",
+          "match": "(!)(\\s*)([a-zA-Z_][a-zA-Z_0-9]*)",
           "captures": {
             "1": {
               "name": "support.constant.siddhi"
@@ -316,7 +322,7 @@
     },
     "outputEventType": {
       "name": "keyword.control.output.event.type.siddhi",
-      "match": "\\b(?i)(^all(\\s\\s*)events$|^expired(\\s\\s*)events$|^current(\\s\\s*)events$|^events$)\\b"
+      "match": "\\b(?i)(all(\\s\\s*)events|expired(\\s\\s*)events|current(\\s\\s*)events|events)\\b"
     },
     "functionOperation": {
       "begin": "(?=[a-zA-Z_][a-zA-Z_0-9]*\\s*:\\s*[a-zA-Z_][a-zA-Z_0-9]*\\(|[a-zA-Z_][a-zA-Z_0-9]*\\()",
@@ -368,7 +374,7 @@
     "mathOperation": {
       "patterns": [
         {
-          "name": "keyword.operator.numerical.math.operation.siddhi",
+          "name": "operator.numerical.math.operation.siddhi",
           "match": "\\+|\\*|\\/|-|%|==|!=|\\>=|<=|\\>|\\<"
         },
         {
@@ -443,7 +449,7 @@
         },
         {
           "name": "constant.numeric.double.siddhi",
-          "match": "(\\d*\\.?\\d*)(?i)d"
+          "match": "(\\d*\\.?\\d*)\\b(?i)d\\b"
         },
         {
           "name": "constant.numeric.long.siddhi",
@@ -459,7 +465,7 @@
         },
         {
           "name": "constant.other.timevalue.siddhi",
-          "match": "\\b((?i)years|(?i)months|(?i)hours|(?i)minutes|(?i)seconds)\\b"
+          "match": "\\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
         },
         {
           "include": "#stringValue"
@@ -582,7 +588,7 @@
       "name": "entity.name.tag.language.siddhi",
       "match": "[a-zA-Z_][a-zA-Z_0-9]*"
     },
-    "triggerDefinition": {
+    "definitionTrigger": {
       "begin": "((?i)define)(\\s*)((?i)trigger)",
       "end": ";",
       "beginCaptures": {
@@ -622,7 +628,7 @@
         }
       ]
     },
-    "aggregationDefinition": {
+    "definitionAggregation": {
       "begin": "((?i)define)(\\s*)((?i)aggregation)",
       "end": ";",
       "beginCaptures": {
@@ -702,8 +708,12 @@
       "name": "aggregation.time.siddhi",
       "patterns": [
         {
+          "name": "support.constnst.siddhi",
+          "match": "\\.\\s*\\.\\s*\\."
+        },
+        {
           "name": "constant.other.timevalue.siddhi",
-          "match": "\\b((?i)years|(?i)months|(?i)hours|(?i)minutes|(?i)seconds)\\b"
+          "match": "\\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
         }
       ]
     },
@@ -740,8 +750,8 @@
           "name": "keyword.control.siddhi"
         }
       },
-      "end": "(?=(i?)select)",
-      "name": "definition.window.siddhi",
+      "end": "\\b(?=(i?)select)\\b|\\b(?=(i?)as)\\b",
+      "name": "definition.stream.window.siddhi",
       "patterns": [
         {
           "include": "#functionOperation"
@@ -749,10 +759,10 @@
       ]
     },
     "streamFunction": {
-      "begin": "#",
+      "begin": "(#)(\\s*)(?=[a-zA-Z_][a-zA-Z_0-9]*\\(|[a-zA-Z_][a-zA-Z_0-9]*\\s*:)",
       "end": "(?<=\\))",
       "beginCaptures": {
-        "0": {
+        "1": {
           "name": "support.constant.siddhi"
         }
       },
@@ -777,11 +787,11 @@
       ]
     },
     "aggregationName": {
-      "name": "variable.parameter.name.aggregation.siddhi",
+      "name": "entity.other.attribute-name.name.aggregation.siddhi",
       "match": "(?<= aggregation)((\\s*)[a-zA-Z_][a-zA-Z_0-9]*)"
     },
     "triggerName": {
-      "name": "variable.parameter.name.trigger.siddhi",
+      "name": "entity.other.attribute-name.name.trigger.siddhi",
       "match": "[a-zA-Z_][a-zA-Z_0-9]*"
     },
     "timeValue": {
@@ -963,10 +973,6 @@
           "match": "\\b((?i)define|(?i)stream|(?i)table|(?i)window|(?i)output|(?i)function)\\b"
         },
         {
-          "name": "keyword.other.siddhi",
-          "match": ""
-        },
-        {
           "name": "keyword.operator.siddhi",
           "match": "(!|%|\\+|\\-|~=|==|=|!=|<|>|&&|\\|\\||\\?:|\\.\\.\\.|@)"
         },
@@ -980,7 +986,7 @@
         },
         {
           "name": "storage.type.timevalue.siddhi",
-          "match": "\\b((?i)years|(?i)months|(?i)hours|(?i)minutes|(?i)seconds)\\b"
+          "match": "\\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
         },
         {
           "name": "support.constant.punctuation.siddhi",
@@ -989,7 +995,7 @@
       ]
     },
     "executionElement": {
-      "begin": "((?i)from|((?i)partition)(\\s*)((?i)with))",
+      "begin": "(\\b(?i)from\\b|(\\b(?i)partition\\b)(\\s*)(\\b(?i)with)\\b)",
       "end": ";",
       "beginCaptures": {
         "0": {
@@ -1032,40 +1038,49 @@
     },
     "queryInput": {
       "begin": "(?i)(?<=from)",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.other.siddhi"
+        }
+      },
       "end": "(?i)(?=select|update|delete|return|insert)",
       "name": "input.query.siddhi",
       "patterns": [
         {
           "name": "keyword.other.siddhi",
-          "match": "(?i)per"
+          "match": "(?<=from)\\s*(?i)\\bevery\\b"
         },
         {
           "name": "keyword.other.siddhi",
-          "match": "(?i)for"
+          "match": "every"
         },
         {
           "name": "keyword.other.siddhi",
-          "match": "(?i)unidirectional"
+          "match": "(?i)\\bper\\b"
+        },
+        {
+          "name": "keyword.other.siddhi",
+          "match": "(?i)\\bfor\\b"
+        },
+        {
+          "name": "keyword.other.siddhi",
+          "match": "(?i)\\bunidirectional\\b"
         },
         {
           "name": "keyword.other.siddhi",
           "match": "(?i)\\bas\\b"
         },
         {
-          "name": "keyword.control.siddhi",
-          "match": "(?i)every"
-        },
-        {
           "name": "keyword.operator.logical.siddhi",
-          "match": "(?i)(and|or|not)"
+          "match": "(?i)\\b(and|or|not)\\b"
         },
         {
           "name": "keyword.other.siddhi",
-          "match": "(?i)on"
+          "match": "\\b(?i)on\\b"
         },
         {
           "name": "constant.other.timevalue.siddhi",
-          "match": "\\b((?i)years|(?i)months|(?i)hours|(?i)minutes|(?i)seconds)\\b"
+          "match": "\\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
         },
         {
           "name": "keyword.operator.logical.math.operation.siddhi",
@@ -1106,13 +1121,13 @@
           "include": "#filter"
         },
         {
-          "include": "#streamFunction"
-        },
-        {
           "include": "#anonymousStream"
         },
         {
           "include": "#sequenceSource"
+        },
+        {
+          "include": "#streamFunction"
         },
         {
           "include": "#source"
@@ -1144,7 +1159,7 @@
     "sequenceSource": {
       "patterns": [
         {
-          "name": "variable.parameter.sequence.source.siddhi",
+          "name": "entity.other.attribute-name.sequence.source.siddhi",
           "match": "(?<=\\=)(\\s*)[a-zA-Z_][a-zA-Z_0-9]*"
         }
       ]
@@ -1186,7 +1201,7 @@
       ]
     },
     "onCondition": {
-      "begin": "(?i)(?<=on)",
+      "begin": "(?i)(?<=\\son)",
       "end": "(?i)(?=select|within|;)",
       "name": "on.expression.siddhi",
       "patterns": [
@@ -1259,7 +1274,7 @@
         },
         {
           "name": "constant.other.timevalue.siddhi",
-          "match": "\\b((?i)years|(?i)months|(?i)hours|(?i)minutes|(?i)seconds)\\b"
+          "match": "\\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
         }
       ]
     },
@@ -1425,21 +1440,6 @@
         },
         {
           "include": "#onDemandInput"
-        },
-        {
-          "include": "#querySection"
-        },
-        {
-          "include": "#target"
-        },
-        {
-          "include": "#setClause"
-        },
-        {
-          "include": "#onDemandQueryOutput"
-        },
-        {
-          "include": "#expression"
         }
       ]
     },
@@ -1450,15 +1450,19 @@
       "patterns": [
         {
           "name": "keyword.control.siddhi",
-          "match": "(?i)as"
+          "match": "(?i)\\bas\\b"
         },
         {
           "name": "keyword.control.siddhi",
-          "match": "(?i)on"
+          "match": "(?i)\\bon\\b"
         },
         {
           "name": "keyword.control.siddhi",
-          "match": "(?i)per"
+          "match": "(?i)\\bper\\b"
+        },
+        {
+          "name": "variable.parameter.name.sourceid.ondemandquery.siddhi",
+          "match": "(?<=from\\s*every)(\\s*)[a-zA-Z_][a-zA-Z_0-9]*"
         },
         {
           "name": "variable.parameter.name.sourceid.ondemandquery.siddhi",
@@ -1478,7 +1482,7 @@
     },
     "withinTimeRange": {
       "begin": "(?i)within",
-      "end": "(?=per)",
+      "end": "(?=per|select)",
       "beginCaptures": {
         "0": {
           "name": "keyword.control.siddhi"

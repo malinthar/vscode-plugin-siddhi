@@ -20,9 +20,9 @@ import java.util.logging.Logger;
 public class StdioLauncher {
     public static void main(String args[]) throws InterruptedException, ExecutionException {
         /**Launcher is started by the trigger event of client*/
-        LogManager.getLogManager().reset();
-        Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-        globalLogger.setLevel(Level.OFF);
+        //LogManager.getLogManager().reset();
+       // Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        //globalLogger.setLevel(Level.OFF);
        /**stdio used as the transport*/
         startServer(System.in, System.out);
     }

@@ -2,9 +2,9 @@ package io.siddhi.langserver.completion.snippet;
 
 import io.siddhi.langserver.LSContext;
 import io.siddhi.langserver.completion.ContextTreeVisitor;
-import io.siddhi.query.compiler.SiddhiQLLexer;
-import io.siddhi.query.compiler.SiddhiQLParser;
-import io.siddhi.query.compiler.internal.ErrorNode;
+import io.siddhi.langserver.compiler.SiddhiQLLexer;
+import io.siddhi.langserver.compiler.SiddhiQLParser;
+import io.siddhi.langserver.compiler.internal.ErrorNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import java.util.List;
 import java.util.ArrayList;

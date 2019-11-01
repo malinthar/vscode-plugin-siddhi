@@ -1,0 +1,7 @@
+@App:name("App1-InputProcessorApp")
+@App:description("App to consume the inputs.")
+
+define stream Fo (attribute1 string, attribute2 int );
+
+-- @Source(type = 'tcp', context='abc', @map(type='binary'))
+define stream Foo (attribute1 string, attribute2 int );

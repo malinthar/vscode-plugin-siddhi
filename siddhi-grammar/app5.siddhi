@@ -44,7 +44,6 @@ select str:concat(time:dateFormat(eventTimestamp(), 'yyyy-MM-dd'), " **:**:** +0
        time:dateFormat(eventTimestamp(), 'yyyy-MM-dd') as date
 insert into TaxiReportReqestStream;
 
--- bug
 from TaxiReportReqestStream#window.batch() as R join RidePaymentAggregation as P
     within R.dateRange
     per 'days'

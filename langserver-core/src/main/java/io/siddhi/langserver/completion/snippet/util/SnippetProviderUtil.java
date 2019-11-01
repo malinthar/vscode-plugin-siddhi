@@ -1,6 +1,5 @@
 package io.siddhi.langserver.completion.snippet.util;
 
-import io.siddhi.distribution.editor.core.util.SourceEditorUtils;
 import io.siddhi.langserver.completion.snippet.util.metadata.MetaData;
 import io.siddhi.langserver.completion.snippet.util.metadata.AttributeMetaData;
 import io.siddhi.langserver.completion.snippet.util.metadata.ParameterMetaData;
@@ -24,12 +23,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-import org.apache.log4j.Logger;
 
-import io.siddhi.core.SiddhiManager;
 
 public class SnippetProviderUtil {
-    static final Logger LOGGER = Logger.getLogger(SourceEditorUtils.class);
+
 
     public static MetaData getInBuiltProcessorMetaData() {
 
@@ -88,19 +85,19 @@ public class SnippetProviderUtil {
                                 }
                             }
                         } catch (ClassNotFoundException e) {
-                            LOGGER.debug("Failed to load class " +
-                                    jarEntryName.substring(0, jarEntryName.length() - 6), e);
+                           // LOGGER.debug("Failed to load class " +
+                                    //jarEntryName.substring(0, jarEntryName.length() - 6), e);
                         }
                         jarEntry = stream.getNextJarEntry();
                     }
                 } catch (IOException e) {
-                    LOGGER.debug("Failed to open the jar input stream for " + classPathName, e);
+                   // LOGGER.debug("Failed to open the jar input stream for " + classPathName, e);
                 } finally {
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (IOException e) {
-                            LOGGER.debug("Failed to close the jar input stream for " + classPathName, e);
+                           // LOGGER.debug("Failed to close the jar input stream for " + classPathName, e);
                         }
                     }
                 }

@@ -1,13 +1,13 @@
 @App:name("App1-InputProcessorApp")
 @App:description("App to consume the inputs.")
 
-@source(type='http', receiver.url='http://0.0.0.0:8009/taxi/request', @map(type='json', enclosing.element='$', @attributes('$.users','$.from'))) 
-@sink(type='log')
-define stream BulkRideRequestStream (userIds string, pickupLocation string);
-
 @sink(type='inMemory', topic='ride-request') 
 @sink(type='log')
 define stream RideRequestStream (userId string, pickupLocation string);
+
+@source(type='http', receiver.url='http://0.0.0.0:8009/taxi/request', @map(type='json', enclosing.element='$', @attributes('$.users','$.from'))) 
+@sink(type='log')
+define stream BulkRideRequestStream (userIds string, pickupLocation string);
 
 @source(type='http', receiver.url="http://0.0.0.0:8009/taxi/available", @map(type='json')) 
 @sink(type='log')
@@ -41,6 +41,7 @@ from RawAvailableTaxiStream
 select str:trim(taxiId) as taxiId, str:trim(location) as location
 insert into  AvailableTaxiStream;
 
+
 from RideEndStream
 select taxiId, userId, dropoffLocation, fare, currentTimeMillis() as currentTime
-insert into RideInputEndStream
+insert into RideInputEndStream;

@@ -2,75 +2,34 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.siddhi.ls</groupId>
     <artifactId>siddhi-language-server</artifactId>
-    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
     <modules>
         <module>langserver-core</module>
         <module>stdio-launcher</module>
+        <module>langservercompiler</module>
     </modules>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-core</artifactId>
-                <version>5.1.0</version>
+                <version>${siddhi-core.version}</version>
             </dependency>
             <dependency>
-                <groupId>io.siddhi.distribution</groupId>
-                <artifactId>io.siddhi.distribution.editor.core</artifactId>
-                <version>1.0.0-m3</version>
+                <groupId>org.eclipse.lsp4j</groupId>
+                <artifactId>org.eclipse.lsp4j</artifactId>
+                <version>${lsp4j.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-runtime</artifactId>
+                <version>${antlr4-runtime.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.21</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.lsp4j</groupId>
-            <artifactId>org.eclipse.lsp4j</artifactId>
-            <version>0.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.22</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.0.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <properties>
-        <lsp4j.version>0.4.1</lsp4j.version>
-        <testng.version>6.14.3</testng.version>
-        <slf4j.version>1.7.22</slf4j.version>
-    </properties>
-
     <repositories>
         <repository>
             <id>wso2-nexus</id>
@@ -83,4 +42,9 @@
             </releases>
         </repository>
     </repositories>
+    <properties>
+        <lsp4j.version>0.6.0</lsp4j.version>
+        <antlr4-runtime.version>4.7.2</antlr4-runtime.version>
+        <siddhi-core.version>5.1.0</siddhi-core.version>
+    </properties>
 </project>

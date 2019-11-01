@@ -1,10 +1,10 @@
 package io.siddhi.langserver.completion;
 
 import io.siddhi.langserver.LSContext;
-import io.siddhi.query.compiler.SiddhiCompiler;
-import io.siddhi.query.compiler.SiddhiQLParser;
-import io.siddhi.query.compiler.internal.ErrorNode;
-import io.siddhi.query.compiler.internal.SiddhiQLLangServerBaseVisitorImpl;
+import io.siddhi.langserver.compiler.SiddhiCompiler;
+import io.siddhi.langserver.compiler.SiddhiQLParser;
+import io.siddhi.langserver.compiler.internal.ErrorNode;
+import io.siddhi.langserver.compiler.internal.SiddhiQLLangServerBaseVisitorImpl;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;

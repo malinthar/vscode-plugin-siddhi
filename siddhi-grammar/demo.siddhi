@@ -1,22 +1,22 @@
-@App:name(name ='testApp',var = "home" )
+@App:name("Test add for syntax highlighting")
 @App:description(description = "Test app for syntax highlighting feature")
 
-define function   maxTemp [JavaScript] (temp1,temp2){
+-- bug
+/*define function   maxTemp [JavaScript] (temp1,temp2){
    var name = data[0];
    var amount = data[1];
    var res = "There are " + amount + "kg of " + name + " in the store";
    return res;
-}; 
+}; */
 
 @source(type="kafka", @info(fun="vfiv"))
-define stream  TempStream (roomNo string,rackNo int,temp float);
+define stream  TempStream (roomNo string  ,rackNo int,temp float);
 
 define stream SearchTempStream (roomNo string,rackNo int);
 
 define stream StateStream (id string, state string);
 
 define stream TempStream1(roomId int, temp double);
-
 
 @sink(type = 'log')
 define stream AlertStream (roomNo int, initialTemp double, finalTemp double);
@@ -29,7 +29,7 @@ define stream AlertStream (roomNo int, initialTemp double, finalTemp double);
 define Table TemperatureTable (roomNo string,rackNo int,temp float);
 
 @sink(type="log")
-define stream LogStream (roomNumber string,rackNumber int,temperature float);
+define stream LogStream (roomNumber string ,rackNumber int,temperature float);
 
 @sink(type="log")
 define stream StatePatternStream (id string, lastState string, state string, transitionProbability double, notify bool);
@@ -37,21 +37,17 @@ define stream StatePatternStream (id string, lastState string, state string, tra
 @sink(type = 'log')
 define stream AlertStream1(initialTemp double, finalTemp double);
 
-
 define window TempWindow (roomNo string,rackNo int,temp float) str:func1(func('parameter1'),234344,4445,(cdndc))  output current events;
 
 define Trigger TempTrigger at every 2 hours;
 
-define aggregation Tempaggregation from  TempStream #str:func() select * group by roomNo aggregate by temp every seconds...years,months...years ; 
-
 @info(name='standardStream')
 from TempStream select * insert into LogStream ;
 
---bug
 @info(name='joinStream')
 from  TempStream  as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
 select roomNo as roomNumber, rackNo as rackNumber, temp as temperature
-group by  roomNo having roomNo< 0010 limit 10 offset 2 output all every 10 events
+group by  roomNo having roomNo < 0010 limit 10 offset 2 output all every 10 events
 update or insert into LogStream for all events set temperature=0 on temperature<10 ;
 
 @info(name= "patternStream")
@@ -61,7 +57,7 @@ select id, lastState, state, transitionProbability, notify
 insert into StatePatternStream;
 
 @info(name= "sequenceStream")
-from every e1 = TempStream, e2 = TempStream[temp > e1.temp + 1]
+from every e1 = TempStream , e2 = TempStream[temp > e1.temp + 1]
 select e1.temp as initialTemp, e2.temp as finalTemp
 insert into AlertStream1 ;
 
@@ -76,13 +72,13 @@ roomNo < 330 as 'lobby' of TempStream)
 
 begin
 
-from  TempStream as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
+from  #TempStream as tempStream join TemperatureTable as tempTable on tempStream.roomNo=tempTable.roomNo and tempStream.rackNo=tempTable.rackNo within '29.01.2019.*','1.02.2019.*' per hours
 select roomNo as roomNumber, rackNo as rackNumber, temp as temperature
 group by  roomNo having roomNo< 0010 limit 10 offset 2 output all every 10 events
 update or insert into LogStream for all events set temperature=0 on temperature<10 ;
 
-end    
- ;
+end ;
+
 
 
 

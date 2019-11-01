@@ -1,0 +1,7 @@
+@App:name("PublishEventsToPrometheus")
+@App:description("Use siddhi-io-prometheus to publish events to Prometheus")
+
+define stream BarStram (symbol string, price float, volume long); 
+@sink(type='file',@map(type='json') ,append ='false', file.uri='/abc/{{symbol}}.txt')
+define stream BarStream (symbol string, price float, volume long); 
+
