@@ -84,20 +84,18 @@ import io.siddhi.query.api.expression.constant.LongConstant;
 import io.siddhi.query.api.expression.constant.StringConstant;
 import io.siddhi.query.api.expression.constant.TimeConstant;
 import io.siddhi.query.api.util.SiddhiConstants;
-import io.siddhi.langserver.compiler.SiddhiQLBaseVisitor;
-import io.siddhi.langserver.compiler.SiddhiQLParser;
 import io.siddhi.langserver.compiler.exception.SiddhiParserException;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import io.siddhi.langserver.compiler.SiddhiQLParser;
+import io.siddhi.langserver.compiler.SiddhiQLBaseVisitor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Siddhi Query visitor implementation converting query to Siddhi Query Objects
- */
 public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
 
     private Set<String> activeStreams = new HashSet<String>();
