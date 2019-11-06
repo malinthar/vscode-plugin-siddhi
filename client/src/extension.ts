@@ -8,7 +8,7 @@ const main:string='StdioLauncher';
 export function activate(context:ExtensionContext){
    const JAVA_HOME=process.env.JAVA_HOME
    let excecutable : string = path.join(String(JAVA_HOME),'bin', 'java');
-   let classPath = path.join(__dirname, '..', 'launcher','ls-launcher.jar');
+   let classPath = path.join(__dirname, '..', 'launcher','ls-launcher-0.0.1-SNAPSHOT.jar');
    const SIDDHI_HOME=path.join(__dirname, '..', 'lib','*');
    classPath=SIDDHI_HOME+':'+classPath
    const args: string[] = ['-cp',classPath];
@@ -26,6 +26,7 @@ export function activate(context:ExtensionContext){
    let clientOptions:LanguageClientOptions={
        documentSelector: [{scheme: 'file', language: 'siddhi'}],
    }
-   let disposable = new LanguageClient('SiddhiLanguageServer', 'Siddhi Language Server', serverOptions, clientOptions).start();
+   let disposable = new LanguageClient('SiddhiLanguageServer', 'Siddhi Language Server', serverOptions, clientOptions,true).start();
+
    context.subscriptions.push(disposable);
 }

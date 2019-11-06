@@ -7,14 +7,13 @@
         <version>5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.siddhi.ls</groupId>
+    <groupId>io.siddhi.ls</groupId>
     <artifactId>siddhi-language-server-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>langserver-core</module>
         <module>stdio-launcher</module>
-        <module>langservercompiler</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -22,6 +21,11 @@
                 <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-core</artifactId>
                 <version>${siddhi-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.siddhi</groupId>
+                <artifactId>siddhi-query-compiler</artifactId>
+                <version>5.1.8-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.lsp4j</groupId>

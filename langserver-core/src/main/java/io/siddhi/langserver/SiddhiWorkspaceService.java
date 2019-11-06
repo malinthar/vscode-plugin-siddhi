@@ -1,4 +1,6 @@
 package io.siddhi.langserver;
+
+import com.google.gson.JsonObject;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
@@ -8,18 +10,16 @@ import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.WorkspaceSymbolParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Implementation of LS$J Workspace Service
+ * Implementation of LSP4J Workspace Service.
  */
 public class SiddhiWorkspaceService implements WorkspaceService {
     private DiagnosticProvider diagnosticProvider;
-    SiddhiWorkspaceService(){
-             this.diagnosticProvider= LSContext.INSTANCE.getDiagnosticProvider();
+    SiddhiWorkspaceService() {
+             this.diagnosticProvider = LSContext.INSTANCE.getDiagnosticProvider();
     }
     @Override
     public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
@@ -27,8 +27,7 @@ public class SiddhiWorkspaceService implements WorkspaceService {
     }
 
     @Override
-    public CompletableFuture<List<? extends SymbolInformation>> symbol(WorkspaceSymbolParams
-                                                                                   workspaceSymbolParams) {
+    public CompletableFuture<List<? extends SymbolInformation>> symbol(WorkspaceSymbolParams workspaceSymbolParams) {
         return null;
     }
 

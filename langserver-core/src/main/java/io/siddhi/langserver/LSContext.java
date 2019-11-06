@@ -1,70 +1,73 @@
 package io.siddhi.langserver;
 
 import io.siddhi.core.SiddhiManager;
-import io.siddhi.langserver.compiler.exception.SiddhiParserException;
 import io.siddhi.langserver.completion.LSCompletionProviderFactory;
-import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
+import io.siddhi.query.compiler.SiddhiCompiler;
 import org.antlr.v4.runtime.ParserRuleContext;
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+/**
+ * {@code LSContext} Context for Siddhi language server.
+ */
 public class LSContext {
-    private  int[] position={1,0};
-    private  Map<String,Object> ContextTree=new HashMap<>();
-    private CurrentContext currentParserContext=new CurrentContext();
+    private  int[] position = {1, 0};
+    private  Map<String, Object> contextTree = new HashMap<>();
+    private  CurrentContext currentParserContext = new CurrentContext();
     private  String sourceContent;
     private  String fileUri;
-    public static final LSContext INSTANCE=new LSContext();
+    public static final LSContext INSTANCE = new LSContext();
     private SiddhiLanguageServer siddhiLanguageServer;
     private SiddhiManager siddhiManager;
     private DiagnosticProvider diagnosticProvider;
-    public static final LSCompletionProviderFactory factory=LSCompletionProviderFactory.getInstance();
+    private SiddhiCompiler siddhiCompiler;
+    public static final LSCompletionProviderFactory FACTORY = LSCompletionProviderFactory.getInstance();
 
-    public void setPosition(int line,int col) {
-        this.position[0]=line;
-        this.position[1]=col;
+    public void setPosition(int line, int col) {
+        this.position[0] = line;
+        this.position[1] = col;
     }
 
     public int[] getPosition() {
         return position;
     }
 
-    public void setContextTree(Map<String,Object> tree) {
-       this.ContextTree=tree;
+    public void setContextTree(Map<String, Object> tree) {
+       this.contextTree = tree;
     }
 
-    public Map<String,Object> getContextTree(){
-        return this.ContextTree;
+    public Map<String, Object> getContextTree() {
+        return this.contextTree;
     }
 
-    public void setCurrentParserContext(Object currentContext){
-        this.currentParserContext.context=(ParserRuleContext)currentContext;
-
+    public void setCurrentParserContext(Object currentContext) {
+        this.currentParserContext.context = (ParserRuleContext) currentContext;
     }
-    public void setCurrentErrorNode(Object currentErrorNode){
-        this.currentParserContext.errorNode=(ParserRuleContext)currentErrorNode;
+    public void setCurrentErrorNode(Object currentErrorNode) {
+        this.currentParserContext.errorNode = (ParserRuleContext) currentErrorNode;
     }
 
-    public ParserRuleContext getCurrentContext(){
+    public ParserRuleContext getCurrentContext() {
         return this.currentParserContext.context;
     }
-    public ParserRuleContext getCurrentErrorNode(){
+    public ParserRuleContext getCurrentErrorNode() {
         return this.currentParserContext.errorNode;
     }
 
-
-    public void setSourceContent(String sourceContent){
-        this.sourceContent=sourceContent;
+    public void setSourceContent(String sourceContent) {
+        this.sourceContent = sourceContent;
     }
 
-    public String getSourceContent(){
-
+    public String getSourceContent() {
         return this.sourceContent;
     }
-    public  class CurrentContext{
+    /**
+     * {@code SnippetProvider} provide snippets based on context.
+     */
+    //todo:check if this is needed
+    public  class CurrentContext {
         ParserRuleContext context;
         ParserRuleContext errorNode;
     }
@@ -72,19 +75,19 @@ public class LSContext {
     public void setSiddhiLanguageServer(SiddhiLanguageServer siddhiLanguageServer) {
         this.siddhiLanguageServer = siddhiLanguageServer;
     }
-    public SiddhiLanguageServer getSiddhiLanguageServer(){
+    public SiddhiLanguageServer getSiddhiLanguageServer() {
         return this.siddhiLanguageServer;
     }
-    public void setFileUri(String  uri){
-        this.fileUri=fileUri;
+    public void setFileUri(String  uri) {
+        this.fileUri = fileUri;
     }
-    public  String getFileUri(){
+    public  String getFileUri() {
         return this.fileUri;
     }
-    public void setSiddhiManager(SiddhiManager siddhiManager){
-        this.siddhiManager=siddhiManager;
+    public void setSiddhiManager(SiddhiManager siddhiManager) {
+        this.siddhiManager = siddhiManager;
     }
-    public SiddhiManager getSiddhiManager(){
+    public SiddhiManager getSiddhiManager() {
         return this.siddhiManager;
     }
 
@@ -94,6 +97,12 @@ public class LSContext {
 
     public void setDiagnosticProvider(DiagnosticProvider diagnosticProvider) {
         this.diagnosticProvider = diagnosticProvider;
+    }
+    public void setSiddhiCompiler(SiddhiCompiler compiler) {
+      this.siddhiCompiler = compiler;
+    }
+    public SiddhiCompiler getSiddhiCompiler() {
+        return this.siddhiCompiler;
     }
 }
 

@@ -8,7 +8,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-public class DocumentManagerImpl implements DocumentManager{
+
+/**
+ * {@code SiddhiDocumentMangerImpl} manage the documents in the workspace.
+ */
+public class DocumentManagerImpl implements DocumentManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentManagerImpl.class);
 
@@ -98,8 +102,6 @@ public class DocumentManagerImpl implements DocumentManager{
         }
         return documents.get(filePath);
     }
-    
-    // Private methods
 
     /**
      * Get the path entry for the given file path.
@@ -117,5 +119,4 @@ public class DocumentManagerImpl implements DocumentManager{
             }
         }).map(Map.Entry::getKey).findFirst().orElse(null);
     }
-   
 }

@@ -8,13 +8,15 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
-import java.util.LinkedHashMap;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-
-public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
+/**
+ * SiddhiQLLangServerBaseVisitorImpl.
+ */
+public class SiddhiQLLanguageServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
     public CurrentPosition currentPosition = new CurrentPosition();
     int[] position;
     List<Object> output = new ArrayList<>();
@@ -26,7 +28,7 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
         return  currentPosition.contextTree;
     }
     public Object visit(ParserRuleContext tree) {
-        if (findCursorPosition(tree)){
+        if (findCursorPosition(tree)) {
             tree.accept(this);
             if (currentPosition.isFound) {
                 return output;
@@ -50,8 +52,7 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
                         break;
                     }
                }
-
-            }
+        }
         return currentPosition.isFound;
     }
     @Override
@@ -74,7 +75,7 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
         currentPosition.setCurrentEndLine(ctx.getStop().getLine());
         currentPosition.setStartPositionInLine(ctx.getStart().getCharPositionInLine());
         currentPosition.setEndPositionInLine(ctx.getStart().getCharPositionInLine() + ctx.getStop().getStopIndex() - ctx.getStart().getStartIndex());
-        if (currentPosition.getPosition()[0] <= position[0] && position[0] <= currentPosition.getPosition()[1] && currentPosition.getPosition()[2] <= position[1] && position[1] <= currentPosition.getPosition()[3]){
+        if (currentPosition.getPosition()[0] <= position[0] && position[0] <= currentPosition.getPosition()[1] && currentPosition.getPosition()[2] <= position[1] && position[1] <= currentPosition.getPosition()[3]) {
             direction = true;
             currentPosition.addContext(ctx);
             if (ctx.getChildCount() == 1 && ctx.getChild(0).getClass().equals(TerminalNodeImpl.class)) {
@@ -82,7 +83,7 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
                 currentPosition.setIsFound();
                 currentPosition.setTerminal(ctx.getChild(0));
             } else if (ctx.getChildCount() > 1) {
-                for (int i = 0;i < ctx.getChildCount(); i++) {
+                for (int i = 0; i < ctx.getChildCount(); i++) {
                     if (ctx.getChild(i).getClass().equals(TerminalNodeImpl.class)) {
                         if (visitTerminal((TerminalNodeImpl) ctx.getChild(i))) {
                             ParseTree terminal = ctx.getChild(i);
@@ -91,7 +92,6 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
                             currentPosition.setIsFound();
                             break;
                         }
-
                     }
                 }
             }
@@ -99,7 +99,7 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
         }
         return direction;
     }
-    private class CurrentPosition{
+    private class CurrentPosition {
 
         private int currentStartLine;
         private int currentEndLine;
@@ -109,7 +109,7 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
         private HashMap<String, Object> contextTree = new LinkedHashMap<>();
         private ParseTree terminal;
         public int[] getPosition() {
-            int[] position = new int[]{currentStartLine,currentEndLine, startPositionInLine, endPositionInLine};
+            int[] position = new int[]{currentStartLine, currentEndLine, startPositionInLine, endPositionInLine};
             return position;
         }
         public void setCurrentStartLine(int newLine) {
@@ -125,9 +125,9 @@ public class SiddhiQLLangServerBaseVisitorImpl extends SiddhiQLBaseVisitor {
             this.startPositionInLine = newStartPosition;
         }
         public void addContext(Object ctx) {
-            contextTree.put(ctx.getClass().toString(),ctx);
+            contextTree.put(ctx.getClass().toString(), ctx);
         }
-        public void setTerminal(ParseTree terminal){
+        public void setTerminal(ParseTree terminal) {
             this.terminal = terminal;
         }
         public ParseTree getTerminal() {

@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
 
+/**
+ * {@code CompletionProviderFactory} factory for completion providers.
+ */
 public class LSCompletionProviderFactory  {
     private static final LSCompletionProviderFactory INSTANCE = new LSCompletionProviderFactory();
 

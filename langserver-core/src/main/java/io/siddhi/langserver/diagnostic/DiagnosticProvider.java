@@ -13,21 +13,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DiagnosticProvider {
-    public DiagnosticProvider() {
-    }
-    public void compileAndSendDiagnostics(LanguageClient client,String fileUri,String sourceContent){
-        try{
-            Map<String,Class> map= new HashMap();
-            map=LSContext.INSTANCE.getSiddhiManager().getExtensions();
-            LSContext.INSTANCE.getSiddhiManager().validateSiddhiApp(sourceContent);
-            client.publishDiagnostics(new PublishDiagnosticsParams(fileUri,new ArrayList<>()));
+/**
+ * {@code DiagnosticProvider} Push diagnostics provided by SiddhiManager to client .
+ */
 
-        } catch(Throwable exception){
-            client.publishDiagnostics(new PublishDiagnosticsParams(fileUri,generateDiagnostics((SiddhiAppContextException)(exception))));
+public class DiagnosticProvider {
+    Map<String, Class> map = new HashMap();
+
+    public DiagnosticProvider() {
+        map.putAll(LSContext.INSTANCE.getSiddhiManager().getExtensions());
+    }
+    public void compileAndSendDiagnostics(LanguageClient client, String fileUri, String sourceContent) {
+        try {
+            LSContext.INSTANCE.getSiddhiManager().validateSiddhiApp(sourceContent);
+            client.publishDiagnostics(new PublishDiagnosticsParams(fileUri, new ArrayList<>(0)));
+        } catch (Throwable exception) {
+            client.publishDiagnostics(new PublishDiagnosticsParams(fileUri, generateDiagnostics((SiddhiAppContextException) (exception))));
         }
     }
-    private List<Diagnostic> generateDiagnostics(SiddhiAppContextException exception){
+    private List<Diagnostic> generateDiagnostics(SiddhiAppContextException exception) {
         try {
             List<Diagnostic> clientDiagnostics = new ArrayList<>();
             int startLine = (exception.getQueryContextStartIndex() != null) ? exception.getQueryContextStartIndex()[0] - 1 : 0; // LSP diagnostics range is 0 based
@@ -45,10 +49,10 @@ public class DiagnosticProvider {
             diagnostic.setSeverity(DiagnosticSeverity.Error);
             clientDiagnostics.add(diagnostic);
             return clientDiagnostics;
-        }
-        catch(Throwable e){
-            Throwable error =e;
+        } catch (Throwable e) {
+            Throwable error = e;
             return new ArrayList<>();
+            //TODO:check behaviour
         }
     }
 }

@@ -1,14 +1,19 @@
 package io.siddhi.langserver.completion.snippet.util;
 
-import io.siddhi.langserver.completion.snippet.util.metadata.MetaData;
-import io.siddhi.langserver.completion.snippet.util.metadata.AttributeMetaData;
-import io.siddhi.langserver.completion.snippet.util.metadata.ParameterMetaData;
-import io.siddhi.langserver.completion.snippet.util.metadata.ProcessorMetaData;
-
 import io.siddhi.annotation.Extension;
 import io.siddhi.annotation.Parameter;
 import io.siddhi.annotation.ParameterOverload;
 import io.siddhi.annotation.ReturnAttribute;
+import io.siddhi.core.SiddhiManager;
+import io.siddhi.langserver.LSContext;
+import io.siddhi.langserver.completion.snippet.util.metadata.AttributeMetaData;
+import io.siddhi.langserver.completion.snippet.util.metadata.MetaData;
+import io.siddhi.langserver.completion.snippet.util.metadata.ParameterMetaData;
+import io.siddhi.langserver.completion.snippet.util.metadata.ProcessorMetaData;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,24 +22,21 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.io.IOException;
-import io.siddhi.core.SiddhiManager;
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+/**
+ * {@code SnippetProviderUtil} Compiles the source code and generate parse(context) tree.
+ */
 
 public class SnippetProviderUtil {
-
-
     public static MetaData getInBuiltProcessorMetaData() {
-
         Map<String, Set<Class<?>>> processorClassMap = getClassesInClassPathFromPackages();
         return generateInBuiltMetaData(processorClassMap);
     }
     public static Map<String, MetaData> getExtensionProcessorMetaData() {
-        SiddhiManager  manager=new SiddhiManager();
+        SiddhiManager  manager = LSContext.INSTANCE.getSiddhiManager();
+        //todo:use previously declared siddhi manager
         Map<String, Class> extensionsMap = manager.getExtensions();
         return generateExtensionsMetaData(extensionsMap);
     }
@@ -52,6 +54,7 @@ public class SnippetProviderUtil {
      *
      * @return Processor types to Classes map
      */
+    //todo:geeting completion items from siddhi manager
     private static Map<String, Set<Class<?>>> getClassesInClassPathFromPackages() {
 
         String[] classPathNames = System.getProperty("java.class.path").split(File.pathSeparator);

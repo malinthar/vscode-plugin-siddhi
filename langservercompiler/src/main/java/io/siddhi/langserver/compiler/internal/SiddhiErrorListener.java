@@ -23,7 +23,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
 /**
- * Error listener in Siddhi Parser
+ * Error Listner.
  */
 public class SiddhiErrorListener extends BaseErrorListener {
     public static final SiddhiErrorListener INSTANCE = new SiddhiErrorListener();

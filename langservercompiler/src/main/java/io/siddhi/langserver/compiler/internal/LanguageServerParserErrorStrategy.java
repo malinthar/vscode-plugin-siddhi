@@ -32,7 +32,7 @@ public class LanguageServerParserErrorStrategy extends DefaultErrorStrategy {
         fillContext(recognizer.getContext());
         Token t = recognizer.getCurrentToken();
         String tokenName = getTokenErrorDisplay(t);
-        String msg = "extraneous input " + tokenName + " expecting "+
+        String msg = "extraneous input " + tokenName + " expecting " +
                 expecting.toString(recognizer.getVocabulary());
         recognizer.notifyErrorListeners(t, msg, null);
     }
@@ -48,9 +48,12 @@ public class LanguageServerParserErrorStrategy extends DefaultErrorStrategy {
         fillContext(recognizer.getContext());
         TokenStream tokens = recognizer.getInputStream();
         String input;
-        if ( tokens != null ) {
-            if ( e.getStartToken().getType() == Token.EOF ) input = "<EOF>";
-            else input = tokens.getText(e.getStartToken(), e.getOffendingToken());
+        if (tokens != null) {
+            if (e.getStartToken().getType() == Token.EOF) {
+                input = "<EOF>";
+            } else {
+                input = tokens.getText(e.getStartToken(), e.getOffendingToken());
+            }
         } else {
             input = "<unknown input>";
         }
@@ -71,7 +74,7 @@ public class LanguageServerParserErrorStrategy extends DefaultErrorStrategy {
         beginErrorCondition(recognizer);
         Token t = recognizer.getCurrentToken();
         String tokenName = getTokenErrorDisplay(t);
-        String msg = "extraneous input " + tokenName+" expecting " +
+        String msg = "extraneous input " + tokenName + " expecting " +
                 expecting.toString(recognizer.getVocabulary());
         recognizer.notifyErrorListeners(t, msg, null);
     }
@@ -82,19 +85,19 @@ public class LanguageServerParserErrorStrategy extends DefaultErrorStrategy {
         errorNode.setParent(recognizer.getContext());
         IntervalSet expecting = getExpectedTokens(recognizer);
         errorNode.setExpectedSymbols(expecting.toString(recognizer.getVocabulary()));
-        contextTree.put(ErrorNode.class.toString(),errorNode);
+        contextTree.put(ErrorNode.class.toString(), errorNode);
         contextTree.put(recognizer.getContext().getClass().toString(), recognizer.getContext());
         fillContext(recognizer.getContext());
         RuleContext ctx = e.getCtx();
-        String msg = "mismatched input "+getTokenErrorDisplay(e.getOffendingToken()) +
-                " expecting "+e.getExpectedTokens().toString(recognizer.getVocabulary());
+        String msg = "mismatched input " + getTokenErrorDisplay(e.getOffendingToken()) +
+                " expecting " + e.getExpectedTokens().toString(recognizer.getVocabulary());
         recognizer.notifyErrorListeners(e.getOffendingToken(), msg, e);
 
     }
-    public void fillContext(ParserRuleContext context){
+    public void fillContext(ParserRuleContext context) {
         if (context.parent != null) {
-            contextTree.put(context.parent.getClass().toString(), (ParserRuleContext)context.parent);
-            fillContext((ParserRuleContext)context.parent);
+            contextTree.put(context.parent.getClass().toString(), (ParserRuleContext) context.parent);
+            fillContext((ParserRuleContext) context.parent);
         }
 
     }
