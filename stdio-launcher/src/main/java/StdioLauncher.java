@@ -1,6 +1,8 @@
 
 
 import io.siddhi.langserver.SiddhiLanguageServer;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -9,10 +11,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
 
 /** To launch the language server
    Language server is imported
@@ -25,9 +23,7 @@ public class StdioLauncher {
 
     public static void main(String args[]) throws InterruptedException, ExecutionException {
         /**Launcher is started by the trigger event of client.*/
-        LogManager.getLogManager().reset();
-        Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-        globalLogger.setLevel(Level.OFF);
+        Logger.getRootLogger().setLevel(Level.OFF);
         startServer(System.in, System.out);
     }
 

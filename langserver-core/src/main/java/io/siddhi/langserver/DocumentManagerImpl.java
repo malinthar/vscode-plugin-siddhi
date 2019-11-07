@@ -1,8 +1,5 @@
 package io.siddhi.langserver;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,8 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * {@code SiddhiDocumentMangerImpl} manage the documents in the workspace.
  */
 public class DocumentManagerImpl implements DocumentManager {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentManagerImpl.class);
 
     private ConcurrentHashMap<Path, String> documents;
 
@@ -50,7 +45,6 @@ public class DocumentManagerImpl implements DocumentManager {
     @Override
     public void openFile(Path filePath, String content) {
         if (isFileOpen(filePath)) {
-            LOGGER.warn("File is Already opened");
             return;
         }
         this.documents.put(filePath, content);
@@ -66,7 +60,6 @@ public class DocumentManagerImpl implements DocumentManager {
     public void updateFile(Path filePath, String updatedContent) {
         Path opened = getPathEntry(filePath);
         if (opened == null) {
-            LOGGER.error("Cannot find the file to update: " + filePath.toString());
             return;
         }
 
@@ -82,7 +75,6 @@ public class DocumentManagerImpl implements DocumentManager {
     public void closeFile(Path filePath) {
         Path opened = getPathEntry(filePath);
         if (opened == null) {
-            LOGGER.warn("Cannot find open file [" + filePath.toString() + "] to close");
             return;
         }
 
@@ -114,7 +106,6 @@ public class DocumentManagerImpl implements DocumentManager {
             try {
                 return Files.isSameFile(entry.getKey(), filePath);
             } catch (IOException e) {
-                LOGGER.error("Error locating File: " + e.getMessage());
                 return false;
             }
         }).map(Map.Entry::getKey).findFirst().orElse(null);
