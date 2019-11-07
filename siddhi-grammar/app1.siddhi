@@ -3,7 +3,7 @@
 
 @sink(type='inMemory', topic='ride-request') 
 @sink(type='log')
-define stream RideRequestStream (userId string, pickupLocation string);
+define stream RideRequestStream (userId sting, pickupLocation string);
 
 @source(type='http', receiver.url='http://0.0.0.0:8059/taxi/request', @map(type='json', enclosing.element='$', @attributes('$.users','$.from'))) 
 @sink(type='log')
@@ -40,7 +40,6 @@ insert into  RideRequestStream;
 from RawAvailableTaxiStream
 select str:trim(taxiId) as taxiId, str:trim(location) as location
 insert into  AvailableTaxiStream;
-
 
 from RideEndStream
 select taxiId, userId, dropoffLocation, fare, currentTimeMillis() as currentTime

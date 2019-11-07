@@ -10,7 +10,6 @@ import java.util.List;
  * {@code LSCompletionProvider} CompletionProvider SPI.
  */
 public abstract class LSCompletionProvider {
-
     protected List<Class> attachmentPoints = new ArrayList<>();
     public abstract List<CompletionItem> getCompletions(LSContext context);
     public List<Class> getAttachmentPoints() {

@@ -4,7 +4,6 @@ import io.siddhi.langserver.LSContext;
 import io.siddhi.langserver.completion.ContextTreeVisitor;
 import io.siddhi.query.compiler.SiddhiQLLexer;
 import io.siddhi.query.compiler.SiddhiQLParser;
-import io.siddhi.query.compiler.internal.ErrorNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class SnippetGenerator {
     private ContextTreeVisitor visitor = ContextTreeVisitor.INSTANCE;
     /**default keywords suggested by error node.*/
     public Object getDefalutKeyWords(LSContext lsContext) {
-        String defaultKeyWordstring = (((ErrorNode) lsContext.getCurrentErrorNode()).getExpectedSymbols()).replaceAll("\\{", "").replaceAll("\\}", "");;
+        String defaultKeyWordstring = "keyword";
         defaultKeyWordstring = defaultKeyWordstring.toLowerCase();
         String[] defualtKeyWords = defaultKeyWordstring.split("\\s*,\\s*");
         return defualtKeyWords;

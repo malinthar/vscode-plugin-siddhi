@@ -4,6 +4,7 @@ import io.siddhi.langserver.DocumentManagerImpl;
 import io.siddhi.langserver.LSContext;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import org.eclipse.lsp4j.CompletionItem;
+import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.Position;
 
@@ -34,7 +35,14 @@ public class CompletionUtil {
        Map<Class, LSCompletionProvider> providers = LSContext.INSTANCE.FACTORY.getProviders();
        LSCompletionProvider contextProvider = providers.get(LSContext.INSTANCE.getCurrentContext().getClass());
        if (contextProvider != null) {
-           completionItems = contextProvider.getCompletions(LSContext.INSTANCE);
+           //completionItems = contextProvider.getCompletions(LSContext.INSTANCE);
+           CompletionItem completionItem = new CompletionItem();
+           completionItem.setInsertText("test");
+           completionItem.setLabel("testlabel");
+           completionItem.setKind(CompletionItemKind.Snippet);
+           completionItem.setDetail("testsugession");
+           completionItem.setFilterText("test");
+           completionItems.add(completionItem);
        }
        return completionItems;
    }

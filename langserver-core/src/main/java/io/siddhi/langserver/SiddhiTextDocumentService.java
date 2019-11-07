@@ -168,10 +168,14 @@ public class SiddhiTextDocumentService implements TextDocumentService {
 
     @Override
     public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {
+        //todo: handle errors
         String uri = didOpenTextDocumentParams.getTextDocument().getUri();
         String content = didOpenTextDocumentParams.getTextDocument().getText();
         this.documentManager.openFile(Paths.get(URI.create(uri)), content);
-        this.diagnosticProvider.compileAndSendDiagnostics(siddhiLanguageServer.getClient(), uri, content);
+        if (siddhiLanguageServer.getClient() != null) {
+            this.diagnosticProvider.compileAndSendDiagnostics(siddhiLanguageServer.getClient(), uri, content);
+        }
+
     }
 
     @Override
