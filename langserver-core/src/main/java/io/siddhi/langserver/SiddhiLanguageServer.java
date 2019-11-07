@@ -2,6 +2,7 @@ package io.siddhi.langserver;
 
 import io.siddhi.core.SiddhiManager;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
+import io.siddhi.query.compiler.SiddhiCompiler;
 import  org.eclipse.lsp4j.CompletionOptions;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
@@ -13,17 +14,21 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
 import java.util.concurrent.CompletableFuture;
 
-public class SiddhiLanguageServer implements LanguageServer{
+/**
+ * {@code SiddhiLanguageServer} language server for Siddhi.
+ */
+public class SiddhiLanguageServer implements LanguageServer {
     private LanguageClient client;
     private SiddhiTextDocumentService textDocumentService;
     private SiddhiWorkspaceService workspaceService;
     private int shutDownStatus = 1;
-    public SiddhiLanguageServer(){
+    public SiddhiLanguageServer() {
         LSContext.INSTANCE.setSiddhiLanguageServer(this);
         LSContext.INSTANCE.setSiddhiManager(new SiddhiManager());
         LSContext.INSTANCE.setDiagnosticProvider(new DiagnosticProvider());
-        this.textDocumentService=new SiddhiTextDocumentService();
-        this.workspaceService=new SiddhiWorkspaceService();
+        LSContext.INSTANCE.setSiddhiCompiler(new SiddhiCompiler());
+        this.textDocumentService = new SiddhiTextDocumentService();
+        this.workspaceService = new SiddhiWorkspaceService();
     }
     public void connect(LanguageClient languageClient) {
         this.client = languageClient;
@@ -58,10 +63,9 @@ public class SiddhiLanguageServer implements LanguageServer{
     @Override
     public WorkspaceService getWorkspaceService() {
         return this.workspaceService;
-}
+    }
 
-    public LanguageClient getClient(){
+    public LanguageClient getClient() {
         return this.client;
     }
-    
 }

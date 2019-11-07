@@ -7,14 +7,13 @@
         <version>5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.siddhi.ls</groupId>
+    <groupId>io.siddhi.ls</groupId>
     <artifactId>siddhi-language-server-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>langserver-core</module>
         <module>stdio-launcher</module>
-        <module>langservercompiler</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -22,6 +21,11 @@
                 <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-core</artifactId>
                 <version>${siddhi-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.siddhi</groupId>
+                <artifactId>siddhi-query-compiler</artifactId>
+                <version>5.1.8-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.lsp4j</groupId>
@@ -32,6 +36,12 @@
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr4-runtime</artifactId>
                 <version>${antlr4-runtime.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -98,5 +108,6 @@
         <lsp4j.version>0.6.0</lsp4j.version>
         <antlr4-runtime.version>4.7.2</antlr4-runtime.version>
         <siddhi-core.version>5.1.0</siddhi-core.version>
+        <testng.version>7.0.0</testng.version>
     </properties>
 </project>

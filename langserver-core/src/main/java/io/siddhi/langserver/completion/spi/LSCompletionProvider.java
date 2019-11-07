@@ -5,18 +5,14 @@ import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * {@code LSCompletionProvider} CompletionProvider SPI.
+ */
 public abstract class LSCompletionProvider {
     protected List<Class> attachmentPoints = new ArrayList<>();
-
-
     public abstract List<CompletionItem> getCompletions(LSContext context);
-
-
     public List<Class> getAttachmentPoints() {
         return this.attachmentPoints;
     }
-
-
 }

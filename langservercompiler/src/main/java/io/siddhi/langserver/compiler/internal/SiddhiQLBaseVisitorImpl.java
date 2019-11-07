@@ -667,10 +667,10 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
 
 //        join_stream
 //        :left_source=join_source join right_source=join_source right_unidirectional=UNIDIRECTIONAL (ON expression)?
-// 
-//        |left_source=join_source join right_source=join_source (ON expression)? 
+//
+//        |left_source=join_source join right_source=join_source (ON expression)?
 //        |left_source=join_source left_unidirectional=UNIDIRECTIONAL join right_source=join_source (ON expression)?
-// 
+//
 //        ;
 
         SingleInputStream leftStream = (SingleInputStream) visit(ctx.left_source);
@@ -786,14 +786,14 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public Object visitEvery_pattern_source_chain(@NotNull SiddhiQLParser.Every_pattern_source_chainContext ctx) {
 //        every_pattern_source_chain
-//        : '('every_pattern_source_chain')' 
-//        | EVERY '('pattern_source_chain ')' 
+//        : '('every_pattern_source_chain')'
+//        | EVERY '('pattern_source_chain ')'
 //        | every_pattern_source_chain  '->' every_pattern_source_chain
 //        | pattern_source_chain
-//        | EVERY pattern_source 
+//        | EVERY pattern_source
 //        ;
 
-        if (ctx.every_pattern_source_chain().size() == 1) { // '('every_pattern_source_chain')' 
+        if (ctx.every_pattern_source_chain().size() == 1) { // '('every_pattern_source_chain')'
             StateElement stateElement = ((StateElement) visit(ctx.every_pattern_source_chain(0)));
             populateQueryContext(stateElement, ctx);
             return stateElement;
@@ -805,12 +805,12 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
             populateQueryContext(nextStateElement, ctx);
             return nextStateElement;
         } else if (ctx.EVERY() != null) {
-            if (ctx.pattern_source_chain() != null) { // EVERY '('pattern_source_chain ')' 
+            if (ctx.pattern_source_chain() != null) { // EVERY '('pattern_source_chain ')'
                 EveryStateElement everyStateElement = new EveryStateElement((StateElement) visit(ctx
                         .pattern_source_chain()));
                 populateQueryContext(everyStateElement, ctx);
                 return everyStateElement;
-            } else if (ctx.pattern_source() != null) { // EVERY pattern_source 
+            } else if (ctx.pattern_source() != null) { // EVERY pattern_source
                 EveryStateElement everyStateElement = new EveryStateElement((StateElement) visit(ctx.pattern_source()));
                 populateQueryContext(everyStateElement, ctx);
                 return everyStateElement;
@@ -836,9 +836,9 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public Object visitPattern_source_chain(@NotNull SiddhiQLParser.Pattern_source_chainContext ctx) {
 //    pattern_source_chain
-//    : '('pattern_source_chain')' 
+//    : '('pattern_source_chain')'
 //    | pattern_source_chain  '->' pattern_source_chain
-//    | pattern_source 
+//    | pattern_source
 //    ;
 
         if (ctx.pattern_source_chain().size() == 1) {
@@ -863,7 +863,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public Object visitAbsent_pattern_source_chain(SiddhiQLParser.Absent_pattern_source_chainContext ctx) {
 //    absent_pattern_source_chain
-//    : EVERY? '('absent_pattern_source_chain')' 
+//    : EVERY? '('absent_pattern_source_chain')'
 //    | every_absent_pattern_source
 //    | left_absent_pattern_source
 //    | right_absent_pattern_source
@@ -884,7 +884,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public Object visitLeft_absent_pattern_source(SiddhiQLParser.Left_absent_pattern_sourceContext ctx) {
 //    left_absent_pattern_source
-//    : EVERY? '('left_absent_pattern_source')' 
+//    : EVERY? '('left_absent_pattern_source')'
 //    | every_absent_pattern_source '->' every_pattern_source_chain
 //    | left_absent_pattern_source '->' left_absent_pattern_source
 //    | left_absent_pattern_source '->' every_absent_pattern_source
@@ -893,7 +893,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
 
         if (ctx.left_absent_pattern_source().size() == 1 && ctx.every_absent_pattern_source() == null &&
                 ctx.every_pattern_source_chain() == null) {
-            // EVERY? '('left_absent_pattern_source')' 
+            // EVERY? '('left_absent_pattern_source')'
             StateElement stateElement = (StateElement) visit(ctx.left_absent_pattern_source(0));
             if (ctx.EVERY() != null) {
                 stateElement = new EveryStateElement(stateElement);
@@ -911,7 +911,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public Object visitRight_absent_pattern_source(SiddhiQLParser.Right_absent_pattern_sourceContext ctx) {
 //    right_absent_pattern_source
-//    : EVERY? '('right_absent_pattern_source')' 
+//    : EVERY? '('right_absent_pattern_source')'
 //    | every_pattern_source_chain '->' every_absent_pattern_source
 //    | right_absent_pattern_source '->' right_absent_pattern_source
 //    | every_absent_pattern_source '->' right_absent_pattern_source
@@ -919,7 +919,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
 //    ;
         if (ctx.right_absent_pattern_source().size() == 1 && ctx.every_absent_pattern_source() == null &&
                 ctx.every_pattern_source_chain() == null) {
-            // EVERY? '('right_absent_pattern_source')' 
+            // EVERY? '('right_absent_pattern_source')'
             StateElement stateElement = (StateElement) visit(ctx.right_absent_pattern_source(0));
             if (ctx.EVERY() != null) {
                 stateElement = new EveryStateElement(stateElement);
@@ -1164,7 +1164,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public Object visitAbsent_sequence_source_chain(SiddhiQLParser.Absent_sequence_source_chainContext ctx) {
 //        absent_sequence_source_chain
-//        : '('absent_sequence_source_chain')' 
+//        : '('absent_sequence_source_chain')'
 //        | basic_absent_pattern_source
 //        | left_absent_sequence_source
 //        | right_absent_sequence_source
@@ -1184,7 +1184,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     public Object visitLeft_absent_sequence_source(SiddhiQLParser.Left_absent_sequence_sourceContext ctx) {
 
 //        left_absent_sequence_source
-//        : '('left_absent_sequence_source')' 
+//        : '('left_absent_sequence_source')'
 //        | basic_absent_pattern_source ',' sequence_source_chain
 //        | left_absent_sequence_source ',' left_absent_sequence_source
 //        | left_absent_sequence_source ',' basic_absent_pattern_source
@@ -1193,7 +1193,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
 
         if (ctx.left_absent_sequence_source().size() == 1 && ctx.basic_absent_pattern_source() == null &&
                 ctx.sequence_source_chain() == null) {
-            // '('left_absent_pattern_source')' 
+            // '('left_absent_pattern_source')'
             StateElement stateElement = (StateElement) visit(ctx.left_absent_sequence_source(0));
             populateQueryContext(stateElement, ctx);
             return stateElement;
@@ -1208,7 +1208,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public Object visitRight_absent_sequence_source(SiddhiQLParser.Right_absent_sequence_sourceContext ctx) {
 //        right_absent_sequence_source
-//        : '('right_absent_sequence_source')' 
+//        : '('right_absent_sequence_source')'
 //        | sequence_source_chain ',' basic_absent_pattern_source
 //        | right_absent_sequence_source ',' right_absent_sequence_source
 //        | basic_absent_pattern_source ',' right_absent_sequence_source
@@ -1217,7 +1217,7 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
 
         if (ctx.right_absent_sequence_source().size() == 1 && ctx.basic_absent_pattern_source() == null &&
                 ctx.sequence_source_chain() == null) {
-            // '('right_absent_pattern_source')' 
+            // '('right_absent_pattern_source')'
             StateElement stateElement = (StateElement) visit(ctx.right_absent_sequence_source(0));
             populateQueryContext(stateElement, ctx);
             return stateElement;
@@ -1239,9 +1239,9 @@ public class SiddhiQLBaseVisitorImpl extends SiddhiQLBaseVisitor {
     @Override
     public StateElement visitSequence_source_chain(@NotNull SiddhiQLParser.Sequence_source_chainContext ctx) {
 //        sequence_source_chain
-//        :'('sequence_source_chain ')' 
+//        :'('sequence_source_chain ')'
 //        | sequence_source_chain ',' sequence_source_chain
-//        | sequence_source  
+//        | sequence_source
 //        ;
 
         if (ctx.sequence_source_chain().size() == 1) {

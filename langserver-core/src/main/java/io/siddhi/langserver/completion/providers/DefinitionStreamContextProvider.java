@@ -2,7 +2,7 @@ package io.siddhi.langserver.completion.providers;
 
 import io.siddhi.langserver.LSContext;
 import io.siddhi.langserver.completion.spi.LSCompletionProvider;
-import io.siddhi.langserver.compiler.SiddhiQLParser.Definition_streamContext;
+import io.siddhi.query.compiler.SiddhiQLParser.Definition_streamContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;

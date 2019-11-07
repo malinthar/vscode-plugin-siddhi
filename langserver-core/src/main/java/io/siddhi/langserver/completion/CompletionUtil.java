@@ -1,48 +1,51 @@
 package io.siddhi.langserver.completion;
 
+import io.siddhi.langserver.DocumentManagerImpl;
+import io.siddhi.langserver.LSContext;
+import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import org.eclipse.lsp4j.CompletionItem;
+import org.eclipse.lsp4j.CompletionItemKind;
 import org.eclipse.lsp4j.CompletionParams;
 import org.eclipse.lsp4j.Position;
-import io.siddhi.langserver.DocumentManagerImpl;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.spi.LSCompletionProvider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/** completionUtil class*/
-
-public class CompletionUtil
-{
-
-   public static List<CompletionItem> getCompletions(CompletionParams completionParams) throws URISyntaxException{
+/**
+ * {@code CompletionUtil} Provide utilities for completion providers.
+ */
+public class CompletionUtil {
+   public static List<CompletionItem> getCompletions(CompletionParams completionParams) throws URISyntaxException {
 
        /** resolve the position*/
        Path path = Paths.get(new URI(completionParams.getTextDocument().getUri()));
        String sourceContent = DocumentManagerImpl.getInstance().getFileContent(path);
        Position cursorPosition = completionParams.getPosition();
-       List<CompletionItem> completionItems=new ArrayList<>();
+       List<CompletionItem> completionItems = new ArrayList<>();
 
        /** retrieve the completions from siddhi completion engine */
-       LSContext.INSTANCE.setPosition(cursorPosition.getLine()+1,cursorPosition.getCharacter());
+       LSContext.INSTANCE.setPosition(cursorPosition.getLine() + 1, cursorPosition.getCharacter());
        LSContext.INSTANCE.setSourceContent(sourceContent);
        ContextTreeGenerator.INSTANCE.generateContextTree();
-       Map<Class,LSCompletionProvider> providers=LSContext.INSTANCE.factory.getProviders();
-       LSCompletionProvider contextProvider=providers.get(LSContext.INSTANCE.getCurrentContext().getClass());
-       if(contextProvider!=null) {
-           completionItems = contextProvider.getCompletions(LSContext.INSTANCE);
+       Map<Class, LSCompletionProvider> providers = LSContext.INSTANCE.FACTORY.getProviders();
+       LSCompletionProvider contextProvider = providers.get(LSContext.INSTANCE.getCurrentContext().getClass());
+       if (contextProvider != null) {
+           //completionItems = contextProvider.getCompletions(LSContext.INSTANCE);
+           CompletionItem completionItem = new CompletionItem();
+           completionItem.setInsertText("test");
+           completionItem.setLabel("testlabel");
+           completionItem.setKind(CompletionItemKind.Snippet);
+           completionItem.setDetail("testsugession");
+           completionItem.setFilterText("test");
+           completionItems.add(completionItem);
        }
        return completionItems;
-
-
    }
-
-
-
 }
 
 

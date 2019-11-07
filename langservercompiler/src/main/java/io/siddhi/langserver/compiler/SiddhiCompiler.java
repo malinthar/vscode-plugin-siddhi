@@ -1,20 +1,3 @@
-/*
- * Copyright (c) 2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- *
- * WSO2 Inc. licenses this file to you under the Apache License,
- * Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 
 /**
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,9 +16,10 @@
 
 package io.siddhi.langserver.compiler;
 
-import io.siddhi.langserver.compiler.internal.SiddhiQLBaseVisitorImpl;
+import io.siddhi.langserver.compiler.exception.SiddhiParserException;
 import io.siddhi.langserver.compiler.internal.LanguageServerParserErrorStrategy;
 import io.siddhi.langserver.compiler.internal.SiddhiErrorListener;
+import io.siddhi.langserver.compiler.internal.SiddhiQLBaseVisitorImpl;
 import io.siddhi.query.api.definition.AggregationDefinition;
 import io.siddhi.query.api.definition.FunctionDefinition;
 import io.siddhi.query.api.definition.StreamDefinition;
@@ -44,17 +28,16 @@ import io.siddhi.query.api.execution.partition.Partition;
 import io.siddhi.query.api.execution.query.Query;
 import io.siddhi.query.api.execution.query.StoreQuery;
 import io.siddhi.query.api.expression.constant.TimeConstant;
-import io.siddhi.langserver.compiler.exception.SiddhiParserException;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-/** lang server basevisitoe*/
+
 
 /**
- * Siddhi query compiler
+ * Siddhi Language Server compiler.
  */
 public class SiddhiCompiler {
 
@@ -72,17 +55,13 @@ public class SiddhiCompiler {
         try {
             SiddhiQLParser.ParseContext tree = parser.parse();
             return tree;
-        }catch(SiddhiParserException error){
-           if(((LanguageServerParserErrorStrategy)parser.getErrorHandler()).triggered){
-               return ((LanguageServerParserErrorStrategy)parser.getErrorHandler()).contextTree;
-           }
-           else{
+        } catch (SiddhiParserException error) {
+           if (((LanguageServerParserErrorStrategy) parser.getErrorHandler()).triggered) {
+               return ((LanguageServerParserErrorStrategy) parser.getErrorHandler()).contextTree;
+           } else {
                return error;
            }
-
         }
-
-
     }
 
     public static StreamDefinition parseStreamDefinition(String source) {

@@ -1,0 +1,17 @@
+{
+  "position": {
+    "line": 5,
+    "character": 40
+  },
+  "source": "attributetype/source/AttributeTypeCompletion.siddhi",
+  "items": [
+    {
+      "label": "testlabel",
+      "kind": "snippet",
+      "detail": "testsugession",
+      "sortText": "",
+      "insertText": "test",
+      "insertTextFormat": "Snippet"
+    }
+  ]
+}

@@ -4,14 +4,37 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
       <parent>
         <artifactId>siddhi-language-server-parent</artifactId>
-        <groupId>org.siddhi.ls</groupId>
+        <groupId>io.siddhi.ls</groupId>
         <version>0.0.1-SNAPSHOT</version>
       </parent>
       <modelVersion>4.0.0</modelVersion>
       <artifactId>langserver-core</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <name>langserver-core</name>
-     <build>
+      <dependencies>
+         <dependency>
+            <groupId>io.siddhi</groupId>
+            <artifactId>siddhi-core</artifactId>
+         </dependency>
+         <dependency>
+            <groupId>org.eclipse.lsp4j</groupId>
+            <artifactId>org.eclipse.lsp4j</artifactId>
+         </dependency>
+         <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4-runtime</artifactId>
+         </dependency>
+         <dependency>
+            <groupId>io.siddhi</groupId>
+            <artifactId>siddhi-query-compiler</artifactId>
+         </dependency>
+          <dependency>
+              <groupId>org.testng</groupId>
+              <artifactId>testng</artifactId>
+              <scope>test</scope>
+          </dependency>
+    </dependencies>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -21,25 +44,16 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>false</skipTests>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-  <dependencies>
-      <dependency>
-        <groupId>io.siddhi</groupId>
-        <artifactId>siddhi-core</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.lsp4j</groupId>
-        <artifactId>org.eclipse.lsp4j</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr4-runtime</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>io.siddhi</groupId>
-          <artifactId>langserver-compiler</artifactId>
-          <version>1.0-SNAPSHOT</version>
-      </dependency>
-  </dependencies>
 </project>
