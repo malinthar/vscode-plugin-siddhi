@@ -27,11 +27,11 @@ results
 .vscode-test
 
 #directories
-client/out
-client/.vscode-test
-client/node_modules
+vscode-client/out
+vscode-client/.vscode-test
+vscode-client/node_modules
 node_modules/
-client/.vscode/
-client/node_modules/
-client/.vscode-test/
+vscode-client/.vscode/
+vscode-client/node_modules/
+vscode-client/.vscode-test/
 
