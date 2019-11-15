@@ -1,7 +1,7 @@
-package io.siddhi.langserver.completion.snippet;
+package io.siddhi.langserver.completion.providers.snippet;
 
-import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.ContextTreeVisitor;
+import io.siddhi.langserver.LSOperationContext;
+import io.siddhi.langserver.completion.util.ContextTreeVisitor;
 import io.siddhi.query.compiler.SiddhiQLLexer;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -19,7 +19,7 @@ public class SnippetGenerator {
     /** context visitor to find specific tokens given the context.*/
     private ContextTreeVisitor visitor = ContextTreeVisitor.INSTANCE;
     /**default keywords suggested by error node.*/
-    public Object getDefalutKeyWords(LSContext lsContext) {
+    public Object getDefalutKeyWords(LSOperationContext lsContext) {
         String defaultKeyWordstring = "keyword";
         defaultKeyWordstring = defaultKeyWordstring.toLowerCase();
         String[] defualtKeyWords = defaultKeyWordstring.split("\\s*,\\s*");
@@ -28,28 +28,28 @@ public class SnippetGenerator {
     /**
      *annotation snippets.
       */
-    public Object getAnnotations(LSContext lsContext) {
+    public Object getAnnotations(LSOperationContext lsContext) {
         List<String[]> annotations = new ArrayList<>();
         annotations.add(SnippetBlock.KW_APP);
         return annotations;
     }
     /**name context snippets.*/
-    public Object getName(LSContext lsContext) {
+    public Object getName(LSOperationContext lsContext) {
       return SnippetBlock.KW_NAME;
     }
     /**attribute type context snippets.*/
-    public Object getAttributetype(LSContext lsContext) {
+    public Object getAttributetype(LSOperationContext lsContext) {
         SnippetBlock.getBuiltInFuncions();
-        return SnippetBlock.getAttributeTypeContextKWs();
+        return SnippetBlock.attributeTypes;
     }
     /**annotation element context snippets.*/
-    public Object getAnnotationElements(LSContext lsContext) {
+    public Object getAnnotationElements(LSOperationContext lsContext) {
         List<String[]> elements = new ArrayList<>();
         elements.add(SnippetBlock.KW_NAME);
         return elements;
     }
     /** attribute reference context snippets.*/
-    public Object getAttributeReference(LSContext lsContext) {
+    public Object getAttributeReference(LSOperationContext lsContext) {
         List<String> refs = new ArrayList<>();
         List<ParserRuleContext> namecontexts = this.visitor.findRuleContexts((ParserRuleContext) lsContext.getContextTree().get(SiddhiQLParser.Siddhi_appContext.class.toString()), SiddhiQLParser.Attribute_nameContext.class);
         for (ParserRuleContext ctx:namecontexts) {
@@ -64,12 +64,12 @@ public class SnippetGenerator {
         }
     }
     /** output attribute context snippets.*/
-    public Object getOutputAttribute(LSContext lsContext) {
+    public Object getOutputAttribute(LSOperationContext lsContext) {
         return this.getQuerySection(lsContext);
     }
 
     /** query input context snippets.*/
-    public Object getQueryInput(LSContext lsContext) {
+    public Object getQueryInput(LSOperationContext lsContext) {
         List<String> instreams = new ArrayList<>();
         List<ParserRuleContext> sourceContexts = this.visitor.findRuleContexts((ParserRuleContext) lsContext.getContextTree().get(SiddhiQLParser.Siddhi_appContext.class.toString()), SiddhiQLParser.SourceContext.class);
         for (ParserRuleContext ctx:sourceContexts) {
@@ -83,7 +83,7 @@ public class SnippetGenerator {
 
     }
     /**query section context snippets.*/
-    public Object getQuerySection(LSContext lsContext) {
+    public Object getQuerySection(LSOperationContext lsContext) {
         List<String[]> refs = new ArrayList<>();
 
         // todo:change lscontext getMethod; return a map instead of an array list from the ErrorStrategy
@@ -103,7 +103,7 @@ public class SnippetGenerator {
     }
 
     /**query context snippets.*/
-    public Object getQueryContext(LSContext lsContext) {
+    public Object getQueryContext(LSOperationContext lsContext) {
         List<String[]> snips = new ArrayList<>();
         snips.addAll((ArrayList) this.getQuerySection(lsContext));
         snips.addAll(SnippetBlock.getQueryContextKWs());
@@ -111,20 +111,20 @@ public class SnippetGenerator {
         return snips;
     }
     /**source context snippets.*/
-    public Object getSourceContext(LSContext lsContext) {
+    public Object getSourceContext(LSOperationContext lsContext) {
         List<String[]> snips = new ArrayList<>();
         return snips;
     }
     /**DefinitionFunctionContext snippets.*/
-    public Object getDefFuncContext(LSContext lsContext) {
-        List<String[]> snips = new ArrayList<>();
+    public Object getDefFuncContext(LSOperationContext lsContext) {
+        List<Object[]> snips = new ArrayList<>();
         snips.add(SnippetBlock.FUNC_DEFINITION);
         return snips;
     }
     /**completion item generation.*/
-    public Object getSiddhiAppSnippets(LSContext lsContext) {
-        List<String[]> siddhiAppContextSnippets = new ArrayList<>();
-        siddhiAppContextSnippets.add(SnippetBlock.APP_ANNOTATION);
+    public Object getSiddhiAppSnippets(LSOperationContext lsContext) {
+        List<Object[]> siddhiAppContextSnippets = new ArrayList<>();
+        siddhiAppContextSnippets.addAll(SnippetBlock.APP_ANNOTATION_DEFINITION);
         siddhiAppContextSnippets.add(SnippetBlock.QUERY_DEFINITION);
         siddhiAppContextSnippets.add(SnippetBlock.STREAM_DEFINITION);
         siddhiAppContextSnippets.add(SnippetBlock.AGGREGATION_DEFINITION);

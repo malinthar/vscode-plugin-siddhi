@@ -1,15 +1,15 @@
-package io.siddhi.langserver.completion.snippet.util;
+package io.siddhi.langserver.completion.providers.snippet.util;
 
 import io.siddhi.annotation.Extension;
 import io.siddhi.annotation.Parameter;
 import io.siddhi.annotation.ParameterOverload;
 import io.siddhi.annotation.ReturnAttribute;
 import io.siddhi.core.SiddhiManager;
-import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.snippet.util.metadata.AttributeMetaData;
-import io.siddhi.langserver.completion.snippet.util.metadata.MetaData;
-import io.siddhi.langserver.completion.snippet.util.metadata.ParameterMetaData;
-import io.siddhi.langserver.completion.snippet.util.metadata.ProcessorMetaData;
+import io.siddhi.langserver.LSOperationContext;
+import io.siddhi.langserver.completion.providers.snippet.util.metadata.AttributeMetaData;
+import io.siddhi.langserver.completion.providers.snippet.util.metadata.MetaData;
+import io.siddhi.langserver.completion.providers.snippet.util.metadata.ParameterMetaData;
+import io.siddhi.langserver.completion.providers.snippet.util.metadata.ProcessorMetaData;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,17 +25,20 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+//todo:change comments.
 /**
  * {@code SnippetProviderUtil} Compiles the source code and generate parse(context) tree.
  */
 
 public class SnippetProviderUtil {
+
     public static MetaData getInBuiltProcessorMetaData() {
         Map<String, Set<Class<?>>> processorClassMap = getClassesInClassPathFromPackages();
         return generateInBuiltMetaData(processorClassMap);
     }
+
     public static Map<String, MetaData> getExtensionProcessorMetaData() {
-        SiddhiManager  manager = LSContext.INSTANCE.getSiddhiManager();
+        SiddhiManager  manager = LSOperationContext.INSTANCE.getSiddhiManager();
         //todo:use previously declared siddhi manager
         Map<String, Class> extensionsMap = manager.getExtensions();
         return generateExtensionsMetaData(extensionsMap);
@@ -131,6 +134,7 @@ public class SnippetProviderUtil {
 
         return metaData;
     }
+
     private static void populateInBuiltProcessorMetaDataList(List<ProcessorMetaData> targetProcessorMetaDataList,
                                                              Map<String, Set<Class<?>>> classMap,
                                                              String processorType) {
@@ -145,6 +149,7 @@ public class SnippetProviderUtil {
             }
         }
     }
+
     private static ProcessorMetaData generateProcessorMetaData(Class<?> processorClass,
                                                                String processorType) {
 

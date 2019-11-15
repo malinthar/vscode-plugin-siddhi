@@ -1,11 +1,12 @@
 package io.siddhi.langserver.completion.providers;
 
-import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.snippet.SnippetProvider;
-import io.siddhi.langserver.completion.spi.LSCompletionProvider;
+import io.siddhi.langserver.completion.providers.snippet.SnippetBlock;
+import io.siddhi.langserver.completion.providers.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,10 +14,20 @@ import java.util.List;
  */
 public class AnnotationElementContextProvider extends LSCompletionProvider{
     public AnnotationElementContextProvider() {
-        this.attachmentPoints.add(SiddhiQLParser.Annotation_elementContext.class);
+        this.attachmentContext = SiddhiQLParser.Annotation_elementContext.class.getName();
     }
-    public List<CompletionItem> getCompletions(LSContext lsContext) {
-            SnippetProvider sinppetProvider = new SnippetProvider();
-            return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.Annotation_elementContext) lsContext.getCurrentContext(),lsContext);
+
+    @Override
+    public List<CompletionItem> getCompletions() {
+        ParserRuleContext parent = visitParent();
+        if (parent instanceof SiddhiQLParser.App_annotationContext) {
+            //todo: whether to add Namecontext check
+            List<Object[]> suggestions = Arrays.asList(SnippetBlock.APP_ANNOTATION_ELEMENT_NAME_DEFINITION,
+                    SnippetBlock.APP_ANNOTATION_ELEMENT_DESCRIPTION_DEFINITION);
+            return  generateCompletionList(suggestions);
+        } else {
+            return generateCompletionList(null);
         }
+    }
+
 }

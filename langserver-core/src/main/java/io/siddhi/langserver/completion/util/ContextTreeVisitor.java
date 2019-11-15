@@ -1,4 +1,4 @@
-package io.siddhi.langserver.completion;
+package io.siddhi.langserver.completion.util;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 

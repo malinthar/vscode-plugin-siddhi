@@ -3,7 +3,7 @@
 
 @sink(type='inMemory', topic='ride-request') 
 @sink(type='log')
-define stream RideRequestStream (userId sting, pickupLocation string);
+define stream RideRequestStream (userId string, pickupLocation string);
 
 @source(type='http', receiver.url='http://0.0.0.0:8059/taxi/request', @map(type='json', enclosing.element='$', @attributes('$.users','$.from'))) 
 @sink(type='log')
@@ -21,7 +21,7 @@ define stream AvailableTaxiStream (taxiId string, location string);
 @sink(type='inMemory', topic='ride-start') 
 define stream RideStartStream (taxiId string, userId string, pickupLocation string, dropoffLocation string);
 
-@source(type='http', receiver.url="http://0.0.0.0:8089/taxi/end", @map(type='json'))
+@source(type='http', recver.url="http://0.0.0.0:8089/taxi/end", @map(type='json'))
 @sink(type='log')
 define stream RideEndStream (taxiId string, userId string, dropoffLocation string, fare double);
 

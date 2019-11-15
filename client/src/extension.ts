@@ -7,6 +7,7 @@ const main:string='StdioLauncher';
 
 export function activate(context:ExtensionContext){
    const JAVA_HOME=process.env.JAVA_HOME
+   //if java_home_is_not_set?
    //const SIDDHI_HOME="/home/malintha/Documents/wso2/siddhi-modules/tooling/siddhi-tooling-5.1.0/"
    const SIDDHI_HOME=workspace.getConfiguration().get("siddhi_home")
    let excecutable : string = path.join(String(JAVA_HOME),'bin', 'java');

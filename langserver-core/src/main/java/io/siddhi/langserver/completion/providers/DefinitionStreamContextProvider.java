@@ -1,7 +1,7 @@
 package io.siddhi.langserver.completion.providers;
 
-import io.siddhi.langserver.LSContext;
-import io.siddhi.langserver.completion.spi.LSCompletionProvider;
+import io.siddhi.langserver.LSOperationContext;
+import io.siddhi.langserver.completion.providers.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser.Definition_streamContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
@@ -11,10 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefinitionStreamContextProvider extends LSCompletionProvider {
-    public DefinitionStreamContextProvider(){
-        this.attachmentPoints.add(Definition_streamContext.class);
+    public DefinitionStreamContextProvider() {
+        this.attachmentContext = Definition_streamContext.class.getName();
     }
-    public List<CompletionItem> getCompletions(LSContext lsContext){
+
+    @Override
+    public List<CompletionItem> getCompletions() {
+        return null;
+    }
+
+    public List<CompletionItem> getCompletions(LSOperationContext lsContext){
         ParserRuleContext currctx=lsContext.getCurrentContext();
         CompletionItem completionItem = new CompletionItem();
         completionItem.setInsertText(currctx.getClass().toString());

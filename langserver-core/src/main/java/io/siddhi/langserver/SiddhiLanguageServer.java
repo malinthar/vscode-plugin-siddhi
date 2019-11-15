@@ -1,9 +1,9 @@
 package io.siddhi.langserver;
 
 import io.siddhi.core.SiddhiManager;
+import io.siddhi.langserver.completion.providers.snippet.SnippetProvider;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
-import io.siddhi.query.compiler.SiddhiCompiler;
-import  org.eclipse.lsp4j.CompletionOptions;
+import org.eclipse.lsp4j.CompletionOptions;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.ServerCapabilities;
@@ -12,6 +12,7 @@ import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.lsp4j.services.WorkspaceService;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -23,10 +24,12 @@ public class SiddhiLanguageServer implements LanguageServer {
     private SiddhiWorkspaceService workspaceService;
     private int shutDownStatus = 1;
     public SiddhiLanguageServer() {
-        LSContext.INSTANCE.setSiddhiLanguageServer(this);
-        LSContext.INSTANCE.setSiddhiManager(new SiddhiManager());
-        LSContext.INSTANCE.setDiagnosticProvider(new DiagnosticProvider());
-        LSContext.INSTANCE.setSiddhiCompiler(new SiddhiCompiler());
+        LSOperationContext.INSTANCE.setSiddhiLanguageServer(this);
+        LSOperationContext.INSTANCE.setSiddhiManager(new SiddhiManager());
+        LSOperationContext.INSTANCE.setDiagnosticProvider(new DiagnosticProvider());
+        //todo: check if completion is a capability
+        LSOperationContext.INSTANCE.setSnippetProvider(new SnippetProvider());
+
         this.textDocumentService = new SiddhiTextDocumentService();
         this.workspaceService = new SiddhiWorkspaceService();
     }

@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package io.siddhi.langserver.completion.snippet.util;
+package io.siddhi.langserver.completion.providers.snippet.util;
 
 import io.siddhi.core.executor.function.FunctionExecutor;
 import io.siddhi.core.query.processor.stream.StreamProcessor;

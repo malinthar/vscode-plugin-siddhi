@@ -1,6 +1,7 @@
 
-
 import io.siddhi.langserver.SiddhiLanguageServer;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -9,25 +10,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
-
-/** To launch the language server
-   Language server is imported
-   It provides its capabilities.
+/** To launch the language server.
 */
 public class StdioLauncher {
 
-    // To avoid multiple slf4j binding error printed to I/O which breaks LS protocol.
-
-
     public static void main(String args[]) throws InterruptedException, ExecutionException {
         /**Launcher is started by the trigger event of client.*/
-        LogManager.getLogManager().reset();
-        Logger globalLogger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-        globalLogger.setLevel(Level.OFF);
+        // To avoid logs printed to I/O which breaks LS protocol.
+        Logger.getRootLogger().setLevel(Level.OFF);
         startServer(System.in, System.out);
     }
 
@@ -52,32 +43,3 @@ public class StdioLauncher {
 https://github.com/eclipse/lsp4j/blob/master/org.eclipse.lsp4j.jsonrpc/src/main/java/org/eclipse/lsp4j/jsonrpc/Launcher.java
 https://www.baeldung.com/java-future.
 */
-    /**stdio used as the transport.*/
-//        PrintStream stream =new PrintStream();
-//    PrintStream old = System.out;
-//    PrintStream myStream = new PrintStream(System.out) {
-//        @Override
-//        public void println(String x) {
-//            old.println(x);
-//        }
-//        @Override
-//        public void print(String x) {
-//            old.print(x);
-//        }
-//
-//        @Override
-//        public void write(int b) {
-//            old.write(b);
-//        }
-//
-//        @Override
-//        public void write(byte[] b) throws IOException {
-//            old.write(b);
-//        }
-//
-//        @Override
-//        public void write(byte[] buf, int off, int len) {
-//            old.write(buf, off, len);
-//        }
-//    };
-//        System.setOut(myStream);

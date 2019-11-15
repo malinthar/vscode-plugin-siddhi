@@ -1,8 +1,9 @@
 package io.siddhi.langserver;
 
 import io.siddhi.langserver.common.utils.CommonUtil;
-import io.siddhi.langserver.completion.CompletionUtil;
+import io.siddhi.langserver.completion.util.CompletionUtil;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
+import org.apache.log4j.Logger;
 import org.eclipse.lsp4j.CodeAction;
 import org.eclipse.lsp4j.CodeActionParams;
 import org.eclipse.lsp4j.CodeLens;
@@ -23,6 +24,7 @@ import org.eclipse.lsp4j.DocumentSymbol;
 import org.eclipse.lsp4j.DocumentSymbolParams;
 import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.Location;
+import org.eclipse.lsp4j.LocationLink;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.ReferenceParams;
 import org.eclipse.lsp4j.RenameParams;
@@ -58,8 +60,8 @@ public class SiddhiTextDocumentService implements TextDocumentService {
     //TODO:Add debouncer
     public SiddhiTextDocumentService() {
         this.documentManager = DocumentManagerImpl.getInstance();
-        this.siddhiLanguageServer = LSContext.INSTANCE.getSiddhiLanguageServer();
-        this.diagnosticProvider = LSContext.INSTANCE.getDiagnosticProvider();
+        this.siddhiLanguageServer = LSOperationContext.INSTANCE.getSiddhiLanguageServer();
+        this.diagnosticProvider = LSOperationContext.INSTANCE.getDiagnosticProvider();
     }
 
     /**
@@ -108,7 +110,8 @@ public class SiddhiTextDocumentService implements TextDocumentService {
     }
 
     @Override
-    public CompletableFuture<List<? extends Location>> definition(TextDocumentPositionParams textDocumentPositionParams) {
+    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(TextDocumentPositionParams textDocumentPositionParams) {
+
         return null;
     }
 
@@ -180,6 +183,7 @@ public class SiddhiTextDocumentService implements TextDocumentService {
 
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
+        Logger root = Logger.getRootLogger();
         String fileUri = didChangeTextDocumentParams.getTextDocument().getUri();
         Optional<Path> changedPath = CommonUtil.getPathFromURI(fileUri);
         if (!changedPath.isPresent()) {

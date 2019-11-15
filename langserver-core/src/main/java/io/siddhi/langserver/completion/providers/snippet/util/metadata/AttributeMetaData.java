@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package io.siddhi.langserver.completion.snippet.util.metadata;
+package io.siddhi.langserver.completion.providers.snippet.util.metadata;
 
 import io.siddhi.annotation.util.DataType;
 

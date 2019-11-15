@@ -27,6 +27,7 @@ repository:
       - include: '#executionElement'
       - include: '#keywords'
 
+  #special case- remove annotation element from here
   appAnnotation:
     begin:  '(@)(\s*)((?i)App)(\s*)(:)(\s*)((?i)name|(?i)description|(?i)statistics)(\s*)(\()'
     end: '\)'
@@ -403,7 +404,6 @@ repository:
     patterns:
       - include: '#functionOperation'
 
-  # can't include parenthesis inside function opration 
   streamFunction:
     begin: '(#)(\s*)(?=[a-zA-Z_][a-zA-Z_0-9]*\(|[a-zA-Z_][a-zA-Z_0-9]*\s*:)'
     end: '(?<=\))'

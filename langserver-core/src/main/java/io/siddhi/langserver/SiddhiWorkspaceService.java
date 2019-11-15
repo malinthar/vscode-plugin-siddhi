@@ -19,7 +19,7 @@ import java.util.concurrent.CompletableFuture;
 public class SiddhiWorkspaceService implements WorkspaceService {
     private DiagnosticProvider diagnosticProvider;
     SiddhiWorkspaceService() {
-             this.diagnosticProvider = LSContext.INSTANCE.getDiagnosticProvider();
+             this.diagnosticProvider = LSOperationContext.INSTANCE.getDiagnosticProvider();
     }
     @Override
     public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
