@@ -23,11 +23,14 @@ public class AnnotationElementContextProvider extends LSCompletionProvider{
         if (parent instanceof SiddhiQLParser.App_annotationContext) {
             //todo: whether to add Namecontext check
             List<Object[]> suggestions = Arrays.asList(SnippetBlock.APP_ANNOTATION_ELEMENT_NAME_DEFINITION,
-                    SnippetBlock.APP_ANNOTATION_ELEMENT_DESCRIPTION_DEFINITION);
+                    SnippetBlock.APP_ANNOTATION_ELEMENT_DESCRIPTION_DEFINITION, SnippetBlock.APP_ANNOTATION_ELEMENT_STATISTICS_DEFINITION);
             return  generateCompletionList(suggestions);
         } else {
             return generateCompletionList(null);
         }
     }
 
+    public static class NameContextProvider {
+
+    }
 }

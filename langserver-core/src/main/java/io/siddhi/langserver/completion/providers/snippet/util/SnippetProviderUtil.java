@@ -10,6 +10,7 @@ import io.siddhi.langserver.completion.providers.snippet.util.metadata.Attribute
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.MetaData;
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.ParameterMetaData;
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.ProcessorMetaData;
+import org.eclipse.lsp4j.CompletionItemKind;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,10 +23,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
+import java.util.stream.Collectors;
 
 //todo:change comments.
+
 /**
  * {@code SnippetProviderUtil} Compiles the source code and generate parse(context) tree.
  */
@@ -33,12 +39,14 @@ import java.util.jar.JarInputStream;
 public class SnippetProviderUtil {
 
     public static MetaData getInBuiltProcessorMetaData() {
+
         Map<String, Set<Class<?>>> processorClassMap = getClassesInClassPathFromPackages();
         return generateInBuiltMetaData(processorClassMap);
     }
 
     public static Map<String, MetaData> getExtensionProcessorMetaData() {
-        SiddhiManager  manager = LSOperationContext.INSTANCE.getSiddhiManager();
+
+        SiddhiManager manager = LSOperationContext.INSTANCE.getSiddhiManager();
         //todo:use previously declared siddhi manager
         Map<String, Class> extensionsMap = manager.getExtensions();
         return generateExtensionsMetaData(extensionsMap);
@@ -50,7 +58,6 @@ public class SnippetProviderUtil {
      *
      * @return Extension processor meta data
      */
-
 
     /**
      * Returns processor types to Classes map with classes in the packages in processor type to package name map.
@@ -91,19 +98,19 @@ public class SnippetProviderUtil {
                                 }
                             }
                         } catch (ClassNotFoundException e) {
-                           // LOGGER.debug("Failed to load class " +
-                                    //jarEntryName.substring(0, jarEntryName.length() - 6), e);
+                            // LOGGER.debug("Failed to load class " +
+                            //jarEntryName.substring(0, jarEntryName.length() - 6), e);
                         }
                         jarEntry = stream.getNextJarEntry();
                     }
                 } catch (IOException e) {
-                   // LOGGER.debug("Failed to open the jar input stream for " + classPathName, e);
+                    // LOGGER.debug("Failed to open the jar input stream for " + classPathName, e);
                 } finally {
                     if (stream != null) {
                         try {
                             stream.close();
                         } catch (IOException e) {
-                           // LOGGER.debug("Failed to close the jar input stream for " + classPathName, e);
+                            // LOGGER.debug("Failed to close the jar input stream for " + classPathName, e);
                         }
                     }
                 }
@@ -111,6 +118,7 @@ public class SnippetProviderUtil {
         }
         return classSetMap;
     }
+
     private static MetaData generateInBuiltMetaData(Map<String, Set<Class<?>>> classMap) {
 
         MetaData metaData = new MetaData();
@@ -168,6 +176,7 @@ public class SnippetProviderUtil {
             return null;
         }
     }
+
     private static ProcessorMetaData generateProcessorMetaData(Class<?> processorClass, String processorType,
                                                                String processorName) {
 
@@ -241,6 +250,7 @@ public class SnippetProviderUtil {
         }
         return processorMetaData;
     }
+
     private static Map<String, MetaData> generateExtensionsMetaData(Map<String, Class> extensionsMap) {
 
         Map<String, MetaData> metaDataMap = new HashMap<>();
@@ -316,6 +326,27 @@ public class SnippetProviderUtil {
             */
         }
         return metaDataMap;
+    }
+
+    static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
+    }
+
+    public static List<ProcessorMetaData> getFunctionMetaData() {
+
+        List<ProcessorMetaData> functions = new ArrayList<>();
+        MetaData builtinProcessorMetadata = getInBuiltProcessorMetaData();
+        Map<String, MetaData> metadataMap = getExtensionProcessorMetaData();
+        for (Map.Entry<String, MetaData> entry : metadataMap.entrySet()) {
+            functions.addAll(entry.getValue().getFunctions());
+        }
+        functions.addAll(builtinProcessorMetadata.getFunctions());
+        List<ProcessorMetaData> filteredFunctions = functions.stream().filter(distinctByKey(b -> b.getName())).collect(
+                Collectors.toList());
+        return filteredFunctions;
+
     }
 
 }

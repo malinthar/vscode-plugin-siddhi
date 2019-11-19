@@ -13,6 +13,8 @@ io.siddhi.langserver.completion.providers.QuerySectionContextProvider
 io.siddhi.langserver.completion.providers.QueryContextProvider
 io.siddhi.langserver.completion.providers.SiddhiAppContextProvider
 io.siddhi.langserver.completion.providers.OutputAttributeContextProvider
+io.siddhi.langserver.completion.providers.FunctionOperationContextProvider
+io.siddhi.langserver.completion.providers.BasicMathOperationContextProvider
 
 
 

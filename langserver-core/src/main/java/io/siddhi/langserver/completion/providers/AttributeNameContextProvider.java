@@ -1,6 +1,6 @@
 package io.siddhi.langserver.completion.providers;
 
-import io.siddhi.langserver.LSOperationContext;
+import io.siddhi.langserver.completion.providers.snippet.SnippetBlock;
 import io.siddhi.langserver.completion.providers.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -9,17 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AttributeNameContextProvider extends LSCompletionProvider {
+
     public AttributeNameContextProvider() {
+
         this.attachmentContext = SiddhiQLParser.Attribute_nameContext.class.getName();
     }
 
     @Override
     public List<CompletionItem> getCompletions() {
-        return null;
+
+        if (visitParent() instanceof SiddhiQLParser.Attribute_referenceContext) {
+            return generateCompletionList(null);
+
+        } else {
+            //todo: change this initialization
+            List<Object[]> suggestions = new ArrayList<>();
+            suggestions.add(SnippetBlock.ATTRIBUTE_NAME_TYPE_SNIPPET);
+            return generateCompletionList(suggestions);
+        }
+
     }
 
-    public List<CompletionItem> getCompletions(LSOperationContext context){
-        List<CompletionItem> completionItems=new ArrayList<>();
-        return completionItems;
-    }
 }
+
+//todo store without calling Arrays.aslist everytime. each time an array object is created. It is not healthy

@@ -813,7 +813,7 @@ repository:
   #change instert-> insert_into , update-> update or insert_into
   querySection:
     begin: '(?i)select'
-    end: '(?i)(?=insert|update|output|\)|;)'
+    end: '(?=insert|update|output|\)|;)'
     beginCaptures:
       '0': {name: 'keyword.control.siddhi'}
     name: querysection.siddhi
@@ -834,8 +834,8 @@ repository:
     beginCaptures:
       '1': { name: keyword.control.siddhi}
       '3': { name: keyword.control.siddhi}
-    end: '(?=(?i)\baggregate\b|\bhaving\b|(?i)\border\b(\s*)(?i)by|(?i)limit|(?i)offset|(?i)insert|(?i)update|(?i)output|;)'
-    name: phrase.groupby.siddhi
+    end: '(?=aggregate|having|order\s*by|limit|offset|insert|update|output|;)'
+    name: phrase.groupbys.siddhi
     patterns:
       - include: '#attributeReference'
 

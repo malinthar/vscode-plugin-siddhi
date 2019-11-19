@@ -6,14 +6,14 @@ import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.List;
 
-public class IdContextProvider  extends LSCompletionProvider {
-    public IdContextProvider() {
-        this.attachmentContext = SiddhiQLParser.IdContext.class.getName();
+public class BasicMathOperationContextProvider extends LSCompletionProvider {
+
+    public BasicMathOperationContextProvider(){
+        this.attachmentContext = SiddhiQLParser.Basic_math_operationContext.class.getName();
     }
 
     @Override
     public List<CompletionItem> getCompletions() {
-        return generateCompletionList(null);
+        return null;
     }
-
 }

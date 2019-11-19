@@ -1494,7 +1494,7 @@
     },
     "querySection": {
       "begin": "(?i)select",
-      "end": "(?i)(?=insert|update|output|\\)|;)",
+      "end": "(?=insert|update|output|\\)|;)",
       "beginCaptures": {
         "0": {
           "name": "keyword.control.siddhi"
@@ -1540,8 +1540,8 @@
           "name": "keyword.control.siddhi"
         }
       },
-      "end": "(?=(?i)\\baggregate\\b|\\bhaving\\b|(?i)\\border\\b(\\s*)(?i)by|(?i)limit|(?i)offset|(?i)insert|(?i)update|(?i)output|;)",
-      "name": "phrase.groupby.siddhi",
+      "end": "(?=aggregate|having|order\\s*by|limit|offset|insert|update|output|;)",
+      "name": "phrase.groupbys.siddhi",
       "patterns": [
         {
           "include": "#attributeReference"

@@ -3,6 +3,9 @@ package io.siddhi.langserver.completion.providers.snippet;
 import io.siddhi.core.SiddhiManager;
 import io.siddhi.langserver.completion.providers.snippet.util.SnippetProviderUtil;
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.MetaData;
+import io.siddhi.langserver.completion.providers.snippet.util.metadata.ProcessorMetaData;
+import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp4j.CompletionItemKind;
 
 import java.util.ArrayList;
@@ -20,6 +23,11 @@ public class SnippetBlock {
      */
     //todo : filter word is the word filtered when inserting for example if
     // @app is already there it is filtered and inserted into the file.
+
+    /**
+     * Each completion snippet consists of an array of
+     * {inserted-text,label,completion-item-kind,detail,filter-word,sort-text,}
+     */
     public static final Object[] APP_NAME_ANNOTATION_DEFINITION =
             {"@App:Name(\"App_Name\")", "annotate-appName", CompletionItemKind.Snippet, "annotate-AppName\n" +
                     "@App:Name(\"${1:App_Name}\")", "@app"};
@@ -42,15 +50,21 @@ public class SnippetBlock {
     public static final Object[] KEYWORD_ANNOTATION_DESCRIPTION =
             {"description", "description", CompletionItemKind.Snippet, "app-annotation-description", "@app:"};
 
+    public static final Object[] KEYWORD_ANNOTATION_STATISTICS =
+            {"statistics", "statistics", CompletionItemKind.Snippet, "app-annotation-statistics", "@app:"};
+
     public static final Object[] APP_ANNOTATION_ELEMENT_NAME_DEFINITION =
-            {"'plan name'", "plan name", CompletionItemKind.Snippet, "app-annotation-element", "@app:name"};
+            {"\"plan name\"", "plan name", CompletionItemKind.Snippet, "app-annotation-element", "@app:name"};
     public static final Object[] APP_ANNOTATION_ELEMENT_DESCRIPTION_DEFINITION =
-            {"'plan description'", "plan description", CompletionItemKind.Snippet, "app-annotation-element", "@app" +
+            {"\"plan description\"", "plan description", CompletionItemKind.Snippet, "app-annotation-element", "@app" +
                     ":description"};
+
+    public static final Object[] APP_ANNOTATION_ELEMENT_STATISTICS_DEFINITION =
+            {"\"statistic\"", "statistic", CompletionItemKind.Snippet, "app-annotation-element", "@app:statistics"};
 
     public static final Object[] STREAM_DEFINITION =
             {"define stream stream_name (attr1 Type1, attrN TypeN)", "define-stream", CompletionItemKind.Snippet,
-                    "define stream stream_name ($attrname $Type1, $nextattrname $TypeN)", "define"};
+                    "define stream stream_name ($attrname $Type1, $nextattrname $TypeN)", "stream"};
 
     public static final Object[] QUERY_DEFINITION = {
             "from stream_name\n" +
@@ -60,17 +74,18 @@ public class SnippetBlock {
             "select $attribute1 $attribute2\n" +
             "insert into output_stream", "from"};
 
-    public static final Object[] FUNC_DEFINITION = {"define function function_name[lang_name] return return_type { \n" +
-            "    function_body \n" +
-            "};", "define-function", CompletionItemKind.Snippet,
-            "define-Function\n" +
-                    "define function ${1:function_name}[${2:lang_name}] return ${3:return_type} { \n" +
-                    "\t${4:function_body} \n" +
-                    "};", "define"};
+    public static final Object[] FUNCTION_DEFINITION =
+            {"define function function_name[lang_name] return return_type { \n" +
+                    "    function_body \n" +
+                    "};", "define-function", CompletionItemKind.Snippet,
+                    "define-Function\n" +
+                            "define function ${1:function_name}[${2:lang_name}] return ${3:return_type} { \n" +
+                            "\t${4:function_body} \n" +
+                            "};", "function"};
 
     public static final Object[] TABLE_DEFINITION =
             {"define table table_name (attr1 Type1, attN TypeN);", "define-table", CompletionItemKind.Snippet,
-                    "define table ${1:table_name} (${2:attr1} ${3:Type1}, ${4:attN} ${5:TypeN});", "define"};
+                    "define table ${1:table_name} (${2:attr1} ${3:Type1}, ${4:attN} ${5:TypeN});", "table"};
 
     public static final Object[] AGGREGATION_DEFINITION = {"define aggregation aggregator_name\n" +
             "from input_stream\n" +
@@ -80,7 +95,7 @@ public class SnippetBlock {
             CompletionItemKind.Snippet, "define aggregation ${1:aggregator_name}\n" + "from ${2:input_stream}\n" +
             "select ${3:attribute1}, ${4:aggregate_function}(${5:attribute2}) as ${6:attribute3},${7:aggregate_function}(${8:attribute4}) as ${9:attribute5}\n" +
             "\tgroup by ${10:attribute6}\n" + "\taggregate by ${11:timestamp_attribute} every ${12:time_periods};",
-            "define"};
+            "define aggregation"};
 
     public static final Object[] PARTITION_DEFINITION = {"partition with (attribute_name of stream_name)\n" +
             "begin\n" +
@@ -181,7 +196,7 @@ public class SnippetBlock {
                     "define stream ${12:stream_name} (${13:attribute1} ${14:Type1}, ${15:attributeN} ${16:TypeN});",
                     "@sink"};
 
-    public static Object[] SOURCE_DEFINITION = {"@source(type='source_type', option_key='option_value',\n" +
+    public static final Object[] SOURCE_DEFINITION = {"@source(type='source_type', option_key='option_value',\n" +
             "    @map(type='map_type', option_key='option_value',\n" +
             "        @attributes('attribute_mapping_1', 'attribute_mapping_N')\n" +
             "    )\n" +
@@ -195,47 +210,60 @@ public class SnippetBlock {
             ")\n" +
             "define stream ${9:stream_name} (${10:attribute1} ${11:Type1}, ${12:attributeN} ${13:TypeN});", "@source"};
 
-    public static Object[] ANNOTATION_ASYNC_DEFINITION =
+    public static final Object[] ANNOTATION_ASYNC_DEFINITION =
             {"@async(buffer.size=\"64\", workers='2', batch.size.max='10')", "annotate-Async",
                     CompletionItemKind.Snippet,
-                    "annotate-Async\n" +
-                            "@async(buffer.size=\"${1:64}\", workers='${2:2}', batch.size.max='${3:10}')", "@async"};
+                    "annotate-Async\n" + "@async(buffer.size=\"${1:64}\", workers='${2:2}', batch.size.max='${3:10}')",
+                    "@async"};
 
-    public static Object[] ANNOTATION_QUERYINFO_DEFINITION = {"@info(name = \"Query_Name\")", "annotate-queryInfo",
-            CompletionItemKind.Snippet, "@async(buffer" +
-            ".size=\"64\", " +
-            "workers='2', batch" +
-            ".size" +
-            ".max='10')", "@info"};
+    public static final Object[] ANNOTATION_QUERYINFO_DEFINITION =
+            {"@info(name = \"Query_Name\")", "annotate" + "-queryInfo", CompletionItemKind.Snippet,
+                    "@async(buffer" + ".size=\"64\", " + "workers='2', batch" + ".size" + ".max='10')", "@info"};
 
-    public static Object[] ANNOTATION_PRIMARY_KEY_DEFINITION =
+    public static final Object[] ANNOTATION_PRIMARY_KEY_DEFINITION =
             {"@primaryKey('attribute_name')", "annotate-primarykey", CompletionItemKind.Snippet,
-                    "annotate-PrimaryKey\n" +
-                            "@primaryKey('${1:attribute_name}')", "@primaryKey"};
+                    "annotate-PrimaryKey\n" + "@primaryKey('${1:attribute_name}')", "@primaryKey"};
 
-    public static Object[] ANNOTATION_INDEX_DEFINITION = {"@index('attribute_name')", "annotate-index",
+    public static final Object[] ANNOTATION_INDEX_DEFINITION = {"@index('attribute_name')", "annotate-index",
             CompletionItemKind.Snippet, "annotate" +
             "-Index\n" +
             "@index('${1:attribute_name}')", "@index"};
 
+    public static final Object[] ATTRIBUTE_NAME_TYPE_SNIPPET = {"attribute_name attribute_type", "attribute_name " +
+            "attribute_type",
+            CompletionItemKind.Snippet, "$attributeName <BOOL,FLOAT,DOUBLE,OBJECT,STRING,INT,LONG>", ""};
+
     //todo : add other definitions.
     /**
-     * default keywords.
+     * Siddhi app context's keywords
      */
-    public static final String[] KW_DEFINE = {"define", "define", "keyword", "define"};
-    public static final String[] KW_STREAM = {"stream", "stream", "keyword", "stream"};
-    public static final String[] KW_SELECT = {"select", "select", "keyword", "select"};
-    public static final String[] KW_INSERT = {"insert", "insert", "keyword", "insert"};
-    public static final String[] KW_DELETE = {"delete", "delete", "keyword", "delete"};
-    public static final String[] KW_UPDATE = {"update", "update", "keyword", "update"};
-    public static final String[] KW_RETURN = {"return", "return", "keyword", "return"};
-    public static final String[] KW_OUTPUT = {"output", "output", "keyword", "output"};
-    public static final String[] KW_FROM = {"from", "from", "keyword", "from"};
-    public static final String[] KW_NAME = {"name", "name", "keyword", "name"};
-    public static final String[] KW_APP = {"app", "app", "keyword", "app"};
+    public static final Object[] KEYWORD_DEFINE = {"define", "define", CompletionItemKind.Keyword, "keyword", "define"};
+    public static final Object[] KEYWORD_STREAM = {"stream", "stream", CompletionItemKind.Keyword, "keyword", "stream"};
+    public static final Object[] KEYWORD_AGGREGATION =
+            {"aggregation", "aggregation", CompletionItemKind.Keyword, "keyword", "aggregation"};
+    public static final Object[] KEYWORD_TRIGGER =
+            {"trigger", "trigger", CompletionItemKind.Keyword, "keyword", "trigger"};
+    public static final Object[] KEYWORD_FUNCTION =
+            {"function", "function", CompletionItemKind.Keyword, "keyword", "function"};
+    public static final Object[] KEYWORD_WINDOW = {"window", "window", CompletionItemKind.Keyword, "keyword", "window"};
+    public static final Object[] KEYWORD_PARTITION =
+            {"partition", "partition", CompletionItemKind.Keyword, "keyword", "partition"};
+    public static final Object[] KEYWORD_TABLE = {"table", "table", CompletionItemKind.Keyword, "keyword", "table"};
+    public static final Object[] KEYWORD_FROM = {"from", "from", CompletionItemKind.Keyword, "keyword", "from"};
 
     /**
-     * atribute type keywords.
+     * Query context keywords.
+     */
+
+    public static final Object[] KEYWORD_SELECT = {"select", "select", CompletionItemKind.Keyword, "keyword", "select"};
+    public static final Object[] KEYWORD_INSERT = {"insert", "insert", CompletionItemKind.Keyword, "keyword", "insert"};
+    public static final Object[] KEYWORD_DELETE = {"delete", "delete", CompletionItemKind.Keyword, "keyword", "delete"};
+    public static final Object[] KEYWORD_UPDATE = {"update", "update", CompletionItemKind.Keyword, "keyword", "update"};
+    public static final Object[] KEYWORD_RETURN = {"return", "return", CompletionItemKind.Keyword, "keyword", "return"};
+    public static final Object[] KEYWORD_OUTPUT = {"output", "output", CompletionItemKind.Keyword, "keyword", "output"};
+
+    /**
+     * Siddhi attribute-type context's keywords.
      */
 
     //todo:have more descriptive explanation : adding keyword thing seprately
@@ -254,23 +282,76 @@ public class SnippetBlock {
     public static final Object[] KEYWORD_OBJECT =
             {"object", "object", CompletionItemKind.Keyword, "attribute type:object", "object"};
 
-    public static final List<Object[]> attributeTypes = Arrays.asList(KEYWORD_STRING, KEYWORD_INT, KEYWORD_FLOAT,
+    public static final List<Object[]> attributeTypes = Arrays.asList(
+            KEYWORD_STRING,
+            KEYWORD_INT,
+            KEYWORD_FLOAT,
             KEYWORD_DOUBLE,
             KEYWORD_LONG,
-            KEYWORD_BOOL, KEYWORD_OBJECT);
+            KEYWORD_BOOL,
+            KEYWORD_OBJECT);
+
+    /**
+     * Function operation context's function completions
+     */
+
+    public static List<Object[]> suggestions = new ArrayList<>();
+
+    public static List<Object[]> getFunctions() {
+
+        if (suggestions.isEmpty()) {
+            List<ProcessorMetaData> functions = SnippetProviderUtil.getFunctionMetaData();
+            for (ProcessorMetaData function : functions) {
+                suggestions.add(generateFunctionCompletionItem(function));
+            }
+        }
+        return suggestions;
+    }
+
+    /**
+     * Attribute reference context's completion generation
+     */
+
+    public static List<Object[]> generateAttributeReferences(List<Object> terminals) {
+        List<Object[]> suggestions = new ArrayList<>();
+        for (Object terminal : terminals) {
+            String attributeValue = ((TerminalNodeImpl) terminal).getText();
+            if ( attributeValue != null) {
+                suggestions.add( new Object[] {attributeValue, attributeValue, CompletionItemKind.Reference,
+                        "attribute-reference",attributeValue});
+            }
+
+        }
+        return suggestions;
+    }
+
+    public static Object[] generateFunctionCompletionItem(ProcessorMetaData function) {
+        //todo: when it has multiple parameter overloads
+        StringBuilder insertText = new StringBuilder(function.getName());
+        if (function.getParameterOverloads().isEmpty()) {
+            insertText.append("()");
+        } else {
+            insertText.append("(").append(String.join(",", function.getParameterOverloads().get(0))).append(")");
+        }
+        Object[] functionCompletionItem = {insertText.toString(), function.getName(), CompletionItemKind.Function,
+                function.getDescription(),
+                function.getName()};
+        return functionCompletionItem;
+    }
 
     /**
      * by context getters.
      */
+
     public static List<String[]> getQueryContextKWs() {
 
         List<String[]> kws = new ArrayList<>();
-        kws.add(KW_SELECT);
-        kws.add(KW_INSERT);
-        kws.add(KW_OUTPUT);
-        kws.add(KW_RETURN);
-        kws.add(KW_DELETE);
-        kws.add(KW_UPDATE);
+//        kws.add(KW_SELECT);
+//        kws.add(KW_INSERT);
+//        kws.add(KW_OUTPUT);
+//        kws.add(KW_RETURN);
+//        kws.add(KW_DELETE);
+//        kws.add(KW_UPDATE);
         return kws;
     }
     //todo: adding in multiple rows: is it necessary?
@@ -303,3 +384,23 @@ public class SnippetBlock {
         String app = "tets";
     }
 }
+
+
+/*
+    private String label;
+    private CompletionItemKind kind;
+    private String detail;
+    private Either<String, MarkupContent> documentation;
+    private Boolean deprecated;
+    private Boolean preselect;
+    private String sortText;
+    private String filterText;
+    private String insertText;
+    private InsertTextFormat insertTextFormat;
+    private TextEdit textEdit;
+    private List<TextEdit> additionalTextEdits;
+    private List<String> commitCharacters;
+    private Command command;
+ */
+
+//todo after all things have been done look at these things and complete all the completion items

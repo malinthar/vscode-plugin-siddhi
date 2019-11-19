@@ -75,16 +75,19 @@ public class CompletionUtil {
 
         List<CompletionItem> completionItems = currentContextProvider.getCompletions();
         //todo: check whether the completions are empty/ Arraylist of zero length-check, what if parent is null?
+       //todo: Null point could come here
         if (completionItems.isEmpty()) {
             ParserRuleContext parentContext =
                     (ParserRuleContext) LSOperationContext.INSTANCE.getCurrentContext().parent;
             LSOperationContext.INSTANCE.setCurrentContext(parentContext);
             currentContextProvider =
                     LSOperationContext.INSTANCE.FACTORY.getProviders().get(parentContext.getClass().getName());
-            completionItems = currentContextProvider.getCompletions();
+            completionItems = traverseContextTreeUpward(currentContextProvider);
             return completionItems;
         } else {
             return completionItems;
         }
     }
+    //todo error here:
+
 }

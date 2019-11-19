@@ -19,8 +19,5 @@ public class DefinitionFunctionContextProvider extends LSCompletionProvider {
         return null;
     }
 
-    public List<CompletionItem> getCompletions(LSOperationContext lsContext){
-        SnippetProvider sinppetProvider=new SnippetProvider();
-        return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.Definition_functionContext) lsContext.getCurrentContext(),lsContext);
-    }
+
 }

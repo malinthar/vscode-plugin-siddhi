@@ -3,10 +3,7 @@ package io.siddhi.langserver;
 import io.siddhi.core.SiddhiManager;
 import io.siddhi.langserver.completion.LSCompletionProviderFactory;
 import io.siddhi.langserver.completion.providers.snippet.SnippetProvider;
-import io.siddhi.langserver.completion.providers.snippet.util.SnippetProviderUtil;
-import io.siddhi.langserver.completion.providers.snippet.util.metadata.MetaData;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
-import io.siddhi.query.compiler.SiddhiCompiler;
 import io.siddhi.query.compiler.langserver.LSErrorNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -32,12 +29,8 @@ public class LSOperationContext {
     private SiddhiLanguageServer siddhiLanguageServer;
     private SiddhiManager siddhiManager;
     private DiagnosticProvider diagnosticProvider;
-    private SiddhiCompiler siddhiCompiler;
     private SnippetProvider snippetProvider;
     public static final LSCompletionProviderFactory FACTORY = LSCompletionProviderFactory.getInstance();
-    private MetaData metadata;
-    private Map<String, MetaData> extensionMetaData;
-    private Map<String, Class> extensionMap;
     //todo:chnage here
 
     public void setPosition(int line, int col) {
@@ -78,6 +71,7 @@ public class LSOperationContext {
     }
 
     public Map<String, ParseTree> getContextTree() {
+
         return this.contextTree;
     }
 
@@ -106,35 +100,6 @@ public class LSOperationContext {
         return this.sourceContent;
     }
 
-    public MetaData getMetadata() {
-
-        return metadata;
-    }
-
-    public void setMetadata(MetaData metadata) {
-
-        this.metadata = metadata;
-    }
-
-    public Map<String, MetaData> getExtensionMetaData() {
-
-        return extensionMetaData;
-    }
-
-    public void setExtensionMetaData(Map<String, MetaData> extensionMetaData) {
-
-        this.extensionMetaData = extensionMetaData;
-    }
-
-    public Map<String, Class> getExtensionMap() {
-
-        return extensionMap;
-    }
-
-    public void setExtensionMap(Map<String, Class> extensionMap) {
-
-        this.extensionMap = extensionMap;
-    }
     //todo:check if this is needed, change comment
 
     /**
@@ -169,10 +134,7 @@ public class LSOperationContext {
     public void setSiddhiManager(SiddhiManager siddhiManager) {
 
         this.siddhiManager = siddhiManager;
-        //todo: if completion is enabled, check condition
-        this.metadata = SnippetProviderUtil.getInBuiltProcessorMetaData();
-        this.extensionMetaData = SnippetProviderUtil.getExtensionProcessorMetaData();
-        this.extensionMap = this.siddhiManager.getExtensions();
+        //todo: if completion is enabled, check  condition
     }
 
     public SiddhiManager getSiddhiManager() {

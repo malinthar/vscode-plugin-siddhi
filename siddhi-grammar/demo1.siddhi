@@ -1,4 +1,16 @@
 @App:name('plan name')
 @App:description("App to consume the inputs.")
-define stream  Foo(attribute1 string,a string);
-define stream Mysytream(attribute String, attributew float);
+--  at parser errorStrategy get contextTree.
+  
+define stream Foo(name string, age int);
+define stream TradeStream (symbol string, price double, volume long, timestamp long);
+
+define aggregation TradeAggregation
+  from TradeStream
+  select symbol, avg(price) as avgPrice, sum(price) as total
+    group by symbol
+    aggregate by timestamp every sec ... year;
+    
+-- query not working- bug
+from Foo select name group by age order by name insert into output ;
+

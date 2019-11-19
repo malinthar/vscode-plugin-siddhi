@@ -20,8 +20,4 @@ public class QuerySectionContextProvider extends LSCompletionProvider {
         return null;
     }
 
-    public List<CompletionItem> getCompletions(LSOperationContext lsContext){
-        SnippetProvider sinppetProvider=new SnippetProvider();
-        return (ArrayList)sinppetProvider.getSnippets((SiddhiQLParser.Query_sectionContext) lsContext.getCurrentContext(),lsContext);
-    }
 }
