@@ -7,17 +7,16 @@ import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.List;
 
-public class BasicMathOperationContextProvider extends LSCompletionProvider {
+public class ConstantValueContextProvider extends LSCompletionProvider {
 
-    public BasicMathOperationContextProvider(){
-        this.attachmentContext = SiddhiQLParser.Basic_math_operationContext.class.getName();
+    public ConstantValueContextProvider(){
+        this.attachmentContext = SiddhiQLParser.Constant_valueContext.class.getName();
     }
-
     @Override
     public List<CompletionItem> getCompletions() {
         List<CompletionItem> completions;
         completions =
-                LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Attribute_referenceContext.class.getName()).getCompletions();
+                LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Bool_valueContext.class.getName()).getCompletions();
         return completions;
     }
 }

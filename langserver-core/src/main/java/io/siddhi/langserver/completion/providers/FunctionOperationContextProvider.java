@@ -10,7 +10,6 @@ import java.util.List;
 public class FunctionOperationContextProvider extends LSCompletionProvider {
 
     public FunctionOperationContextProvider() {
-
         this.attachmentContext = SiddhiQLParser.Function_operationContext.class.getName();
     }
 
@@ -21,3 +20,6 @@ public class FunctionOperationContextProvider extends LSCompletionProvider {
     }
 
 }
+
+
+//todo: check why the Terminal Node added for function operation Context

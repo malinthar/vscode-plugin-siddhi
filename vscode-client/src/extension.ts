@@ -1,38 +1,33 @@
-import * as path from 'path';
-import {workspace, Disposable, ExtensionContext} from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions } from 'vscode-languageclient';
+'use strict'
 
+/**
+ * Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ *
+ * WSO2 Inc. licenses this file to you under the Apache License,
+ * Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ */
 
-const main:string='StdioLauncher';
+import {ExtensionContext,window} from 'vscode';
+import { siddhiExtensionInstance } from './core/extension'
+import { log } from './utils/logger';
 
-export function activate(context:ExtensionContext){
-   const JAVA_HOME=process.env.JAVA_HOME
-   //if java_home_is_not_set?
-   //const SIDDHI_HOME="/home/malintha/Documents/wso2/siddhi-modules/tooling/siddhi-tooling-5.1.0/"
-   const SIDDHI_HOME=workspace.getConfiguration().get("siddhi_home")
-   let excecutable : string = path.join(String(JAVA_HOME),'bin', 'java');
-   let classPath = path.join(__dirname, '..', 'launcher','ls-launcher-0.0.1-SNAPSHOT.jar');
-   const SIDDHI_HOME_LIB=path.join(String(SIDDHI_HOME), 'lib','*');
-   const SIDDHI_HOME_PLUGINS=path.join(String(SIDDHI_HOME), 'wso2','lib','plugins','*');
-   const LANGSERVER_LIB=path.join(String(SIDDHI_HOME), 'langserver_lib','*');
-   classPath=SIDDHI_HOME+':'+SIDDHI_HOME_LIB+':'+SIDDHI_HOME_PLUGINS+':'+LANGSERVER_LIB+':'+classPath
-   const args: string[] = ['-cp',classPath];
-
-   process.env.LSDEBUG="true";
-   //'-Xdebug','-Xnoagent','-Djava.compiler=NONE','-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005,quiet=y',
-   if (process.env.LSDEBUG === "true") {
-      //console.log('LSDEBUG is set to "true". Services will run on debug mode');
-      args.push('-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005,quiet=y');
-   }
-   let serverOptions:ServerOptions={
-      command:excecutable,
-      args: [...args, main],
-      options: {}
-   }
-   let clientOptions:LanguageClientOptions={
-       documentSelector: [{scheme: 'file', language: 'siddhi'}],
-   }
-   let disposable = new LanguageClient('SiddhiLanguageServer', 'Siddhi Language Server', serverOptions, clientOptions,true).start();
-
-   context.subscriptions.push(disposable);
+export function activate(context:ExtensionContext): Promise<any>{
+   siddhiExtensionInstance.setContext(context);
+   return siddhiExtensionInstance.init().then()
+   .catch(exception =>{
+      log("Failed to activate Siddhi extension. " + (exception.message ? exception.message : exception));
+      window.showWarningMessage("Siddhi extension did not start properly.")
+   })
 }

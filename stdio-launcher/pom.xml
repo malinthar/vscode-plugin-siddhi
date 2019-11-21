@@ -44,7 +44,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/../client/launcher/</outputDirectory>
+                            <outputDirectory>${basedir}/../vscode-client/launcher/</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${basedir}/target/</directory>

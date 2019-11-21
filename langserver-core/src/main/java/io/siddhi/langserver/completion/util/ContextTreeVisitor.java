@@ -43,9 +43,9 @@ public class ContextTreeVisitor {
         }
     }
 
-    public static List<ParserRuleContext> findFromChildren(ParserRuleContext parentContext, Class childContext) {
+    public static List<ParseTree> findFromChildren(ParserRuleContext parentContext, Class childContext) {
 
-        List<ParserRuleContext> ruleContexts = new ArrayList<>();
+        List<ParseTree> ruleContexts = new ArrayList<>();
         if (parentContext.getChildCount() != 0) {
             List<ParserRuleContext> children = parentContext.getRuleContexts(ParserRuleContext.class);
             for (ParserRuleContext childCtx : children) {

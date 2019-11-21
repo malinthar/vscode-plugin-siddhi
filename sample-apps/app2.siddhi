@@ -1,0 +1,42 @@
+@App:name("App2-AnalyticsAndFraudDedectionApp")
+@App:description("Process short term, long term analytics, and detect fraud.")
+
+@source(type = 'inMemory', topic = 'ride-request') 
+define stream RideRequestStream (userId string, pickupLocation string);
+
+@source(type = 'inMemory', topic = 'ride-end') 
+define stream RideInputEndStream (taxiId string, userId string, dropoffLocation string, fare double, currentTime long);
+
+@source(type = 'inMemory', topic = 'ride-start') 
+define stream RideStartStream (taxiId string, userId string, pickupLocation string, dropoffLocation string);
+
+@sink(type = 'http', publisher.url = 'http://${SERVICE_HOST}:8080/logger', 
+@map(type = 'json'))
+@sink(type = 'log')
+define stream HighDemandLocationStream(type string, pickupLocation string, totalRequest long);
+
+@sink(type = 'http', publisher.url = 'http://${SERVICE_HOST}:8080/logger', 
+@map(type = 'json'))
+@sink(type = 'log') 
+define stream PotentialFraudStream(type string, taxiId string, userId string, location string, reason string);
+
+@store(type = "rdbms", jdbc.url = "jdbc:mysql://${MYSQL_HOST}:3306/taxianalysis?useSSL=false",
+username = "root", password = "root",
+jdbc.driver.name = "com.mysql.jdbc.Driver")
+define aggregation RidePaymentAggregation
+from RideInputEndStream
+select taxiId, count() as rides, sum(fare) as totalFare, avg(fare) as avgFare
+group by taxiId
+aggregate by currentTime every seconds ... years;
+
+from RideRequestStream#window.time(10 min)
+select "HighDemandLocation" as type, pickupLocation, count() as totalRequest
+group by pickupLocation
+having totalRequest > 5
+output first every 3 sec
+insert into HighDemandLocationStream;
+
+-- bug
+from every e1 = RideInputEndStream -> e2 = RideStartStream[e1.taxiId == taxiId and e1.userId == userId] within 15 seconds  
+select "PotentialFraud" as type, e1.taxiId, e1.userId, e2.pickupLocation as location, "Ride split" as reason
+insert into PotentialFraudStream;

@@ -15,6 +15,22 @@ io.siddhi.langserver.completion.providers.SiddhiAppContextProvider
 io.siddhi.langserver.completion.providers.OutputAttributeContextProvider
 io.siddhi.langserver.completion.providers.FunctionOperationContextProvider
 io.siddhi.langserver.completion.providers.BasicMathOperationContextProvider
+io.siddhi.langserver.completion.providers.GroupByContextProvider
+io.siddhi.langserver.completion.providers.OrderByContextProvider
+io.siddhi.langserver.completion.providers.OrderByReferenceContextProvider
+io.siddhi.langserver.completion.providers.OrderContextProvider
+io.siddhi.langserver.completion.providers.AggregationNameContextProvider
+io.siddhi.langserver.completion.providers.SourceContextProvider
+io.siddhi.langserver.completion.providers.GroupByQuerySelectionContextProvider
+io.siddhi.langserver.completion.providers.AggregationTimeContextProvider
+io.siddhi.langserver.completion.providers.AggregationTimeDurationContextProvider
+io.siddhi.langserver.completion.providers.AggregationTimeIntervalContextProvider
+io.siddhi.langserver.completion.providers.AggregationTimeRangeContextProvider
+io.siddhi.langserver.completion.providers.AttributeContextProvider
+io.siddhi.langserver.completion.providers.BoolValueContextProvider
+io.siddhi.langserver.completion.providers.MathOperationContextProvider
+io.siddhi.langserver.completion.providers.ConstantValueContextProvider
+
 
 
 

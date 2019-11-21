@@ -4,7 +4,6 @@ import io.siddhi.core.SiddhiManager;
 import io.siddhi.langserver.completion.providers.snippet.util.SnippetProviderUtil;
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.MetaData;
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.ProcessorMetaData;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp4j.CompletionItemKind;
 
@@ -252,6 +251,11 @@ public class SnippetBlock {
     public static final Object[] KEYWORD_FROM = {"from", "from", CompletionItemKind.Keyword, "keyword", "from"};
 
     /**
+     * Constants
+     */
+
+    public static final Object[] TRIPLE_DOT = {"...", "...", CompletionItemKind.Constant, "triple-dot", "..."};
+    /**
      * Query context keywords.
      */
 
@@ -261,7 +265,7 @@ public class SnippetBlock {
     public static final Object[] KEYWORD_UPDATE = {"update", "update", CompletionItemKind.Keyword, "keyword", "update"};
     public static final Object[] KEYWORD_RETURN = {"return", "return", CompletionItemKind.Keyword, "keyword", "return"};
     public static final Object[] KEYWORD_OUTPUT = {"output", "output", CompletionItemKind.Keyword, "keyword", "output"};
-
+    public static final Object[] KEYWORD_EVERY = {"every", "every", CompletionItemKind.Keyword, "keyword", "every"};
     /**
      * Siddhi attribute-type context's keywords.
      */
@@ -311,19 +315,50 @@ public class SnippetBlock {
     /**
      * Attribute reference context's completion generation
      */
+    public static final Object[] KEYWORD_HAVING = {"having", "having", CompletionItemKind.Keyword, "keyword",
+            "having"};
+    public static final Object[] KEYWORD_ORDER_BY = {"order by", "order by", CompletionItemKind.Keyword, "keyword",
+            "order"};
+    //todo: how to include spaces order_by,aggregate_by,group_by
+    public static final Object[] KEYWORD_LIMIT =
+            {"limit", "limit", CompletionItemKind.Keyword, "keyword", "limit"};
+    public static final Object[] KEYWORD_OFFSET =
+            {"offset", "offset", CompletionItemKind.Keyword, "keyword", "offset"};
+    public static final Object[] KEYWORD_GROUP_BY =
+            {"group by", "group by", CompletionItemKind.Keyword, "keyword", "group"};
+    public static final Object[] KEYWORD_AGGREGATE_BY =
+            {"aggregate by", "aggregate by", CompletionItemKind.Keyword, "keyword", "aggregate"};
+
+    public static final Object[] KEYWORD_AS = {"as", "as", CompletionItemKind.Keyword, "keyword", "as"};
+
+    public static final List<Object[]> QUERY_SECTION_KEYWORDS = Arrays.asList(
+            KEYWORD_GROUP_BY, KEYWORD_OFFSET, KEYWORD_HAVING, KEYWORD_ORDER_BY, KEYWORD_LIMIT);
 
     public static List<Object[]> generateAttributeReferences(List<Object> terminals) {
+
         List<Object[]> suggestions = new ArrayList<>();
         for (Object terminal : terminals) {
             String attributeValue = ((TerminalNodeImpl) terminal).getText();
-            if ( attributeValue != null) {
-                suggestions.add( new Object[] {attributeValue, attributeValue, CompletionItemKind.Reference,
-                        "attribute-reference",attributeValue});
+            if (attributeValue != null) {
+                suggestions.add(new Object[]{attributeValue, attributeValue, CompletionItemKind.Reference,
+                        "attribute-reference", attributeValue});
             }
 
         }
         return suggestions;
     }
+
+    /**
+     *QuerySection context's Keywords
+     */
+
+    /**
+     * OrderContext's keywords
+     */
+    public static final Object[] KEYWORD_ASC = {"asc", "asc", CompletionItemKind.Keyword, "keyword", "asc"};
+    public static final Object[] KEYWORD_DESC = {"desc", "desc", CompletionItemKind.Keyword, "keyword", "desc"};
+
+    public static final List<Object[]> ORDER_KEYWORDS = Arrays.asList(KEYWORD_ASC, KEYWORD_DESC);
 
     public static Object[] generateFunctionCompletionItem(ProcessorMetaData function) {
         //todo: when it has multiple parameter overloads
@@ -340,8 +375,45 @@ public class SnippetBlock {
     }
 
     /**
-     * by context getters.
+     * Source context suggestion generation
      */
+    public static List<Object[]> generateSourceReferences(List<Object> terminals) {
+
+        List<Object[]> suggestions = new ArrayList<>();
+        for (Object terminal : terminals) {
+            String source = ((TerminalNodeImpl) terminal).getText();
+            if (source != null) {
+                suggestions.add(new Object[]{source, source, CompletionItemKind.Reference,
+                        "source", source});
+            }
+
+        }
+        return suggestions;
+    }
+
+    /**
+     * AggregationTimeDuration context's constants
+     */
+
+    public static final Object[] MILLISECONDS = {"sec", "sec", CompletionItemKind.Constant, "constant", "sec"};
+    public static final Object[] SECONDS = {"seconds", "seconds", CompletionItemKind.Constant, "constant", "seconds"};
+    public static final Object[] MINUTES = {"minutes", "minutes", CompletionItemKind.Constant, "constant", "minutes"};
+    public static final Object[] HOURS = {"hours", "hours", CompletionItemKind.Constant, "constant", "hours"};
+    public static final Object[] DAYS = {"days", "days", CompletionItemKind.Constant, "constant", "days"};
+    public static final Object[] WEEKS = {"weeks", "weeks", CompletionItemKind.Constant, "constant", "weeks"};
+    public static final Object[] MONTHS = {"months", "months", CompletionItemKind.Constant, "constant", "months"};
+    public static final Object[] YEARS = {"years", "years", CompletionItemKind.Constant, "constant", "years"};
+
+    public static List<Object[]> AGGREGATION_TIME_DURATION = Arrays.asList(SECONDS, MINUTES, HOURS, DAYS,MONTHS,
+            YEARS);
+
+    /**
+     * Constant Value context
+     */
+    public static final Object[] CONSTANT_TRUE = {"true", "true", CompletionItemKind.Constant, "constant", "true"};
+    public static final Object[] CONSTANT_FALSE = {"false", "false", CompletionItemKind.Constant , "constant", "false"};
+
+    public static  List<Object[]> BOOLEAN_CONSTANTS = Arrays.asList(CONSTANT_TRUE,CONSTANT_FALSE);
 
     public static List<String[]> getQueryContextKWs() {
 

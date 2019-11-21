@@ -710,7 +710,7 @@
         },
         {
           "name": "constant.other.timevalue.siddhi",
-          "match": "\\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
+          "match": "\\b(?i)(years|months|days|hours|minutes|seconds|sec|min|hour|year|month|day)\\b"
         }
       ]
     },
@@ -800,6 +800,10 @@
     },
     "outputAttribute": {
       "patterns": [
+        {
+          "name": "keyword.control.siddhi",
+          "match": "(?i)\\bas\\b"
+        },
         {
           "include": "#attribute"
         },
@@ -1577,7 +1581,22 @@
       "name": "phrase.orderby.siddhi",
       "patterns": [
         {
+          "include": "#order"
+        },
+        {
           "include": "#expression"
+        }
+      ]
+    },
+    "order": {
+      "patterns": [
+        {
+          "name": "support.constant.siddhi",
+          "match": "(?i)\\basc\\b"
+        },
+        {
+          "name": "support.constant.siddhi",
+          "match": "(?i)\\bdesc\\b"
         }
       ]
     },

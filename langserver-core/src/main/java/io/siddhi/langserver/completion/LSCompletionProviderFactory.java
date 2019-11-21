@@ -50,7 +50,7 @@ public class LSCompletionProviderFactory  {
         return this.providers;
     }
 
-    public LSCompletionProvider getProvider(Class key) {
+    public LSCompletionProvider getProvider(String key) {
         return this.providers.get(key);
     }
 }

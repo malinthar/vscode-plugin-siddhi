@@ -6,6 +6,7 @@ import io.siddhi.langserver.completion.providers.spi.LSCompletionProvider;
 import io.siddhi.langserver.completion.util.ContextTreeVisitor;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 import org.eclipse.lsp4j.CompletionItem;
 
@@ -40,13 +41,13 @@ public class AttributeReferenceContextProvider extends LSCompletionProvider {
         } else {
             if (scopeContext instanceof SiddhiQLParser.Definition_windowContext) {
 
-                List<ParserRuleContext> providerContexts = ContextTreeVisitor.INSTANCE.findFromChildren(scopeContext,
+                List<ParseTree> providerContexts = ContextTreeVisitor.INSTANCE.findFromChildren(scopeContext,
                         SiddhiQLParser.Attribute_nameContext.class);
                 //todo:improve here Object is too general
                 List<Object> attributeNameTerminals = new ArrayList<>();
-                for (ParserRuleContext providerContext : providerContexts) {
+                for (ParseTree providerContext : providerContexts) {
                     attributeNameTerminals.addAll(ContextTreeVisitor.INSTANCE
-                            .findRuleContexts(providerContext, TerminalNodeImpl.class));
+                            .findRuleContexts((ParserRuleContext) providerContext, TerminalNodeImpl.class));
                 }
                 return generateCompletionList(SnippetBlock.generateAttributeReferences(attributeNameTerminals));
 
@@ -80,12 +81,13 @@ public class AttributeReferenceContextProvider extends LSCompletionProvider {
                         Object source1 = sourceName.get(0);
                         Object source2 = sourceTerminals.get(0);
                         if (((TerminalNodeImpl) source1).getText().equals(((TerminalNodeImpl) source2).getText())) {
-                            List<ParserRuleContext> attributeNameProviders =
+                            List<ParseTree> attributeNameProviders =
                                     ContextTreeVisitor.findFromChildren((ParserRuleContext) streamDefinitionContext,
                                             SiddhiQLParser.Attribute_nameContext.class);
-                            for (ParserRuleContext attributeNameProvider : attributeNameProviders) {
+                            for (ParseTree attributeNameProvider : attributeNameProviders) {
                                 attributeNameTerminals.addAll(ContextTreeVisitor.INSTANCE
-                                        .findRuleContexts(attributeNameProvider, TerminalNodeImpl.class));
+                                        .findRuleContexts((ParserRuleContext) attributeNameProvider,
+                                                TerminalNodeImpl.class));
                             }
 
                         }
@@ -100,7 +102,7 @@ public class AttributeReferenceContextProvider extends LSCompletionProvider {
             } else if (scopeContext instanceof SiddhiQLParser.QueryContext) {
                 List<Object> sourceContexts = new ArrayList<>();
                 List<Object> sourceTerminals = new ArrayList<>();
-                List<ParserRuleContext> providerContexts = ContextTreeVisitor.INSTANCE.findFromChildren(scopeContext,
+                List<ParseTree> providerContexts = ContextTreeVisitor.INSTANCE.findFromChildren(scopeContext,
                         SiddhiQLParser.Query_inputContext.class);
                 List<Object> attributeNameTerminals = new ArrayList<>();
                 for (Object providerContext : providerContexts) {
@@ -130,14 +132,20 @@ public class AttributeReferenceContextProvider extends LSCompletionProvider {
                             ContextTreeVisitor.INSTANCE.findRuleContexts((ParserRuleContext) streamIdContext.get(0),
                                     TerminalNodeImpl.class);
                     Object source1 = sourceName.get(0);
+                    String source = ((TerminalNodeImpl)source1).getText();
                     Object source2 = sourceTerminals.get(0);
-                    if (((TerminalNodeImpl) source1).getText().equals(((TerminalNodeImpl) source2).getText())) {
-                        List<ParserRuleContext> attributeNameProviders =
+                    List<String> sources =  new ArrayList<>();
+                    for(Object sourceTerminal: sourceTerminals){
+                        sources.add(((TerminalNodeImpl) sourceTerminal).getText());
+                    }
+                    if (sources.contains(source)) {
+                        List<ParseTree> attributeNameProviders =
                                 ContextTreeVisitor.findFromChildren((ParserRuleContext) streamDefinitionContext,
                                         SiddhiQLParser.Attribute_nameContext.class);
-                        for (ParserRuleContext attributeNameProvider : attributeNameProviders) {
+                        for (ParseTree attributeNameProvider : attributeNameProviders) {
                             attributeNameTerminals.addAll(ContextTreeVisitor.INSTANCE
-                                    .findRuleContexts(attributeNameProvider, TerminalNodeImpl.class));
+                                    .findRuleContexts((ParserRuleContext) attributeNameProvider,
+                                            TerminalNodeImpl.class));
                         }
 
                     }
@@ -154,4 +162,6 @@ public class AttributeReferenceContextProvider extends LSCompletionProvider {
     }
 
 }
+
+//todo: use a stack for tree
 

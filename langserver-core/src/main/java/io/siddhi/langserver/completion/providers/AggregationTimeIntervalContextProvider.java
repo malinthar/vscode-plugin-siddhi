@@ -7,17 +7,20 @@ import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.List;
 
-public class BasicMathOperationContextProvider extends LSCompletionProvider {
+public class AggregationTimeIntervalContextProvider extends LSCompletionProvider {
 
-    public BasicMathOperationContextProvider(){
-        this.attachmentContext = SiddhiQLParser.Basic_math_operationContext.class.getName();
+    public AggregationTimeIntervalContextProvider() {
+
+        this.attachmentContext = SiddhiQLParser.Aggregation_time_intervalContext.class.getName();
     }
 
     @Override
     public List<CompletionItem> getCompletions() {
+
         List<CompletionItem> completions;
         completions =
-                LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Attribute_referenceContext.class.getName()).getCompletions();
+                LSOperationContext.INSTANCE.FACTORY
+                        .getProvider(SiddhiQLParser.Aggregation_time_durationContext.class.getName()).getCompletions();
         return completions;
     }
 }

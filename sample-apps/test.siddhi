@@ -1,0 +1,7 @@
+-- onDemandQuery
+from TempStream as source on str:func(temp) within 10 per seconds select
+group by rackNo having roomNo>005 order by roomNo limit 10 offset 5 insert into cfdjnvf set car=2 update TempStream ; 
+
+from RoomTypeTable
+on roomNo >= 10;
+select roomNo, type ;
