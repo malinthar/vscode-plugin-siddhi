@@ -17,20 +17,24 @@
  * under the License.
  *
  */
+
+ /**
+  * Provides logging capabilities into a output channel.
+  */
+
 import * as vscode from 'vscode';
 const outputChannel = vscode.window.createOutputChannel("Siddhi");
 const logLevelDebug: boolean = vscode.workspace.getConfiguration('siddhi').get('debugLog') === true;
 
 function withNewLine(value: string) {
     if (!value.endsWith('\n')) {
-        return value+='\n';
+        return value += '\n';
     }
     return value;
 }
 
 export function debug(value: string) : void {
     const output = withNewLine(value);
-    console.log(output);
     if (logLevelDebug) {
         outputChannel.append(output);
     }
@@ -38,7 +42,6 @@ export function debug(value: string) : void {
 
 export function log(value: string) : void {
     const output = withNewLine(value);
-    console.log(output);
     outputChannel.append(output);
 }
 

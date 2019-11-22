@@ -16,6 +16,7 @@ hs_err_pid*
 target
 results
 *.vsix
+grammar/siddhi-grammar/syntaxes/siddhi/tmLanguage.json
 
 # mac
 .DS_Store
@@ -27,6 +28,7 @@ results
 .vscode-test
 
 #directories
-client/out
+out/
 node_modules/
 .vscode-test/
+.vscode/

@@ -18,6 +18,9 @@
  *
  */
 
+ /**
+  * Log messages 
+  */
 export const SIDDHI_HOME = "siddhi.home";
 export const INVALID_HOME_MSG: string = "Siddhi Home is invalid, please check `" + SIDDHI_HOME + "` in settings";
 export const INSTALL_SIDDHI: string = "Unable to auto detect ballerina in your environment. If you just installed Ballerina, you may need to restart VSCode." + 

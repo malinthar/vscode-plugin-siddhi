@@ -4,12 +4,12 @@
   "fileTypes": [
     "siddhi"
   ],
-  "variables": {
-    "identifier": "[a-zA-Z_][a-zA-Z_0-9]*"
-  },
   "patterns": [
     {
       "include": "#siddhiApp"
+    },
+    {
+      "include": "#onDemandQuery"
     },
     {
       "include": "#comment"
@@ -462,7 +462,7 @@
         },
         {
           "name": "constant.other.timevalue.siddhi",
-          "match": "\\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
+          "match": "(?i)\\b(years|months|hours|minutes|seconds|sec|min|hour|year|month)\\b"
         },
         {
           "include": "#stringValue"
@@ -507,7 +507,7 @@
       "patterns": [
         {
           "name": "keyword.control.siddhi",
-          "match": "\\b(?i)return\\b"
+          "match": "(?i)\\breturn\\b"
         },
         {
           "include": "#keywords"
@@ -1441,6 +1441,21 @@
         },
         {
           "include": "#onDemandInput"
+        },
+        {
+          "include": "#querySection"
+        },
+        {
+          "include": "#target"
+        },
+        {
+          "include": "#setClause"
+        },
+        {
+          "include": "#onDemandQueryOutput"
+        },
+        {
+          "include": "#expression"
         }
       ]
     },
@@ -1463,7 +1478,7 @@
         },
         {
           "name": "variable.parameter.name.sourceid.ondemandquery.siddhi",
-          "match": "(?<=from\\s*every)(\\s*)[a-zA-Z_][a-zA-Z_0-9]*"
+          "match": "(?<=from\\Wevery)(\\s*)[a-zA-Z_][a-zA-Z_0-9]*"
         },
         {
           "name": "variable.parameter.name.sourceid.ondemandquery.siddhi",

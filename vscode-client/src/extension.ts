@@ -1,5 +1,4 @@
 'use strict'
-
 /**
  * Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
@@ -19,6 +18,9 @@
  *
  */
 
+/**
+ * Main method which activates the extesnion.
+ */
 import {ExtensionContext,window} from 'vscode';
 import { siddhiExtensionInstance } from './core/extension'
 import { log } from './utils/logger';

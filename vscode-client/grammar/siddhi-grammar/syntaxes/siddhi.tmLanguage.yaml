@@ -136,7 +136,6 @@ repository:
       name: storage.type.attributetype.siddhi
       match: '\b((?i)string|(?i)int|(?i)long|(?i)float|(?i)double|(?i)bool|(?i)object)\b'
 
-
   attributeName:
     name: variable.parameter.attributename.siddhi
     match: '([a-zA-Z_][a-zA-Z_0-9]*)'  
@@ -243,7 +242,7 @@ repository:
       - name: constant.numeric.float.siddhi
         match: \d\.?\d
       - name: constant.other.timevalue.siddhi
-        match: '\b(?i)(years|months|hours|minutes|seconds|sec|min|hour|year|month)\b'
+        match: '(?i)\b(years|months|hours|minutes|seconds|sec|min|hour|year|month)\b'
       - include: '#stringValue'
 
   basicMathOperation:
@@ -270,7 +269,7 @@ repository:
     name: definition.function.siddhi
     patterns:
       - name: keyword.control.siddhi
-        match: '\b(?i)return\b'
+        match: '(?i)\breturn\b'
       - include: '#keywords'
       - include: '#functionName'
       - include: '#languageName'
@@ -602,7 +601,7 @@ repository:
       - include: '#propertyName'
       - include: '#integerLiteral'
   
-  #can't distinguish between inner source and stream function 
+  #todo:solve issue can't distinguish between inner source and stream function 
   standardStream:
     begin: '(?i)(?<=from)'
     end: '(?i)(?=select)'
@@ -783,7 +782,7 @@ repository:
       - name: keyword.control.siddhi
         match: '(?i)\bper\b'
       - name: variable.parameter.name.sourceid.ondemandquery.siddhi
-        match: '(?<=from\s*every)(\s*)[a-zA-Z_][a-zA-Z_0-9]*'
+        match: '(?<=from\Wevery)(\s*)[a-zA-Z_][a-zA-Z_0-9]*'
       - name: variable.parameter.name.sourceid.ondemandquery.siddhi
         match: '(?<=from)(\s*)[a-zA-Z_][a-zA-Z_0-9]*'
       - name: variable.parameter.name.alias.ondemandquery.siddhi
@@ -800,7 +799,7 @@ repository:
     patterns:
       - include: '#expression'
   
-  #change instert-> insert_into , update-> update or insert_into
+  #todo:change instert-> insert_into , update-> update or insert_into
   querySection:
     begin: '(?i)select'
     end: '(?=insert|update|output|\)|;)'
@@ -875,7 +874,7 @@ repository:
     patterns:
       - include: '#expression'
   
-  #attribute reference stream reference being the same
+  #todo:solve the issue:attribute reference stream reference being the same
   setClause:
     begin: '(?i)set'
     end: '(?i)(?=on|update|delete)'

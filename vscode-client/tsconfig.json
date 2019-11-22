@@ -24,11 +24,12 @@
 
      "moduleResolution": "node",           
      "baseUrl": "./",                    
-     "paths": {},                           
+     "paths": {},  
+    /* List of root folders whose combined content represents the structure of the project at runtime. */                         
      "rootDirs": [
       "src",
       "test"
-     ],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
+     ],                       
     /* Source Map Options */
      "sourceMap": true
   },

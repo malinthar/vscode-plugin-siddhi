@@ -52,18 +52,28 @@
           "type": "string",
           "default": "",
           "description": "Specifies the path to the siddhi home directory"
+        },
+        "siddhi.plugin.dev.mode":{
+          "type": "boolean",
+          "default": false,
+          "description": "Enable plugin development mode"
+        },
+        "siddhi.debugLog": {
+          "type": "boolean",
+          "default": false,
+          "description": "If set to true debug msgs will be printed to Siddhi output channel"
         }
       }
     }
   },
-  "main": "./out/extension",
+  "main": "./out/src/extension",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "npm run compile && node ./node_modules/vscode/bin/test",
     "package": "vsce package",
-    "build-tm-grammar": "js-yaml grammar/siddhi-grammar/syntaxes/ballerina.tmLanguage.yaml > grammar/siddhi-grammar/syntaxes/ballerina.tmLanguage.json"
+    "build-tm-grammar": "js-yaml grammar/siddhi-grammar/syntaxes/siddhi.tmLanguage.yaml > grammar/siddhi-grammar/syntaxes/siddhi.tmLanguage.json"
   },
   "devDependencies": {
     "@types/node": "^12.0.12",
