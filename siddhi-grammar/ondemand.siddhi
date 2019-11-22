@@ -1,0 +1,4 @@
+from TradeAggregation 
+  within "2014-02-15 00:00:00 +05:30", "2014-03-16 00:00:00 +05:30"
+  per "days"
+select symbol, total, avgPrice;
