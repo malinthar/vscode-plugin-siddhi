@@ -16,7 +16,7 @@ hs_err_pid*
 target
 results
 *.vsix
-grammar/siddhi-grammar/syntaxes/siddhi.tmLanguage.json
+siddhi.tmLanguage.json
 
 # mac
 .DS_Store
