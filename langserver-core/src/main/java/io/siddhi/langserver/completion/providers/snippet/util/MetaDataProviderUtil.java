@@ -10,7 +10,6 @@ import io.siddhi.langserver.completion.providers.snippet.util.metadata.Attribute
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.MetaData;
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.ParameterMetaData;
 import io.siddhi.langserver.completion.providers.snippet.util.metadata.ProcessorMetaData;
-import org.eclipse.lsp4j.CompletionItemKind;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -328,6 +327,7 @@ public class SnippetProviderUtil {
         return metaDataMap;
     }
 
+    //todo:check here.how predicate works
     static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
 
         Map<Object, Boolean> seen = new ConcurrentHashMap<>();
@@ -349,4 +349,25 @@ public class SnippetProviderUtil {
 
     }
 
+    //todo: improve this to get only relevant fucntions
+
+    public static List<ProcessorMetaData> getWindowProcessorFunctions() {
+
+        List<ProcessorMetaData> functions = new ArrayList<>();
+        MetaData builtinProcessorMetadata = getInBuiltProcessorMetaData();
+        Map<String, MetaData> metadataMap = getExtensionProcessorMetaData();
+        functions.addAll(metadataMap.get("").getWindowProcessors());
+        functions.addAll(builtinProcessorMetadata.getWindowProcessors());
+        return functions;
+    }
+
+    public static List<ProcessorMetaData> getIncrementalAggregatorFunctions() {
+
+        List<ProcessorMetaData> functions = new ArrayList<>();
+        MetaData builtinProcessorMetadata = getInBuiltProcessorMetaData();
+        Map<String, MetaData> metadataMap = getExtensionProcessorMetaData();
+        functions.addAll(metadataMap.get("").getStreamProcessors());
+        functions.addAll(builtinProcessorMetadata.getWindowProcessors());
+        return functions;
+    }
 }
