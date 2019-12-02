@@ -2,6 +2,7 @@ package io.siddhi.langserver.completion.util;
 
 import io.siddhi.langserver.DocumentManagerImpl;
 import io.siddhi.langserver.LSOperationContext;
+import io.siddhi.langserver.completion.providers.ParseContextProvider;
 import io.siddhi.langserver.completion.providers.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiCompiler;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -76,7 +77,7 @@ public class CompletionUtil {
         List<CompletionItem> completionItems = currentContextProvider.getCompletions();
         //todo: check whether the completions are empty/ Arraylist of zero length-check, what if parent is null?
        //todo: Null point could come here
-        if (completionItems.isEmpty()) {
+        if (completionItems.isEmpty() && !(currentContextProvider instanceof ParseContextProvider)) {
             ParserRuleContext parentContext =
                     (ParserRuleContext) LSOperationContext.INSTANCE.getCurrentContext().parent;
             LSOperationContext.INSTANCE.setCurrentContext(parentContext);

@@ -1,12 +1,12 @@
 package io.siddhi.langserver.completion.providers.spi;
 
-import com.mchange.v1.util.ArrayUtils;
 import io.siddhi.langserver.LSOperationContext;
-import io.siddhi.langserver.completion.providers.snippet.SnippetProvider;
+import io.siddhi.langserver.completion.providers.snippet.MetaDataProvider;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionItemKind;
+import org.eclipse.lsp4j.InsertTextFormat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public abstract class LSCompletionProvider {
 
     protected String attachmentContext;
     protected CompletionItemKind completionItemKind;
-    protected SnippetProvider snippetProvider = new SnippetProvider();
+    protected MetaDataProvider snippetProvider = new MetaDataProvider();
 
     public abstract List<CompletionItem> getCompletions();
 
@@ -31,11 +31,8 @@ public abstract class LSCompletionProvider {
     }
 
     public List<CompletionItem> generateCompletionList(List<Object[]> suggestions) {
-        //todo: make completionItems class local
         List<CompletionItem> completionItems = new ArrayList<>();
-        //todo:check isNull
         if (suggestions != null) {
-            //todo:suggestion array size is 4???
             for (Object[] suggestion : suggestions) {
                 CompletionItem completionItem = new CompletionItem();
                 completionItem.setInsertText((String) suggestion[0]);
@@ -43,6 +40,12 @@ public abstract class LSCompletionProvider {
                 completionItem.setKind((CompletionItemKind) suggestion[2]);
                 completionItem.setDetail((String) suggestion[3]);
                 completionItem.setFilterText((String) suggestion[4]);
+                if(suggestion.length==6){
+                    completionItem.setInsertTextFormat(InsertTextFormat.Snippet);
+                }
+                else {
+                    completionItem.setInsertTextFormat(InsertTextFormat.PlainText);
+                }
                 completionItems.add(completionItem);
             }
         }
@@ -74,6 +77,9 @@ public abstract class LSCompletionProvider {
         Map<String, ParseTree> map = LSOperationContext.INSTANCE.getContextTree();
         ParserRuleContext parent = (ParserRuleContext) map.get(this.attachmentContext).getParent();
         return parent;
+    }
+    public List<CompletionItem> getDefaultCompletions(){
+      return null;
     }
 
 }

@@ -36,7 +36,6 @@ having totalRequest > 5
 output first every 3 sec
 insert into HighDemandLocationStream;
 
--- bug
 from every e1 = RideInputEndStream -> e2 = RideStartStream[e1.taxiId == taxiId and e1.userId == userId] within 15 seconds  
 select "PotentialFraud" as type, e1.taxiId, e1.userId, e2.pickupLocation as location, "Ride split" as reason
 insert into PotentialFraudStream;

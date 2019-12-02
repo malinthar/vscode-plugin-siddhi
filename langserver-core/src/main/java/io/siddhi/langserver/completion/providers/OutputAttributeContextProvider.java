@@ -19,12 +19,12 @@ public class OutputAttributeContextProvider  extends LSCompletionProvider {
     public List<CompletionItem> getCompletions() {
 
         List<CompletionItem> completions =
-                LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Attribute_referenceContext.class.getName()).getCompletions();
-        completions.addAll(LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.AttributeContext.class.getName()).getCompletions());
+               LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.AttributeContext.class.getName()).getCompletions();
         List<Object[]> suggestions = new ArrayList<>();
         suggestions.add(SnippetBlock.KEYWORD_AS);
         completions.addAll(generateCompletionList(suggestions));
         return completions;
+        //todo: as keyword?
     }
 
 }

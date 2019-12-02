@@ -3,6 +3,7 @@ package io.siddhi.langserver.completion.providers;
 import io.siddhi.langserver.completion.providers.snippet.SnippetBlock;
 import io.siddhi.langserver.completion.providers.spi.LSCompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.ArrayList;
@@ -18,10 +19,17 @@ public class AttributeNameContextProvider extends LSCompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
 
-        if (visitParent() instanceof SiddhiQLParser.Attribute_referenceContext) {
+        ParserRuleContext parent = visitParent();
+        if (parent instanceof SiddhiQLParser.Attribute_referenceContext) {
             return generateCompletionList(null);
 
-        } else {
+        }
+        else if(parent instanceof SiddhiQLParser.Output_attributeContext){
+            List<Object[]> suggestions = new ArrayList<>();
+            suggestions.add(SnippetBlock.ALIAS_SNIPPET);
+            return generateCompletionList(suggestions);
+        }
+        else {
             //todo: change this initialization
             List<Object[]> suggestions = new ArrayList<>();
             suggestions.add(SnippetBlock.ATTRIBUTE_NAME_TYPE_SNIPPET);

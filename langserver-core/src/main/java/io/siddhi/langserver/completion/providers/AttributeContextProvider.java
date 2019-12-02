@@ -9,15 +9,18 @@ import java.util.List;
 
 public class AttributeContextProvider extends LSCompletionProvider {
 
-    public AttributeContextProvider(){
+    public AttributeContextProvider() {
+
         this.attachmentContext = SiddhiQLParser.AttributeContext.class.getName();
     }
 
     @Override
     public List<CompletionItem> getCompletions() {
+
         List<CompletionItem> completions;
         completions =
-                LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Math_operationContext.class.getName()).getCompletions();
+                LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Math_operationContext.class.getName())
+                        .getCompletions();
         return completions;
     }
 }

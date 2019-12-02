@@ -9,16 +9,22 @@ import java.util.List;
 
 public class MathOperationContextProvider extends LSCompletionProvider {
 
-    public MathOperationContextProvider(){
+    public MathOperationContextProvider() {
+
         this.attachmentContext = SiddhiQLParser.Math_operationContext.class.getName();
     }
+
     @Override
     public List<CompletionItem> getCompletions() {
+
         List<CompletionItem> completions;
         completions =
-                LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Function_operationContext.class.getName()).getCompletions();
-        completions.addAll(LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Attribute_referenceContext.class.getName()).getCompletions());
-        completions.addAll(LSOperationContext.INSTANCE.FACTORY.getProvider(SiddhiQLParser.Constant_valueContext.class.getName()).getCompletions());
+                LSOperationContext.INSTANCE.FACTORY
+                        .getProvider(SiddhiQLParser.Function_operationContext.class.getName()).getCompletions();
+        completions.addAll(LSOperationContext.INSTANCE.FACTORY
+                .getProvider(SiddhiQLParser.Attribute_referenceContext.class.getName()).getCompletions());
+        completions.addAll(LSOperationContext.INSTANCE.FACTORY
+                .getProvider(SiddhiQLParser.Constant_valueContext.class.getName()).getCompletions());
         return completions;
     }
 }

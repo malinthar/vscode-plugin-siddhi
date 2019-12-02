@@ -8,7 +8,7 @@
     {
       "label": "testlabel",
       "kind": "snippet",
-      "detail": "testsugession",
+      "detail": "testsuggestion",
       "sortText": "",
       "insertText": "test",
       "insertTextFormat": "Snippet"

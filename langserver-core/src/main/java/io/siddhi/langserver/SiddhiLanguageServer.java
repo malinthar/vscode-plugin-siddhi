@@ -1,7 +1,7 @@
 package io.siddhi.langserver;
 
 import io.siddhi.core.SiddhiManager;
-import io.siddhi.langserver.completion.providers.snippet.SnippetProvider;
+import io.siddhi.langserver.completion.providers.snippet.MetaDataProvider;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
 import org.eclipse.lsp4j.CompletionOptions;
 import org.eclipse.lsp4j.InitializeParams;
@@ -28,7 +28,7 @@ public class SiddhiLanguageServer implements LanguageServer {
         LSOperationContext.INSTANCE.setSiddhiManager(new SiddhiManager());
         LSOperationContext.INSTANCE.setDiagnosticProvider(new DiagnosticProvider());
         //todo: check if completion is a capability
-        LSOperationContext.INSTANCE.setSnippetProvider(new SnippetProvider());
+        LSOperationContext.INSTANCE.setSnippetProvider(new MetaDataProvider());
 
         this.textDocumentService = new SiddhiTextDocumentService();
         this.workspaceService = new SiddhiWorkspaceService();

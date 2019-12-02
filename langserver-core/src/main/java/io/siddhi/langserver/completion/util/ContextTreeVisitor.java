@@ -42,6 +42,22 @@ public class ContextTreeVisitor {
             }
         }
     }
+//    public static ParseTree visitChildrenToFindOne(ParserRuleContext context, String descendantContext){
+//        if (context.getChildCount() != 0) {
+//            List<ParseTree> children = context.children;
+//            for (ParseTree childCtx : children) {
+//                if (childCtx.getClass().getName().equalsIgnoreCase(descendantContext)) {
+//                    return childCtx;
+//                }
+//                else {
+//                    visitChildrenToFindOne((ParserRuleContext)childCtx,descendantContext);
+//                }
+//            }
+//        }
+//        else{
+//            return null;
+//        }
+//    }
 
     public static List<ParseTree> findFromChildren(ParserRuleContext parentContext, Class childContext) {
 
@@ -56,4 +72,22 @@ public class ContextTreeVisitor {
         }
         return ruleContexts;
     }
+    public static ParseTree findOneFromChildren(ParserRuleContext parentContext, Class childContext) {
+
+        if (parentContext.getChildCount() != 0) {
+            List<ParserRuleContext> children = parentContext.getRuleContexts(ParserRuleContext.class);
+            for (ParserRuleContext childCtx : children) {
+                if (childCtx.getClass().equals(childContext)) {
+                    return childCtx;
+                }
+            }
+        }
+        return null;
+    }
+    //todo:change name as something like find first occurance.
+//    public static ParseTree findOneFromDescendants(ParserRuleContext parentContext, String descendantContext) {
+//        if (parentContext.getChildCount() != 0) {
+//            return visitChildrenToFindOne(parentContext,descendantContext);
+//        }
+//    }
 }

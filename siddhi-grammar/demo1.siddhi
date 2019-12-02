@@ -1,20 +1,81 @@
-@App:name('plan name')
-@App:description("App to consume the inputs.")
+@App:name('Trade-Analytic-App')
+@App:description("Analyze trades realtime")
 --  at parser errorStrategy get contextTree.
   
-define stream Foo(name string, age int);
+
 define stream TradeStream (symbol string, price double, volume long, timestamp long,arrr string);
+define stream StockStream (symbol string, price float, volume long);
+
 
 define aggregation TradeAggregation
-  from TradeStream
+  from TradeStream 
   select symbol, avg(price) as avgPrice, sum(price) as total
     group by symbol
     aggregate by timestamp every sec ... year;
 
 define aggregation M from TradeStream select symbol,avg(price) as avgPrice group by price aggregate by symbol every days...months;
     
--- query not working- bug
-from Foo join TradeStream select name group by name order by name desc  insert into output ;
+
+--todo: correct minutes in a different color
+define trigger triggerName at every 5 minutes; 
+
+--define window window_name (attr1 Type1, attN TypeN) window_type output event_type events;
+-- show only relevant functions to window.
+
+define window cseEventWindow (symbol string, price float, volume long) sort(2,volume, 'asc');
+
+define function concatFnR[JAVASCRIPT] return string {
+    var str1 = data[0];
+    var str2 = data[1];
+    var str3 = data[2];
+    var response = str1 + str2 + str3;
+    return response;
+};
+
+define table tableName (attr1 string, attN int);
+
+define function functionName [JAVASCRIPT] return bool {
+    body
+};
+-- expression as string value.
+partition with ( symbol of TradeStream )
+begin
+    from TradeStream#window.length(10)
+    select price
+    insert into DeviceTempStream;
+end;
+@sink( type = "kafka", partition.no = "0", sequence.id = "null", key = "null", optional.configuration = "null")
 
 
--- remove weeks from grammar
+
+
+-- @not getting replaced
+--from TradeStream#[TradeStream.price>10] select list:containsAll(list,given.list) ,TradeStream.arrr return 
+
+-- what should come after on expression -done
+-- on expression and as alias -done
+
+-- stream definition-done
+-- aggregation definition-done
+-- trigger-definition- done
+-- window definition- show only relevant functions in function operation context -done
+-- definition table - done
+-- definition function -done
+-- definition partition + usage of partitions-done
+-- query-done
+
+-- onDemand Query
+-- in joining streamA.name streamB.name-done
+-- app-annotation
+
+-- if a name space is selected provide funtions that can be under that name space. Filtering out functions -done
+-- aggregation join query - done
+
+-- annotation-done
+-- partition look more
+-- window is not replaced after choosing completion item. 
+
+-- remove annotation context's snipets from 
+
+-- write an app from begining and see whether everything works.
+

@@ -1,37 +1,42 @@
 package io.siddhi.langserver.completion.providers;
 
 import io.siddhi.langserver.LSOperationContext;
+import io.siddhi.langserver.completion.providers.snippet.SnippetBlock;
 import io.siddhi.langserver.completion.providers.spi.LSCompletionProvider;
+import io.siddhi.query.compiler.SiddhiQLParser;
 import io.siddhi.query.compiler.SiddhiQLParser.Definition_streamContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
-import org.eclipse.lsp4j.CompletionItemKind;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DefinitionStreamContextProvider extends LSCompletionProvider {
+
     public DefinitionStreamContextProvider() {
+
         this.attachmentContext = Definition_streamContext.class.getName();
     }
 
     @Override
     public List<CompletionItem> getCompletions() {
-        return null;
+
+        ParserRuleContext definitionStreamContext =
+                (ParserRuleContext) LSOperationContext.INSTANCE.getContextTree()
+                        .get(Definition_streamContext.class.getName());
+        int childCount = definitionStreamContext.getChildCount();
+        if (childCount > 0) {
+            if (definitionStreamContext.getChild(childCount - 1) instanceof SiddhiQLParser.SourceContext) {
+                List<Object[]> suggestions = new ArrayList<>();
+                suggestions.add(SnippetBlock.ATTRIBUTE_LIST_SNIPPET);
+                return generateCompletionList(suggestions);
+            }
+            else {
+                return generateCompletionList(null);
+            }
+        } else {
+            return generateCompletionList(null);
+        }
     }
-
-    public List<CompletionItem> getCompletions(LSOperationContext lsContext){
-        ParserRuleContext currctx=lsContext.getCurrentContext();
-        CompletionItem completionItem = new CompletionItem();
-        completionItem.setInsertText(currctx.getClass().toString());
-        completionItem.setLabel(currctx.getClass().toString());
-        completionItem.setKind(CompletionItemKind.Text);
-        completionItem.setDetail("completion test");
-        List<CompletionItem> completionItems=new ArrayList<>();
-        completionItems.add(completionItem);
-        return completionItems;
-    }
-
-
 
 }

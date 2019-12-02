@@ -2,7 +2,7 @@ package io.siddhi.langserver;
 
 import io.siddhi.core.SiddhiManager;
 import io.siddhi.langserver.completion.LSCompletionProviderFactory;
-import io.siddhi.langserver.completion.providers.snippet.SnippetProvider;
+import io.siddhi.langserver.completion.providers.snippet.MetaDataProvider;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
 import io.siddhi.query.compiler.langserver.LSErrorNode;
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -29,7 +29,7 @@ public class LSOperationContext {
     private SiddhiLanguageServer siddhiLanguageServer;
     private SiddhiManager siddhiManager;
     private DiagnosticProvider diagnosticProvider;
-    private SnippetProvider snippetProvider;
+    private MetaDataProvider snippetProvider;
     public static final LSCompletionProviderFactory FACTORY = LSCompletionProviderFactory.getInstance();
     //todo:chnage here
 
@@ -152,12 +152,12 @@ public class LSOperationContext {
         this.diagnosticProvider = diagnosticProvider;
     }
 
-    public void setSnippetProvider(SnippetProvider snippetProvider) {
+    public void setSnippetProvider(MetaDataProvider snippetProvider) {
 
         this.snippetProvider = snippetProvider;
     }
 
-    public SnippetProvider getSnippetProvider() {
+    public MetaDataProvider getSnippetProvider() {
 
         return this.snippetProvider;
     }
