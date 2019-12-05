@@ -15,8 +15,8 @@
  */
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
+import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
@@ -39,9 +39,8 @@ public class AttributeNameContextProvider extends CompletionProvider {
         //AttributeName can be a reference
         if (parent instanceof SiddhiQLParser.Attribute_referenceContext) {
             return generateCompletionList(null);
-        }
-        //AttributeName can be an output attribute
-        else if (parent instanceof SiddhiQLParser.Output_attributeContext) {
+        } else if (parent instanceof SiddhiQLParser.Output_attributeContext) {
+            //AttributeName can be an output attribute
             List<Object[]> suggestions = new ArrayList<>();
             suggestions.add(SnippetBlockUtil.ALIAS_SNIPPET);
             return generateCompletionList(suggestions);
@@ -51,5 +50,4 @@ public class AttributeNameContextProvider extends CompletionProvider {
             return generateCompletionList(suggestions);
         }
     }
-
 }

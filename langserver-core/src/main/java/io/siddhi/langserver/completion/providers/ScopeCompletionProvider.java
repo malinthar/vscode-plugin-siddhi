@@ -21,6 +21,9 @@ import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.List;
 
+/**
+ * Provider completions for scopes.
+ */
 public abstract class ScopeCompletionProvider extends CompletionProvider {
     protected static List<String> scopes;
     public abstract List<CompletionItem> getCompletions();
