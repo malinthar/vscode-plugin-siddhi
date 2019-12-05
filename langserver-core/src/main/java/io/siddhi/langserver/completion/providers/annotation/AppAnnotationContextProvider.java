@@ -15,15 +15,16 @@
  */
 package io.siddhi.langserver.completion.providers.annotation;
 
-import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
+import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.List;
 
 /**
- * {@code AppAnnotationContextProvider} Provide completions for AppAnnotationContext{@link io.siddhi.query.compiler.SiddhiQLParser.App_annotationContext}.
+ * {@code AppAnnotationContextProvider} Provide completions for AppAnnotationContext
+ * {@link io.siddhi.query.compiler.SiddhiQLParser.App_annotationContext}.
  */
 public class AppAnnotationContextProvider extends CompletionProvider {
 
