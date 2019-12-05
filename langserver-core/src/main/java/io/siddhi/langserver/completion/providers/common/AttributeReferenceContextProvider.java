@@ -77,9 +77,6 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
             } else if (scopeContext instanceof SiddhiQLParser.Definition_aggregationContext) {
                 List<String> sourceProviderContextsForAggregationDef = new ArrayList<>();
                 sourceProviderContextsForAggregationDef.add(SiddhiQLParser.Definition_streamContext.class.getName());
-                ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
-                Map<String, ParseTree> contextTree = LSCompletionContext.INSTANCE.getParseTreeMap();
-
                 // finding the available source names in the aggregation definition.
                 sources.putAll(findSourcesInScope(scopeContext, SiddhiQLParser.Standard_streamContext.class.getName()));
                 List<ParseTree> sourceProviderContexts =
@@ -95,7 +92,6 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
                                 SiddhiQLParser.Definition_aggregationContext.class.getName(),
                                 SiddhiQLParser.Definition_tableContext.class.getName(),
                                 SiddhiQLParser.Definition_windowContext.class.getName()));
-
                 // finding the available source names in the query context.
                 sources.putAll(findSourcesInScope(scopeContext, SiddhiQLParser.Query_inputContext.class.getName()));
                 List<ParseTree> sourceProviderContexts = findSourceProviderContexts(sourceProviderContextsForQuery);
@@ -252,7 +248,6 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
      */
     private Map<String, List<String>> findAttributesOfSources(List<ParseTree> sourceProviderContexts,
                                                               Map<String, String> sourceToAliasMap) {
-        //todo: return Stream1.attribute1 mapping only when there are two streams.
         Map<String, List<String>> attributeNameMap = new HashMap<>();
         ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
         ArrayList<String> sources = new ArrayList(sourceToAliasMap.keySet());
@@ -332,4 +327,3 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
     }
 }
 
-//todo: remove equalsIgnoreCase function.

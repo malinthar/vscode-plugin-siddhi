@@ -1,4 +1,4 @@
-package io.siddhi.langserver.util;
+package io.siddhi.langserver.utils;
 
 import com.google.gson.Gson;
 import io.siddhi.langserver.SiddhiLanguageServer;
