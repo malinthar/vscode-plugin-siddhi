@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.siddhi.langserver.completion.util.CompletionTestUtil;
+import io.siddhi.langserver.utils.completion.CompletionTestUtil;
 import io.siddhi.langserver.util.FileUtil;
 import io.siddhi.langserver.util.TestUtil;
 import org.eclipse.lsp4j.CompletionItem;

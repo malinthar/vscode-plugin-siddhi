@@ -1,7 +1,20 @@
+/*
+ * Copyright (c) 2019, WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import io.siddhi.langserver.SiddhiLanguageServer;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -11,35 +24,39 @@ import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-/** To launch the language server.
-*/
+/**
+ * Launcher for language server.
+ */
 public class StdioLauncher {
 
+    /**
+     * Main method is executed at the classpath to start Siddhi language server.
+     *
+     * @param args language server/client options
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     public static void main(String args[]) throws InterruptedException, ExecutionException {
-        /**Launcher is started by the trigger event of client.*/
         // To avoid logs printed to I/O which breaks LS protocol.
-        Logger.getRootLogger().setLevel(Level.OFF);
+        //Logger.getRootLogger().setLevel(Level.OFF);
+        //System's standard input and output is used as the transport for server client communication.
         startServer(System.in, System.out);
     }
 
+    /**
+     * Initiates the language server and creates client server connection.
+     *
+     * @param in  input stream/transport
+     * @param out output stream/transport
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
     private static void startServer(InputStream in, OutputStream out) throws InterruptedException, ExecutionException {
-        /**create server instance.*/
         SiddhiLanguageServer server = new SiddhiLanguageServer();
-        /**create server launcher (wire end points ).i.e:returns the initialted Builder<LanguageClient> which wires up all
-        components for JSON-RPC communication.*/ 
         Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(server, in, out);
-        /**client instance.*/
         LanguageClient client = launcher.getRemoteProxy();
-        /**connect the server and client/set the stream up.*/
         server.connect(client);
-        /**promise.*/
         Future<?> startListening = launcher.startListening();
         startListening.get();
     }
-
 }
-
-/**for more details refer:
-https://github.com/eclipse/lsp4j/blob/master/org.eclipse.lsp4j.jsonrpc/src/main/java/org/eclipse/lsp4j/jsonrpc/Launcher.java
-https://www.baeldung.com/java-future.
-*/

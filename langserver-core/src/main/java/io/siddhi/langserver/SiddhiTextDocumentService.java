@@ -1,14 +1,23 @@
+/*
+ * Copyright (c) 2019, WSO2 Inc. (http://wso2.com) All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.siddhi.langserver;
 
-import io.siddhi.langserver.common.utils.CommonUtil;
-import io.siddhi.langserver.completion.util.CompletionUtil;
+import io.siddhi.langserver.utils.CommonUtil;
+import io.siddhi.langserver.utils.CompletionUtil;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
-import org.apache.log4j.Logger;
-import org.eclipse.lsp4j.CodeAction;
-import org.eclipse.lsp4j.CodeActionParams;
-import org.eclipse.lsp4j.CodeLens;
-import org.eclipse.lsp4j.CodeLensParams;
-import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionParams;
@@ -16,29 +25,13 @@ import org.eclipse.lsp4j.DidChangeTextDocumentParams;
 import org.eclipse.lsp4j.DidCloseTextDocumentParams;
 import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.DidSaveTextDocumentParams;
-import org.eclipse.lsp4j.DocumentFormattingParams;
-import org.eclipse.lsp4j.DocumentHighlight;
-import org.eclipse.lsp4j.DocumentOnTypeFormattingParams;
-import org.eclipse.lsp4j.DocumentRangeFormattingParams;
-import org.eclipse.lsp4j.DocumentSymbol;
-import org.eclipse.lsp4j.DocumentSymbolParams;
-import org.eclipse.lsp4j.Hover;
-import org.eclipse.lsp4j.Location;
-import org.eclipse.lsp4j.LocationLink;
-import org.eclipse.lsp4j.Position;
-import org.eclipse.lsp4j.ReferenceParams;
-import org.eclipse.lsp4j.RenameParams;
-import org.eclipse.lsp4j.SignatureHelp;
-import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.TextDocumentClientCapabilities;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
-import org.eclipse.lsp4j.TextDocumentPositionParams;
-import org.eclipse.lsp4j.TextEdit;
-import org.eclipse.lsp4j.WorkspaceEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -47,155 +40,106 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * {@code SiddhiQLTextDocumentServive} Text document service implementation for Siddhi.
+ * TextDocumentService implementation for Siddhi provide various services
+ * {@link TextDocumentService} upon clients' requests.
  */
 public class SiddhiTextDocumentService implements TextDocumentService {
-    // indicates the frequency to send diagnostics to server upon document did change
-    private static final int DIAG_PUSH_DEBOUNCE_DELAY = 750;
+
+    // todo:indicates the frequency to generate diagnostics upon document did change
+    //private static final int DIAG_PUSH_DEBOUNCE_DELAY = 750;
     private DocumentManager documentManager;
-    //TODO:change to document manager implementation
     private TextDocumentClientCapabilities clientCapabilities;
     private SiddhiLanguageServer siddhiLanguageServer;
     private DiagnosticProvider diagnosticProvider;
-    //TODO:Add debouncer
+
     public SiddhiTextDocumentService() {
-        this.documentManager = DocumentManagerImpl.getInstance();
-        this.siddhiLanguageServer = LSOperationContext.INSTANCE.getSiddhiLanguageServer();
-        this.diagnosticProvider = LSOperationContext.INSTANCE.getDiagnosticProvider();
+        this.documentManager = DocumentManager.INSTANCE;
+        this.siddhiLanguageServer = LSCompletionContext.INSTANCE.getSiddhiLanguageServer();
+        this.diagnosticProvider = LSCompletionContext.INSTANCE.getDiagnosticProvider();
+        //todo: rename the LSCompletionContext as LSOPerationContext and comment out that other features should have
+        // separate contexts too.
     }
 
     /**
-     * Set the Text Document Capabilities.
+     * Set the client's capabilities, this is used for concurrent operation of language server which is not
+     * implemented currently.
      *
-     * @param clientCapabilities Client's Text Document Capabilities
+     * @param clientCapabilities Client's Text Document Capabilities.
      */
     public void setClientCapabilities(TextDocumentClientCapabilities clientCapabilities) {
         this.clientCapabilities = clientCapabilities;
     }
 
+    /**
+     * The method is called to retrieve completion items upon a request of a client for completions for a given
+     * completion parameter combination({@link org.eclipse.lsp4j.CompletionContext}).
+     *
+     * @param completionParams
+     * @return the list of Completion items {@link List<CompletionItem>} or an completionList object
+     * {@link CompletionList} is returned.
+     */
     @Override
-    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams completionParams) {
-        final List<CompletionItem> completions = new ArrayList<>();
+    public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(
+            CompletionParams completionParams) {
+
+        List<CompletionItem> completions = new ArrayList<>();
         return CompletableFuture.supplyAsync(() -> {
-            String fileUri = completionParams.getTextDocument().getUri();
-            Optional<Path> completionPath = CommonUtil.getPathFromURI(fileUri);
+            List<CompletionItem> completionItems;
+            String documentUri = completionParams.getTextDocument().getUri();
+            Optional<Path> completionPath = CommonUtil.getPathFromURI(documentUri);
             if (!completionPath.isPresent()) {
                 return Either.forLeft(completions);
             }
-            List<CompletionItem> completionItems;
             try {
                 completionItems = CompletionUtil.getCompletions(completionParams);
-            } catch (Throwable e) {
-                String msg = "Operation 'text/completion' failed!";
-               //logError(msg, e, position.getTextDocument(), position.getPosition());
+            } catch (URISyntaxException e) {
+                String msg = "Operation 'text/completion' failed!: " + e.getMessage();
                 completionItems = new ArrayList<>();
             }
             return Either.forLeft(completionItems);
         });
     }
 
-    @Override
-    public CompletableFuture<CompletionItem> resolveCompletionItem(CompletionItem completionItem) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<Hover> hover(TextDocumentPositionParams textDocumentPositionParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<SignatureHelp> signatureHelp(TextDocumentPositionParams textDocumentPositionParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<Either<List<? extends Location>, List<? extends LocationLink>>> definition(TextDocumentPositionParams textDocumentPositionParams) {
-
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<? extends Location>> references(ReferenceParams referenceParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<? extends DocumentHighlight>> documentHighlight(TextDocumentPositionParams textDocumentPositionParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> documentSymbol(DocumentSymbolParams documentSymbolParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<Either<Command, CodeAction>>>  codeAction(CodeActionParams params) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<? extends CodeLens>> codeLens(CodeLensParams codeLensParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<CodeLens> resolveCodeLens(CodeLens codeLens) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<? extends TextEdit>> formatting(DocumentFormattingParams documentFormattingParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<? extends TextEdit>> rangeFormatting(DocumentRangeFormattingParams documentRangeFormattingParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<List<? extends TextEdit>> onTypeFormatting(DocumentOnTypeFormattingParams documentOnTypeFormattingParams) {
-        return null;
-    }
-
-    @Override
-    public CompletableFuture<WorkspaceEdit> rename(RenameParams renameParams) {
-        return CompletableFuture.supplyAsync(()-> {
-            String fileUri = renameParams.getTextDocument().getUri();
-            Position position = renameParams.getPosition();
-            return null;
-        });
-    }
-
+    /**
+     * This method is called When a document with .siddhi extension is opened which publishes the diagnostics of the
+     * document to client {@link org.eclipse.lsp4j.services.LanguageClient}.
+     *
+     * @param didOpenTextDocumentParams
+     */
     @Override
     public void didOpen(DidOpenTextDocumentParams didOpenTextDocumentParams) {
-        //todo: handle errors
-        String uri = didOpenTextDocumentParams.getTextDocument().getUri();
-        String content = didOpenTextDocumentParams.getTextDocument().getText();
-        this.documentManager.openFile(Paths.get(URI.create(uri)), content);
-        if (siddhiLanguageServer.getClient() != null) {
-            this.diagnosticProvider.compileAndSendDiagnostics(siddhiLanguageServer.getClient(), uri, content);
-        }
 
+        String documentUri = didOpenTextDocumentParams.getTextDocument().getUri();
+        String documentContent = didOpenTextDocumentParams.getTextDocument().getText();
+        this.documentManager.openFile(Paths.get(URI.create(documentUri)), documentContent);
+        if (siddhiLanguageServer.getClient() != null) {
+            this.diagnosticProvider
+                    .compileAndSendDiagnostics(siddhiLanguageServer.getClient(), documentUri, documentContent);
+        }
     }
 
+    /**
+     * This method is called when a document with .siddhi extension is opened which publishes the diagnostics of the
+     * document to client {@link org.eclipse.lsp4j.services.LanguageClient}.
+     *
+     * @param didChangeTextDocumentParams
+     */
     @Override
     public void didChange(DidChangeTextDocumentParams didChangeTextDocumentParams) {
-        Logger root = Logger.getRootLogger();
-        String fileUri = didChangeTextDocumentParams.getTextDocument().getUri();
-        Optional<Path> changedPath = CommonUtil.getPathFromURI(fileUri);
+
+        String documentUri = didChangeTextDocumentParams.getTextDocument().getUri();
+        Optional<Path> changedPath = CommonUtil.getPathFromURI(documentUri);
         if (!changedPath.isPresent()) {
-            return;
+            String msg = "Operation 'text/didChange' failed!: changed path is not present";
         }
         try {
             List<TextDocumentContentChangeEvent> changes = didChangeTextDocumentParams.getContentChanges();
             for (TextDocumentContentChangeEvent changeEvent : changes) {
-                documentManager.updateFile(Paths.get(URI.create(fileUri)), changeEvent.getText());
+                documentManager.updateFile(Paths.get(URI.create(documentUri)), changeEvent.getText());
             }
             try {
-                this.diagnosticProvider.compileAndSendDiagnostics(siddhiLanguageServer.getClient(), fileUri, documentManager.getFileContent(Paths.get(URI.create(fileUri))));
+                this.diagnosticProvider.compileAndSendDiagnostics(siddhiLanguageServer.getClient(), documentUri,
+                        documentManager.getFileContent(Paths.get(URI.create(documentUri))));
             } catch (Throwable e) {
                 String msg = "Computing 'diagnostics' failed!";
                 //logError(msg, e, params.getTextDocument(), (Position) null);
@@ -204,16 +148,30 @@ public class SiddhiTextDocumentService implements TextDocumentService {
             String msg = "Operation 'text/didChange' failed!";
             //logError(msg, e, params.getTextDocument(), (Position) null);
         }
+        //todo:exception types.
     }
 
+    /**
+     * This method is called when a document is close and the document instance held by the
+     * {@link DocumentManager} is destroyed.
+     *
+     * @param didCloseTextDocumentParams
+     */
     @Override
     public void didClose(DidCloseTextDocumentParams didCloseTextDocumentParams) {
-        String uri = didCloseTextDocumentParams.getTextDocument().getUri();
-        this.documentManager.closeFile(Paths.get(URI.create(uri)));
+
+        String fileUri = didCloseTextDocumentParams.getTextDocument().getUri();
+        this.documentManager.closeFile(Paths.get(URI.create(fileUri)));
     }
 
+    /**
+     * This method is called when a document is saved.
+     *
+     * @param didSaveTextDocumentParams
+     */
     @Override
     public void didSave(DidSaveTextDocumentParams didSaveTextDocumentParams) {
+        //implementations
     }
 }
 

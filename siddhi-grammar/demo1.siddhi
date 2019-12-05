@@ -3,7 +3,7 @@
 --  at parser errorStrategy get contextTree.
   
 
-define stream TradeStream (symbol string, price double, volume long, timestamp long,arrr string);
+define stream TradeStream (symbol string   , price double, volume long, timestamp long,arrr string);
 define stream StockStream (symbol string, price float, volume long);
 
 

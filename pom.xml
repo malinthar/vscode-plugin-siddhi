@@ -25,7 +25,7 @@
             <dependency>
                 <groupId>io.siddhi</groupId>
                 <artifactId>siddhi-query-compiler</artifactId>
-                <version>5.1.9-SNAPSHOT</version>
+                <version>${siddhi-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.lsp4j</groupId>
@@ -46,8 +46,23 @@
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
-                <version>1.2.15</version>
+                <version>${log4j.version}</version>
             </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.slf4j</groupId>-->
+<!--                <artifactId>slf4j-api</artifactId>-->
+<!--                <version>${slf4j.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--                <groupId>org.slf4j</groupId>-->
+<!--                <artifactId>slf4j-log4j12</artifactId>-->
+<!--                <version>${slf4j.version}</version>-->
+<!--            </dependency>-->
+<!--            <dependency>-->
+<!--            <groupId>log4j</groupId>-->
+<!--            <artifactId>log4j</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
     <repositories>
@@ -112,7 +127,10 @@
     <properties>
         <lsp4j.version>0.8.1</lsp4j.version>
         <antlr4-runtime.version>4.7.2</antlr4-runtime.version>
-        <siddhi-core.version>5.1.0</siddhi-core.version>
+        <siddhi-core.version>5.1.8</siddhi-core.version>
+        <siddhi-query-compiler.version>5.1.8</siddhi-query-compiler.version>
         <testng.version>7.0.0</testng.version>
+        <log4j.version>1.2.17</log4j.version>
+        <slf4j.version>1.7.12</slf4j.version>
     </properties>
 </project>
