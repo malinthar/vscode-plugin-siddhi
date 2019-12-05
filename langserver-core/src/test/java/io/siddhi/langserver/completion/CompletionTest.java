@@ -5,9 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.siddhi.langserver.utils.completion.CompletionTestUtil;
 import io.siddhi.langserver.util.FileUtil;
 import io.siddhi.langserver.util.TestUtil;
+import io.siddhi.langserver.utils.completion.CompletionTestUtil;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.jsonrpc.Endpoint;
@@ -28,11 +28,13 @@ import static io.siddhi.langserver.util.FileUtil.RES_DIR;
 /**
  * Abstract class for completion test cases.
  */
-public abstract  class CompletionTest {
+public abstract class CompletionTest {
+
     private Endpoint serviceEndpoint;
     private Path sourcesPath = RES_DIR.resolve("completion");
     private JsonParser parser = new JsonParser();
     private Gson gson = new Gson();
+
     @BeforeClass
     public void init() {
         this.serviceEndpoint = TestUtil.initializeLanguageServer();

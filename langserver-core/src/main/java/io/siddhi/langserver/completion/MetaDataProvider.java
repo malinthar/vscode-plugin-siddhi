@@ -15,8 +15,8 @@
  */
 package io.siddhi.langserver.completion;
 
-import io.siddhi.langserver.utils.metadata.MetaDataProviderUtil;
 import io.siddhi.langserver.utils.metadata.MetaData;
+import io.siddhi.langserver.utils.metadata.MetaDataProviderUtil;
 import io.siddhi.langserver.utils.metadata.ProcessorMetaData;
 
 import java.util.ArrayList;
@@ -29,63 +29,64 @@ import java.util.Map;
  */
 public class MetaDataProvider {
 
-    private  List<ProcessorMetaData> functions = new ArrayList<>();
-    private  List<ProcessorMetaData> windowProcessors = new ArrayList<>();
-    private  List<ProcessorMetaData> streamProcessors = new ArrayList<>();
-    private  List<ProcessorMetaData> aggregatorFunctions = new ArrayList<>();
-    private  List<ProcessorMetaData> sinks = new ArrayList<>();
-    private  List<ProcessorMetaData> sources = new ArrayList<>();
-    private  List<ProcessorMetaData> sourceMaps = new ArrayList<>();
-    private  List<ProcessorMetaData> sinkMaps = new ArrayList<>();
-    private  List<ProcessorMetaData> stores = new ArrayList<>();
-    private  Map<String, MetaData> extensionMetaData = new HashMap<>();
-    private static  MetaDataProvider instance;
+    private List<ProcessorMetaData> functions = new ArrayList<>();
+    private List<ProcessorMetaData> windowProcessors = new ArrayList<>();
+    private List<ProcessorMetaData> streamProcessors = new ArrayList<>();
+    private List<ProcessorMetaData> aggregatorFunctions = new ArrayList<>();
+    private List<ProcessorMetaData> sinks = new ArrayList<>();
+    private List<ProcessorMetaData> sources = new ArrayList<>();
+    private List<ProcessorMetaData> sourceMaps = new ArrayList<>();
+    private List<ProcessorMetaData> sinkMaps = new ArrayList<>();
+    private List<ProcessorMetaData> stores = new ArrayList<>();
+    private Map<String, MetaData> extensionMetaData = new HashMap<>();
+    private static MetaDataProvider instance;
 
-    private MetaDataProvider(){
+    private MetaDataProvider() {
         populateExtensionMetaDta();
     }
 
-    public static MetaDataProvider getInstance(){
-        if(instance != null){
-           instance = new MetaDataProvider();
+    public static MetaDataProvider getInstance() {
+        if (instance != null) {
+            instance = new MetaDataProvider();
         }
         return instance;
     }
+
     /**
      * @return {@link List<ProcessorMetaData>} list of function metadata of all the extensions.
      */
-    public  List<ProcessorMetaData> getFunctionMetaData() {
+    public List<ProcessorMetaData> getFunctionMetaData() {
         return this.functions;
     }
 
     /**
      * @return {@link List<ProcessorMetaData>} list of window processor metadata of all the extensions.
      */
-    public  List<ProcessorMetaData> getWindowProcessorFunctions() {
+    public List<ProcessorMetaData> getWindowProcessorFunctions() {
         return this.windowProcessors;
     }
 
-    public  List<ProcessorMetaData> getStreamProcessorFunctions() {
+    public List<ProcessorMetaData> getStreamProcessorFunctions() {
         return this.streamProcessors;
     }
 
-    public  List<ProcessorMetaData> getSources() {
+    public List<ProcessorMetaData> getSources() {
         return this.sources;
     }
 
-    public  List<ProcessorMetaData> getSinks() {
+    public List<ProcessorMetaData> getSinks() {
         return this.sinks;
     }
 
-    public  List<ProcessorMetaData> getSourceMaps() {
+    public List<ProcessorMetaData> getSourceMaps() {
         return this.sourceMaps;
     }
 
-    public  List<ProcessorMetaData> getSinkMaps() {
+    public List<ProcessorMetaData> getSinkMaps() {
         return sinkMaps;
     }
 
-    public  List<ProcessorMetaData> getStores() {
+    public List<ProcessorMetaData> getStores() {
         return stores;
     }
 
@@ -93,13 +94,12 @@ public class MetaDataProvider {
         return aggregatorFunctions;
     }
 
-    private  void populateExtensionMetaDta(){
+    private void populateExtensionMetaDta() {
         this.extensionMetaData = MetaDataProviderUtil.getExtensionProcessorMetaData();
         for (Map.Entry<String, MetaData> entry : this.extensionMetaData.entrySet()) {
             if ("IncrementalAggregator".equalsIgnoreCase(entry.getKey())) {
                 this.aggregatorFunctions.addAll(entry.getValue().getFunctions());
-            }
-            else{
+            } else {
                 this.functions.addAll(entry.getValue().getFunctions());
                 this.streamProcessors.addAll(entry.getValue().getStreamProcessors());
                 this.windowProcessors.addAll(entry.getValue().getWindowProcessors());
@@ -110,6 +110,5 @@ public class MetaDataProvider {
             }
         }
     }
-
 
 }

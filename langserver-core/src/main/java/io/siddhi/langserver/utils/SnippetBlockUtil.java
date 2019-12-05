@@ -40,10 +40,11 @@ public class SnippetBlockUtil {
 
     public static final Object[] APP_NAME_ANNOTATION_DEFINITION =
             new Object[]{"@App:description(\"${1:App_Name}\")", "annotate-appName", CompletionItemKind.Snippet,
-                    "annotate-AppName\n@App:Name(\"${1:App_Name}\")", "@app:name",InsertTextFormat.Snippet};
+                    "annotate-AppName\n@App:Name(\"${1:App_Name}\")", "@app:name", InsertTextFormat.Snippet};
     public static final Object[] APP_DESCRIPTION_ANNOTATION_DEFINITION =
             new Object[]{"@App:description(\"${1:App_Description}\")", "annotate-appDescription",
-        CompletionItemKind.Snippet, "annotate-AppDescription\n@App:description(\"${1:App_Description}\")", "@app:description",
+                    CompletionItemKind.Snippet, "annotate-AppDescription\n@App:description(\"${1:App_Description}\")",
+                    "@app:description",
                     InsertTextFormat.Snippet};
     public static final Object[] APP_STATISTICS_ANNOTATION_DEFINITION =
             new Object[]{"@App:statistics(\"${1:Is_Enabled}\")", "annotate-appStatistics", CompletionItemKind.Snippet,
@@ -56,7 +57,7 @@ public class SnippetBlockUtil {
                     InsertTextFormat.Snippet};
     public static final Object[] APP_ANNOTATION_ELEMENT_DESCRIPTION_DEFINITION =
             new Object[]{"\"${1:plan description}\"", "plan description", CompletionItemKind.Snippet, "app-annotation" +
-        "-element",
+                    "-element",
                     "@app:description", InsertTextFormat.Snippet};
     public static final Object[] APP_ANNOTATION_ELEMENT_STATISTICS_DEFINITION =
             new Object[]{"\"${1:statistics}\"", "statistics", CompletionItemKind.Snippet, "app-annotation-element",
@@ -84,9 +85,10 @@ public class SnippetBlockUtil {
                     "define table ${1:table_name} (${2:attr1} ${3:Type1}, ${4:attN} ${5:TypeN});", "define table",
                     InsertTextFormat.Snippet};
     public static final Object[] AGGREGATION_DEFINITION =
-            new Object[]{"@Purge(enable = '${1:enable_purge}', interval= '${2:purge_interval}',\t\t@retentionPeriod(.." +
-        ".)" +
-        ")" +
+            new Object[]{"@Purge(enable = '${1:enable_purge}', interval= '${2:purge_interval}'," +
+                    "\t\t@retentionPeriod(.." +
+                    ".)" +
+                    ")" +
                     "\ndefine aggregation ${3:aggregator_name}\nfrom ${4:input_stream}" +
                     "\nselect ${5:attribute1}, ${6:aggregate_function}(${7:attribute2}) as ${8:attribute3}," +
                     " ${9:aggregate_function}(${10:attribute4}) as ${11:attribute5}\n" +
@@ -142,14 +144,17 @@ public class SnippetBlockUtil {
             "insert into ${12:output_stream}", "from", InsertTextFormat.Snippet};
     public static final Object[] QUERY_JOIN = new Object[]{
             "from ${1:stream_name}[${2:filter_condition}]#window.${3:window_name}(${4:args}) as ${5:reference}\n" +
-                    "\tjoin ${6:stream_name}[${7:filter_condition}]#window.${8:window_name}(${9:args}) as ${10:reference}\n" +
+                    "\tjoin ${6:stream_name}[${7:filter_condition}]#window.${8:window_name}(${9:args}) " +
+                    "   as ${10:reference}\n" +
                     "\ton ${11:join_condition}\n" +
                     "\twithin ${12: time_gap}\n" +
                     "select ${13:attribute1}, ${14:attribute2}\n" +
                     "insert into ${15:output_stream}", "query-join", CompletionItemKind.Snippet,
             "query-Join\n" +
-                    "from ${1:stream_name}[${2:filter_condition}]#window.${3:window_name}(${4:args}) as ${5:reference}\n" +
-                    "\tjoin ${6:stream_name}[${7:filter_condition}]#window.${8:window_name}(${9:args}) as ${10:reference}\n" +
+                    "from ${1:stream_name}[${2:filter_condition}]#window.${3:window_name}(${4:args}) " +
+                    "   as ${5:reference}\n" +
+                    "\tjoin ${6:stream_name}[${7:filter_condition}]#window.${8:window_name}(${9:args}) " +
+                    "   as ${10:reference}\n" +
                     "\ton ${11:join_condition}\n" +
                     "\twithin ${12: time_gap}\n" +
                     "select ${13:attribute1}, ${14:attribute2}\n" +
@@ -188,8 +193,10 @@ public class SnippetBlockUtil {
             "define-sink",
             CompletionItemKind.Snippet,
             "define-Sink\n" +
-                    "@sink(type='${1:sink_type}', ${2:option_key}='${3:option_value}', ${4:dynamic_option_key}='{{${5:dynamic_option_value}}}',\n" +
-                    "\t@map(type='${6:map_type}', ${7:option_key}='${8:option_value}', ${9:dynamic_option_key}='{{${10:dynamic_option_value}}}',\n" +
+                    "@sink(type='${1:sink_type}', ${2:option_key}='${3:option_value}', " +
+                    "   ${4:dynamic_option_key}='{{${5:dynamic_option_value}}}',\n" +
+                    "\t@map(type='${6:map_type}', ${7:option_key}='${8:option_value}', " +
+                    "   ${9:dynamic_option_key}='{{${10:dynamic_option_value}}}',\n" +
                     "\t\t@payload( '${11:payload_mapping}')\n" +
                     "\t)\n" +
                     ")\n" +
@@ -226,38 +233,38 @@ public class SnippetBlockUtil {
             "@index('${1:attribute_name}')", "@index", InsertTextFormat.Snippet};
 
     public static final Object[] ATTRIBUTE_NAME_AND_TYPE_SNIPPET = new Object[]{"${1:attr1} ${2:Type1}", "${1:attr1} " +
-        "${2:Type1}",
+            "${2:Type1}",
             CompletionItemKind.Snippet, "attribute", InsertTextFormat.Snippet};
     public static final Object[] ALIAS_SNIPPET =
-            {"${1:alias}", "alias", CompletionItemKind.Snippet, "attribute-name", "alias",InsertTextFormat.Snippet};
+            {"${1:alias}", "alias", CompletionItemKind.Snippet, "attribute-name", "alias", InsertTextFormat.Snippet};
     public static final Object[] ATTRIBUTE_LIST_SNIPPET = new Object[]{"(${1:attr1} ${2:Type1}, ${3:attrN} ${4:TypeN})",
-        "(attr1 " +
-            "Type1, attN TypeN)",
-            CompletionItemKind.Snippet, "attribute list", "(attr1 Type1, attN TypeN)",InsertTextFormat.Snippet};
+            "(attr1 " +
+                    "Type1, attN TypeN)",
+            CompletionItemKind.Snippet, "attribute list", "(attr1 Type1, attN TypeN)", InsertTextFormat.Snippet};
     public static final Object[] STREAM_NAME_SNIPPET = new Object[]{"${1:streamName} ", "streamName",
-        CompletionItemKind.Snippet
-            , "stream name:source", "streamName",InsertTextFormat.Snippet};
+            CompletionItemKind.Snippet
+            , "stream name:source", "streamName", InsertTextFormat.Snippet};
     public static final Object[] TRIGGER_NAME_SNIPPET = new Object[]{"${1:triggerName}", "triggerName",
-        CompletionItemKind.Snippet
-            , "trigger name:source", "triggerName",InsertTextFormat.Snippet};
+            CompletionItemKind.Snippet
+            , "trigger name:source", "triggerName", InsertTextFormat.Snippet};
     public static final Object[] WINDOW_NAME_SNIPPET = new Object[]{"${1:windowName}", "windowName",
             CompletionItemKind.Snippet
-            , "window name:source", "windowName",InsertTextFormat.Snippet};
+            , "window name:source", "windowName", InsertTextFormat.Snippet};
     public static final Object[] TABLE_NAME_SNIPPET = new Object[]{"${1:tableName}", "tableName",
             CompletionItemKind.Snippet
-            , "table name:source", "tableName",InsertTextFormat.Snippet};
+            , "table name:source", "tableName", InsertTextFormat.Snippet};
     public static final Object[] FUNCTION_NAME_SNIPPET = new Object[]{"${1:functionName}", "functionName",
-            CompletionItemKind.Snippet, "function name:id", "functionName",InsertTextFormat.Snippet};
+            CompletionItemKind.Snippet, "function name:id", "functionName", InsertTextFormat.Snippet};
     public static final Object[] LANGUAGE_NAME_SNIPPET = new Object[]{"[${1:languageName}]", "languageName",
-        CompletionItemKind.Snippet
-            , "language name", "languageName",InsertTextFormat.Snippet};
+            CompletionItemKind.Snippet
+            , "language name", "languageName", InsertTextFormat.Snippet};
     public static final Object[] FUNCTION_BODY_SNIPPET = new Object[]{"{\n\t\t${1:body}\n};", "function-body",
-            CompletionItemKind.Snippet, "block", "{function-body}",InsertTextFormat.Snippet};
+            CompletionItemKind.Snippet, "block", "{function-body}", InsertTextFormat.Snippet};
     public static final Object[] PARTITION_BLOCK_SNIPPET = new Object[]{
             "begin\n" + "\t${3:queries}\n" + "end;", "partition-block",
             CompletionItemKind.Snippet
             , "partition-block: " +
-            "\nbegin\n" + "  queries\n" + "end;", "begin",InsertTextFormat.Snippet};
+            "\nbegin\n" + "  queries\n" + "end;", "begin", InsertTextFormat.Snippet};
 
     public static final Object[] KEYWORD_DEFINE =
             new Object[]{"define", "define", CompletionItemKind.Keyword, "keyword", "define",
@@ -299,90 +306,90 @@ public class SnippetBlockUtil {
             InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_ALL_EVENTS = new Object[]{"all events", "all events",
             CompletionItemKind.Keyword,
-        "keyword",
-            "all events",InsertTextFormat.PlainText};
+            "keyword",
+            "all events", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_EXPIRED_EVENTS = new Object[]{"expired events", "expired events",
-            CompletionItemKind.Keyword, "keyword", "expired events",InsertTextFormat.PlainText};
+            CompletionItemKind.Keyword, "keyword", "expired events", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_CURRENT_EVENTS = new Object[]{"current events", "current events",
-        CompletionItemKind.Keyword, "keyword", "current events",InsertTextFormat.PlainText};
+            CompletionItemKind.Keyword, "keyword", "current events", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_CURRENT = new Object[]{"current", "current", CompletionItemKind.Keyword,
             "keyword",
-        "current",InsertTextFormat.PlainText};
+            "current", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_EVENTS = new Object[]{"events", "events", CompletionItemKind.Keyword,
             "keyword",
-        "events",InsertTextFormat.PlainText};
-    public static final Object[] TRIPLE_DOT = new Object[]{"...", "...", CompletionItemKind.Constant, "triple-dot", "." +
-            ".."};
+            "events", InsertTextFormat.PlainText};
+    public static final Object[] TRIPLE_DOT = new Object[]{"...", "...", CompletionItemKind.Constant,
+            "triple-dot", "..."};
 
     public static final Object[] KEYWORD_SELECT = new Object[]{"select", "select", CompletionItemKind.Keyword,
             "keyword",
-        "select",InsertTextFormat.PlainText};
+            "select", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_INSERT = new Object[]{"insert", "insert", CompletionItemKind.Keyword,
             "keyword",
-        "insert",InsertTextFormat.PlainText};
+            "insert", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_DELETE = new Object[]{"delete", "delete", CompletionItemKind.Keyword,
             "keyword",
-        "delete",InsertTextFormat.PlainText};
+            "delete", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_UPDATE = new Object[]{"update", "update", CompletionItemKind.Keyword,
             "keyword",
-        "update",InsertTextFormat.PlainText};
+            "update", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_RETURN = new Object[]{"return", "return", CompletionItemKind.Keyword,
             "keyword",
-        "return",InsertTextFormat.PlainText};
+            "return", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_OUTPUT = new Object[]{"output", "output", CompletionItemKind.Keyword,
             "keyword",
-        "output",InsertTextFormat.PlainText};
+            "output", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_EVERY = new Object[]{"every", "every", CompletionItemKind.Keyword, "keyword",
             "every",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_INT = new Object[]{"int", "int", CompletionItemKind.Keyword, "attribute " +
             "type:int",
-        "int",InsertTextFormat.PlainText};
+            "int", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_LONG = new Object[]{"long", "long", CompletionItemKind.Keyword, "attribute " +
-        "type:long",
-        "long",InsertTextFormat.PlainText};
+            "type:long",
+            "long", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_DOUBLE = new Object[]{"double", "double", CompletionItemKind.Keyword,
             "attribute " +
-        "type:double", "double",InsertTextFormat.PlainText};
-    public static final Object[] KEYWORD_FLOAT = new Object[]{"float", "float", CompletionItemKind.Keyword, "attribute" +
-            " " +
-        "type:float", "float",InsertTextFormat.PlainText};
+                    "type:double", "double", InsertTextFormat.PlainText};
+    public static final Object[] KEYWORD_FLOAT = new Object[]{"float", "float", CompletionItemKind.Keyword,
+            "attribute  " +
+            "type:float", "float", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_STRING = new Object[]{"string", "string", CompletionItemKind.Keyword,
             "attribute " +
-        "type:string", "string",InsertTextFormat.PlainText};
+                    "type:string", "string", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_BOOL = new Object[]{"bool", "bool", CompletionItemKind.Keyword, "attribute " +
-        "type:bool",
-        "bool",InsertTextFormat.PlainText};
+            "type:bool",
+            "bool", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_OBJECT = new Object[]{"object", "object", CompletionItemKind.Keyword,
             "attribute " +
-        "type:object", "object",InsertTextFormat.PlainText};
+                    "type:object", "object", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_HAVING = new Object[]{"having", "having", CompletionItemKind.Keyword,
             "keyword",
-        "having",InsertTextFormat.PlainText};
+            "having", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_ORDER_BY = new Object[]{"order by", "order by", CompletionItemKind.Keyword,
-        "keyword",
-        "order",InsertTextFormat.PlainText};
+            "keyword",
+            "order", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_LIMIT = new Object[]{"limit", "limit", CompletionItemKind.Keyword, "keyword",
             "limit",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_OFFSET = new Object[]{"offset", "offset", CompletionItemKind.Keyword,
             "keyword",
-        "offset",InsertTextFormat.PlainText};
+            "offset", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_GROUP_BY = new Object[]{"group by", "group by", CompletionItemKind.Keyword,
-        "keyword",
-        "group",InsertTextFormat.PlainText};
+            "keyword",
+            "group", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_AGGREGATE_BY = new Object[]{"aggregate by", "aggregate by",
-        CompletionItemKind.Keyword,
-        "keyword", "aggregate",InsertTextFormat.PlainText};
+            CompletionItemKind.Keyword,
+            "keyword", "aggregate", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_AS = new Object[]{"as", "as", CompletionItemKind.Keyword, "keyword", "as",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_AT = new Object[]{"at", "at", CompletionItemKind.Keyword, "keyword", "at",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
 
     public static final List<Object[]> QUERY_SECTION_KEYWORDS = Arrays.asList(
             KEYWORD_GROUP_BY, KEYWORD_OFFSET, KEYWORD_HAVING, KEYWORD_ORDER_BY, KEYWORD_LIMIT, KEYWORD_INSERT,
             KEYWORD_INSERT_INTO, KEYWORD_DELETE, KEYWORD_UPDATE_OR_INSERT_INTO, KEYWORD_RETURN, KEYWORD_UPDATE);
-    public static final List<Object[]> attributeTypes = Arrays.asList(
+    public static final List<Object[]> ATTRIBUTE_TYPES = Arrays.asList(
             KEYWORD_STRING,
             KEYWORD_INT,
             KEYWORD_FLOAT,
@@ -393,29 +400,29 @@ public class SnippetBlockUtil {
 
     public static final Object[] KEYWORD_JOIN = new Object[]{"join", "join", CompletionItemKind.Keyword, "keyword",
             "join",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_LEFT = new Object[]{"left", "left", CompletionItemKind.Keyword, "keyword",
             "left",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_RIGHT = new Object[]{"right", "right", CompletionItemKind.Keyword, "keyword",
-        "right",
-        InsertTextFormat.PlainText};
+            "right",
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_OUTER = new Object[]{"outer", "outer", CompletionItemKind.Keyword, "keyword",
-        "outer",
-        InsertTextFormat.PlainText};
+            "outer",
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_FULL = new Object[]{"full", "full", CompletionItemKind.Keyword, "keyword",
             "full",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_UNIDIRECTIONAL = new Object[]{"unidirectional", "unidirectional",
-        CompletionItemKind.Keyword, "keyword", "unidirectional",InsertTextFormat.PlainText};
+            CompletionItemKind.Keyword, "keyword", "unidirectional", InsertTextFormat.PlainText};
     public static final Object[] CLAUSE_LEFT_OUTER_JOIN = new Object[]{"left outer join", "left outer join",
-        CompletionItemKind.Keyword, "keyword", "left outer join",InsertTextFormat.PlainText};
+            CompletionItemKind.Keyword, "keyword", "left outer join", InsertTextFormat.PlainText};
     public static final Object[] CLAUSE_RIGHT_OUTER_JOIN = new Object[]{"right outer join", "right outer join",
-        CompletionItemKind.Keyword, "keyword", "right outer join",InsertTextFormat.PlainText};
+            CompletionItemKind.Keyword, "keyword", "right outer join", InsertTextFormat.PlainText};
     public static final Object[] CLAUSE_FULL_OUTER_JOIN = new Object[]{"full outer join", "full outer join",
-        CompletionItemKind.Keyword, "keyword", "full outer join",InsertTextFormat.PlainText};
+            CompletionItemKind.Keyword, "keyword", "full outer join", InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_ASC = new Object[]{"asc", "asc", CompletionItemKind.Keyword, "keyword", "asc",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_DESC = new Object[]{"desc", "desc", CompletionItemKind.Keyword, "keyword",
             "desc",
             InsertTextFormat.PlainText};
@@ -423,40 +430,42 @@ public class SnippetBlockUtil {
     public static final List<Object[]> ORDER_KEYWORDS = Arrays.asList(KEYWORD_ASC, KEYWORD_DESC);
 
     public static final Object[] KEYWORD_BEGIN = new Object[]{"begin", "begin", CompletionItemKind.Keyword, "keyword",
-        "begin",
-        InsertTextFormat.PlainText};
+            "begin",
+            InsertTextFormat.PlainText};
     public static final Object[] KEYWORD_END = new Object[]{"end", "end", CompletionItemKind.Keyword, "keyword", "end",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] MILLISECONDS = new Object[]{"milliseconds", "milliseconds",
             CompletionItemKind.Constant,
-        "constant", "milliseconds",InsertTextFormat.PlainText};
+            "constant", "milliseconds", InsertTextFormat.PlainText};
     public static final Object[] SECONDS = new Object[]{"seconds", "seconds", CompletionItemKind.Constant, "constant",
-        "seconds"
-        ,InsertTextFormat.PlainText};
+            "seconds"
+            , InsertTextFormat.PlainText};
     public static final Object[] MINUTES = new Object[]{"minutes", "minutes", CompletionItemKind.Constant, "constant",
-        "minutes"
-        ,InsertTextFormat.PlainText};
-    public static final Object[] HOURS = new Object[]{"hours", "hours", CompletionItemKind.Constant, "constant", "hours",
-        InsertTextFormat.PlainText};
+            "minutes"
+            , InsertTextFormat.PlainText};
+    public static final Object[] HOURS = new Object[]{"hours", "hours", CompletionItemKind.Constant, "constant",
+            "hours", InsertTextFormat.PlainText};
     public static final Object[] DAYS = new Object[]{"days", "days", CompletionItemKind.Constant, "constant", "days",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] MONTHS = new Object[]{"months", "months", CompletionItemKind.Constant, "constant",
-        "months",
-        InsertTextFormat.PlainText};
-    public static final Object[] YEARS = new Object[]{"years", "years", CompletionItemKind.Constant, "constant", "years",
-        InsertTextFormat.PlainText};
+            "months",
+            InsertTextFormat.PlainText};
+    public static final Object[] YEARS = new Object[]{"years", "years", CompletionItemKind.Constant, "constant",
+            "years", InsertTextFormat.PlainText};
 
-    public static List<Object[]> AGGREGATION_TIME_DURATION = Arrays.asList(SECONDS, MINUTES, HOURS, DAYS, MONTHS, YEARS);
-    public static List<Object[]> TIME_VALUE = Arrays.asList(SECONDS, MINUTES, HOURS, DAYS, MONTHS, YEARS, MILLISECONDS);
+    public static final List<Object[]> AGGREGATION_TIME_DURATION = Arrays.asList(SECONDS, MINUTES, HOURS, DAYS, MONTHS,
+            YEARS);
+    public static final List<Object[]> TIME_VALUE = Arrays.asList(SECONDS, MINUTES, HOURS, DAYS, MONTHS, YEARS,
+            MILLISECONDS);
 
     public static final Object[] CONSTANT_TRUE = new Object[]{"true", "true", CompletionItemKind.Constant, "constant",
             "true",
-        InsertTextFormat.PlainText};
+            InsertTextFormat.PlainText};
     public static final Object[] CONSTANT_FALSE = new Object[]{"false", "false", CompletionItemKind.Constant,
             "constant",
-        "false",InsertTextFormat.PlainText};
+            "false", InsertTextFormat.PlainText};
 
-    public static List<Object[]> BOOLEAN_CONSTANTS = Arrays.asList(CONSTANT_TRUE, CONSTANT_FALSE);
+    public static final List<Object[]> BOOLEAN_CONSTANTS = Arrays.asList(CONSTANT_TRUE, CONSTANT_FALSE);
 
     private static List<Object[]> functionSuggestions = new ArrayList<>();
     private static List<Object[]> windowSuggestions = new ArrayList<>();
@@ -468,7 +477,8 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getFunctions() {
         if (functionSuggestions.isEmpty()) {
-            List<ProcessorMetaData> functions = LSCompletionContext.INSTANCE.getMetaDataProvider().getFunctionMetaData();
+            List<ProcessorMetaData> functions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+                    getFunctionMetaData();
             for (ProcessorMetaData function : functions) {
                 if (!function.getParameterOverloads().isEmpty()) {
                     for (String[] parameterOverload : function.getParameterOverloads()) {
@@ -489,7 +499,8 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getWindowProcessorFunctions() {
         if (windowSuggestions.isEmpty()) {
-            List<ProcessorMetaData> windowProcessorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().getWindowProcessorFunctions();
+            List<ProcessorMetaData> windowProcessorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+                    getWindowProcessorFunctions();
             for (ProcessorMetaData function : windowProcessorFunctions) {
                 if (!function.getParameterOverloads().isEmpty()) {
                     for (String[] parameterOverload : function.getParameterOverloads()) {
@@ -498,8 +509,8 @@ public class SnippetBlockUtil {
                     }
                 } else {
                     windowSuggestions
-                            .add(generateFunctionSuggestion(function.getName(), null, function.getDescription(),
-                                    function.getReturnAttributes()));
+                            .add(generateFunctionSuggestion(function.getName(), null,
+                                    function.getDescription(), function.getReturnAttributes()));
                 }
 
             }
@@ -509,7 +520,8 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getStreamProcessorFunctions() {
         if (streamFunctionSuggestions.isEmpty()) {
-            List<ProcessorMetaData> streamProcessorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().getStreamProcessorFunctions();
+            List<ProcessorMetaData> streamProcessorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+                    getStreamProcessorFunctions();
             for (ProcessorMetaData function : streamProcessorFunctions) {
                 if (!function.getParameterOverloads().isEmpty()) {
                     for (String[] parameterOverload : function.getParameterOverloads()) {
@@ -519,8 +531,8 @@ public class SnippetBlockUtil {
                     }
                 } else {
                     streamFunctionSuggestions
-                            .add(generateFunctionSuggestion(function.getName(), null, function.getDescription(),
-                                    function.getReturnAttributes()));
+                            .add(generateFunctionSuggestion(function.getName(), null,
+                                    function.getDescription(), function.getReturnAttributes()));
                 }
 
             }
@@ -528,7 +540,8 @@ public class SnippetBlockUtil {
         return streamFunctionSuggestions;
     }
 
-    public static Object[] generateFunctionSuggestion(String functionName, String functionNameSpace, String[] parameterOverload,
+    public static Object[] generateFunctionSuggestion(String functionName, String functionNameSpace,
+                                                      String[] parameterOverload,
                                                       String description, List<AttributeMetaData> returnAttributes) {
         StringBuilder insertText = new StringBuilder();
         if (!functionNameSpace.equalsIgnoreCase("")) {
@@ -558,7 +571,8 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getAggregatorFunctions() {
         if (aggregatorFunctionSuggestions.isEmpty()) {
-            List<ProcessorMetaData> aggregatorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().getAggregatorFunctions();
+            List<ProcessorMetaData> aggregatorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+                    getAggregatorFunctions();
             for (ProcessorMetaData function : aggregatorFunctions) {
                 if (!function.getParameterOverloads().isEmpty()) {
                     for (String[] parameterOverload : function.getParameterOverloads()) {

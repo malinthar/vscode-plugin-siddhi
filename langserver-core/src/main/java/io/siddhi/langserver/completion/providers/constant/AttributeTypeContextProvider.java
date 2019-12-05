@@ -20,7 +20,7 @@ public class AttributeTypeContextProvider extends CompletionProvider {
 
     @Override
     public List<CompletionItem> getCompletions() {
-        List<Object[]> suggestions = SnippetBlockUtil.attributeTypes;
+        List<Object[]> suggestions = SnippetBlockUtil.ATTRIBUTE_TYPES;
         return generateCompletionList(suggestions);
     }
 

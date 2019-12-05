@@ -15,9 +15,9 @@
  */
 package io.siddhi.langserver;
 
+import io.siddhi.langserver.diagnostic.DiagnosticProvider;
 import io.siddhi.langserver.utils.CommonUtil;
 import io.siddhi.langserver.utils.CompletionUtil;
-import io.siddhi.langserver.diagnostic.DiagnosticProvider;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionList;
 import org.eclipse.lsp4j.CompletionParams;

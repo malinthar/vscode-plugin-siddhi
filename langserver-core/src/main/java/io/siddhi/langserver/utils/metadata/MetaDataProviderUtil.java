@@ -39,7 +39,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
 /**
- * {@code MetaDataProviderUtil} is a utility class for getting meta data for the in built and extension processors in Siddhi.
+ * {@code MetaDataProviderUtil} is a utility class for getting meta data for the in built and
+ * extension processors in Siddhi.
  */
 //todo:move this implementation to io.siddhi.distribution.common
 public class MetaDataProviderUtil {
