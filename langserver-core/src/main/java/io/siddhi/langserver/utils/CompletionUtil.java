@@ -18,8 +18,8 @@ package io.siddhi.langserver.utils;
 
 import io.siddhi.langserver.DocumentManager;
 import io.siddhi.langserver.LSCompletionContext;
-import io.siddhi.langserver.completion.providers.siddhiapp.ParseContextProvider;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
+import io.siddhi.langserver.completion.providers.siddhiapp.ParseContextProvider;
 import io.siddhi.langserver.visitor.LanguageServerParserErrorStrategy;
 import io.siddhi.langserver.visitor.SiddhiQLLSVisitorImpl;
 import io.siddhi.query.compiler.SiddhiQLLexer;
@@ -29,7 +29,6 @@ import io.siddhi.query.compiler.internal.SiddhiErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.CompletionItem;
 import org.eclipse.lsp4j.CompletionParams;
@@ -87,6 +86,7 @@ public class CompletionUtil {
     }
 
     //todo:move to a package named parser
+
     /**
      * Used at the Siddhi Language server to parse source content and obtain a parseTreeMap.
      *
@@ -130,8 +130,8 @@ public class CompletionUtil {
         CompletionProvider currentContextProvider = LSCompletionContext.INSTANCE.
                 getCurrentContextProvider();
         if (currentContextProvider != null && !(currentContextProvider instanceof ParseContextProvider)) {
-                completionItems = traverseUp(currentContextProvider);
-                return completionItems;
+            completionItems = traverseUp(currentContextProvider);
+            return completionItems;
         } else {
             return null;
         }
@@ -145,7 +145,7 @@ public class CompletionUtil {
      * @return
      */
     public static List<CompletionItem> traverseUp(CompletionProvider currentContextProvider) {
-        List<CompletionItem> completionItems= new ArrayList<>();
+        List<CompletionItem> completionItems = new ArrayList<>();
         if (currentContextProvider != null) {
             completionItems.addAll(currentContextProvider.getCompletions());
             if (completionItems.isEmpty()) {

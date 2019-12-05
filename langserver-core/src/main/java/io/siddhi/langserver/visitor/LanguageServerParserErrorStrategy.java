@@ -189,7 +189,7 @@ public class LanguageServerParserErrorStrategy extends DefaultErrorStrategy {
         Predicate<Token> errorPredicate = (token) -> {
             if (token.getLine() == currentToken.getLine() &&
                     token.getCharPositionInLine() > currentToken.getCharPositionInLine() &&
-                    token.getType()== 112) {
+                    token.getType() == 112) {
                 return true;
             }
             return false;

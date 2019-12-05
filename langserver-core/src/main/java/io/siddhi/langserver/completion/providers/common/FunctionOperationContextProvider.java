@@ -1,6 +1,7 @@
 package io.siddhi.langserver.completion.providers.common;
 
 import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.completion.providers.ScopeCompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -15,7 +16,7 @@ import java.util.List;
  * Provides completions for FunctionOperationContext.
  * {@link io.siddhi.query.compiler.SiddhiQLParser.Function_operationContext}.
  */
-public class FunctionOperationContextProvider extends CompletionProvider {
+public class FunctionOperationContextProvider extends ScopeCompletionProvider {
 
     public FunctionOperationContextProvider() {
 

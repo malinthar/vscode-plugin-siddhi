@@ -16,12 +16,12 @@
 package io.siddhi.langserver;
 
 import io.siddhi.core.SiddhiManager;
+import io.siddhi.langserver.beans.LSErrorNode;
 import io.siddhi.langserver.completion.LSCompletionProviderFactory;
 import io.siddhi.langserver.completion.MetaDataProvider;
-import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.completion.ParseTreeMapVisitor;
+import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.diagnostic.DiagnosticProvider;
-import io.siddhi.langserver.beans.LSErrorNode;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
@@ -53,7 +53,7 @@ public class LSCompletionContext {
         position = new HashMap<>(2);
     }
 
-    public  void setCompletionProviderFactory(LSCompletionProviderFactory factory) {
+    public void setCompletionProviderFactory(LSCompletionProviderFactory factory) {
         this.completionProviderFactory = factory;
     }
 
