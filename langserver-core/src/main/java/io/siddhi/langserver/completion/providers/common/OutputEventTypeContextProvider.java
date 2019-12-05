@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
+import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
 
@@ -35,7 +36,8 @@ public class OutputEventTypeContextProvider extends CompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
         List<Object[]> suggestions = Arrays.asList(SnippetBlockUtil.KEYWORD_ALL_EVENTS,
-                SnippetBlockUtil.KEYWORD_CURRENT_EVENTS, SnippetBlockUtil.KEYWORD_EXPIRED_EVENTS, SnippetBlockUtil.KEYWORD_CURRENT,
+                SnippetBlockUtil.KEYWORD_CURRENT_EVENTS, SnippetBlockUtil.KEYWORD_EXPIRED_EVENTS,
+                SnippetBlockUtil.KEYWORD_CURRENT,
                 SnippetBlockUtil.KEYWORD_EVENTS);
         return generateCompletionList(suggestions);
     }

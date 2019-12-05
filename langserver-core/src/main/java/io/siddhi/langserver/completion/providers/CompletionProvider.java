@@ -45,8 +45,11 @@ import java.util.Map;
  * {@code LSCompletionProvider} CompletionProvider SPI.
  */
 public abstract class CompletionProvider {
+
     protected String providerName;
+
     public abstract List<CompletionItem> getCompletions();
+
     public String getProviderName() {
         return this.providerName;
     }
@@ -61,7 +64,7 @@ public abstract class CompletionProvider {
         List<CompletionItem> completionItems = new ArrayList<>();
         if (suggestions != null) {
             for (Object[] suggestion : suggestions) {
-                if(suggestion.length == 6) {
+                if (suggestion.length == 6) {
                     CompletionItem completionItem = new CompletionItem();
                     completionItem.setInsertText((String) suggestion[0]);
                     completionItem.setLabel((String) suggestion[1]);
@@ -70,8 +73,7 @@ public abstract class CompletionProvider {
                     completionItem.setFilterText((String) suggestion[4]);
                     completionItem.setInsertTextFormat((InsertTextFormat) suggestion[5]);
                     completionItems.add(completionItem);
-                }
-                else{
+                } else {
                     //todo: log the whatever that is dropped, when the logging framework is implemented.
                 }
             }

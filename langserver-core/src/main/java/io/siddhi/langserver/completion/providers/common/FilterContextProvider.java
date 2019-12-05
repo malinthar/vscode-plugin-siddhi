@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.common;
 
 import io.siddhi.langserver.LSCompletionContext;
@@ -28,9 +29,10 @@ import java.util.List;
  */
 public class FilterContextProvider extends CompletionProvider {
 
-    public  FilterContextProvider(){
+    public FilterContextProvider() {
         this.providerName = SiddhiQLParser.FilterContext.class.getName();
     }
+
     @Override
     public List<CompletionItem> getCompletions() {
         //MathOperationContext is the only context that can be contained by filter context.

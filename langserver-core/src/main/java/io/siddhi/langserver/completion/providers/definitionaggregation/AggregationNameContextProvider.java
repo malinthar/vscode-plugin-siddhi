@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.definitionaggregation;
 
 import io.siddhi.langserver.completion.providers.CompletionProvider;
@@ -22,7 +23,8 @@ import org.eclipse.lsp4j.CompletionItem;
 import java.util.List;
 
 /**
- * Provides Completions for AggregationNameContext.{@link io.siddhi.query.compiler.SiddhiQLParser.Aggregation_nameContext}
+ * Provides Completions for AggregationNameContext.
+ * {@link io.siddhi.query.compiler.SiddhiQLParser.Aggregation_nameContext}
  */
 public class AggregationNameContextProvider extends CompletionProvider {
 

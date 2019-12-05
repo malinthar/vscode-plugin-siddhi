@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.executionelement.query;
 
 import io.siddhi.langserver.completion.providers.CompletionProvider;

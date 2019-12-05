@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.common;
 
 import io.siddhi.langserver.LSCompletionContext;
-import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
+import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -27,6 +28,9 @@ import org.eclipse.lsp4j.CompletionItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provider for group by query selection context.
+ */
 public class GroupByQuerySelectionContextProvider extends CompletionProvider {
 
     public GroupByQuerySelectionContextProvider() {

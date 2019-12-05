@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.definitionaggregation;
 
 import io.siddhi.langserver.LSCompletionContext;
@@ -23,7 +24,8 @@ import org.eclipse.lsp4j.CompletionItem;
 import java.util.List;
 
 /**
- * Provides completions for AggregationTimeInterval context {@link io.siddhi.query.compiler.SiddhiQLParser.Aggregation_time_intervalContext}.
+ * Provides completions for AggregationTimeInterval context
+ * {@link io.siddhi.query.compiler.SiddhiQLParser.Aggregation_time_intervalContext}.
  */
 public class AggregationTimeIntervalContextProvider extends CompletionProvider {
 

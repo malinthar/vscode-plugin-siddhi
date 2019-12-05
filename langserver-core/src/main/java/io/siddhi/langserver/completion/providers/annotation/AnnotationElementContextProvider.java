@@ -15,8 +15,8 @@
  */
 package io.siddhi.langserver.completion.providers.annotation;
 
-import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
+import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
@@ -25,7 +25,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Provide completions for AnnotationElementContext {@link io.siddhi.query.compiler.SiddhiQLParser.Annotation_elementContext}.
+ * Provide completions for AnnotationElementContext
+ * {@link io.siddhi.query.compiler.SiddhiQLParser.Annotation_elementContext}.
  */
 public class AnnotationElementContextProvider extends CompletionProvider {
 

@@ -21,4 +21,5 @@
 
 <suppressions>
     <!-- SiddhiQLBaseVisitorImpl is auto generated-->
+    <suppress checks=".*" files=".*/*SiddhiQLBaseVisitorImpl.java" />
 </suppressions>

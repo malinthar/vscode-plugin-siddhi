@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.annotation;
 
-import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
+import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
 
@@ -40,12 +41,13 @@ public class AnnotationContextProvider extends CompletionProvider {
                 SnippetBlockUtil.ANNOTATION_INDEX_DEFINITION, SnippetBlockUtil.ANNOTATION_PRIMARY_KEY_DEFINITION,
                 SnippetBlockUtil.ANNOTATION_QUERY_INFO_DEFINITION,
                 SnippetBlockUtil.APP_ANNOTATION_ELEMENT_DESCRIPTION_DEFINITION,
-                SnippetBlockUtil.APP_ANNOTATION_ELEMENT_NAME_DEFINITION, SnippetBlockUtil.APP_NAME_ANNOTATION_DEFINITION,
-                SnippetBlockUtil.APP_STATISTICS_ANNOTATION_DEFINITION, SnippetBlockUtil.APP_DESCRIPTION_ANNOTATION_DEFINITION));
+                SnippetBlockUtil.APP_ANNOTATION_ELEMENT_NAME_DEFINITION,
+                SnippetBlockUtil.APP_NAME_ANNOTATION_DEFINITION,
+                SnippetBlockUtil.APP_STATISTICS_ANNOTATION_DEFINITION,
+                SnippetBlockUtil.APP_DESCRIPTION_ANNOTATION_DEFINITION));
         suggestions.addAll(SnippetBlockUtil.getStoreAnnotations());
         suggestions.addAll(SnippetBlockUtil.getSourceAnnotations());
         suggestions.addAll(SnippetBlockUtil.getSinkAnnotations());
         return generateCompletionList(suggestions);
     }
-
 }

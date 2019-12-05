@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver.completion.providers.common;
 
 import io.siddhi.langserver.completion.providers.CompletionProvider;
@@ -21,6 +22,9 @@ import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.List;
 
+/**
+ * Provider for name context.
+ */
 public class NameContextProvider extends CompletionProvider {
 
     public NameContextProvider() {

@@ -16,11 +16,11 @@
 package io.siddhi.langserver.completion.providers.common;
 
 import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.beans.LSErrorNode;
+import io.siddhi.langserver.completion.ParseTreeMapVisitor;
+import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.completion.providers.ScopeCompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
-import io.siddhi.langserver.completion.providers.CompletionProvider;
-import io.siddhi.langserver.completion.ParseTreeMapVisitor;
-import io.siddhi.langserver.beans.LSErrorNode;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -198,7 +198,7 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
     }
 
     /**
-     * Finds all the definition of sources in siddhi App context
+     * Finds all the definition of sources in siddhi App context.
      *
      * @return {@link List<ParseTree> } list of definitions of sources.
      */
