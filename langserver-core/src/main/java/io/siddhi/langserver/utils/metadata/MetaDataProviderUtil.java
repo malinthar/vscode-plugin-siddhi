@@ -22,7 +22,7 @@ import io.siddhi.annotation.Parameter;
 import io.siddhi.annotation.ParameterOverload;
 import io.siddhi.annotation.ReturnAttribute;
 import io.siddhi.core.SiddhiManager;
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,7 +42,6 @@ import java.util.jar.JarInputStream;
  * {@code MetaDataProviderUtil} is a utility class for getting meta data for the in built and
  * extension processors in Siddhi.
  */
-//todo:move this implementation to io.siddhi.distribution.common
 public class MetaDataProviderUtil {
 
     protected MetaDataProviderUtil() {
@@ -69,7 +68,7 @@ public class MetaDataProviderUtil {
      */
     public static Map<String, MetaData> getExtensionProcessorMetaData() {
 
-        SiddhiManager manager = LSCompletionContext.INSTANCE.getSiddhiManager();
+        SiddhiManager manager = LSOperationContext.INSTANCE.getSiddhiManager();
         Map<String, Class> extensionsMap = manager.getExtensions();
         return generateExtensionsMetaData(extensionsMap);
     }

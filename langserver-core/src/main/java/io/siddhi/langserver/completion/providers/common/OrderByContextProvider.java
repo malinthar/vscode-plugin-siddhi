@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -37,7 +37,7 @@ public class OrderByContextProvider extends CompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
         List<CompletionItem> completions = new ArrayList<>();
-        completions.addAll(LSCompletionContext.INSTANCE
+        completions.addAll(LSOperationContext.INSTANCE
                 .getProvider(SiddhiQLParser.Order_by_referenceContext.class.getName()).getCompletions());
         return completions;
     }

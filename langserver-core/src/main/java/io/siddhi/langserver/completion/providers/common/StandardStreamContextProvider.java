@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -35,7 +35,7 @@ public class StandardStreamContextProvider extends CompletionProvider {
 
     @Override
     public List<CompletionItem> getCompletions() {
-        SourceContextProvider sourceContextProvider = (SourceContextProvider) LSCompletionContext.INSTANCE
+        SourceContextProvider sourceContextProvider = (SourceContextProvider) LSOperationContext.INSTANCE
                 .getProvider(SiddhiQLParser.SourceContext.class.getName());
        return  sourceContextProvider.getDefaultCompletions();
     }

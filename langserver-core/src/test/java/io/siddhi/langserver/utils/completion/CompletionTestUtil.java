@@ -30,9 +30,7 @@ public class CompletionTestUtil {
     private static final Gson GSON = new Gson();
 
     private static String getCompletionItemPropertyString(CompletionItem completionItem) {
-
-        // TODO: Need to add kind and sort text as well
-        // Here we replace the Windows specific \r\n to \n for evaluation only
+        // replace the Windows specific \r\n to \n for evaluation only
         String additionalTextEdits = "";
         if (completionItem.getAdditionalTextEdits() != null && !completionItem.getAdditionalTextEdits().isEmpty()) {
             additionalTextEdits = "," + GSON.toJson(completionItem.getAdditionalTextEdits());

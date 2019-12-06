@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -42,14 +42,12 @@ public class GroupByQuerySelectionContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
 
         List<Object[]> suggestions = new ArrayList<>();
-        //todo there should be select and an attribute in-order to provide group by
-        //todo: not sure whether current context is changed in traverseUpwardmethod.
-        ParserRuleContext currentContext = LSCompletionContext.INSTANCE.getCurrentContext();
+        ParserRuleContext currentContext = LSOperationContext.INSTANCE.getCurrentContext();
         ParseTree firstChild = currentContext.getChild(0);
         if (firstChild instanceof TerminalNodeImpl) {
             if (firstChild.getText().equalsIgnoreCase("select")) {
                 List<CompletionItem> completions;
-                completions = LSCompletionContext.INSTANCE.getProvider(
+                completions = LSOperationContext.INSTANCE.getProvider(
                         SiddhiQLParser.Output_attributeContext.class.getName())
                         .getCompletions();
                 suggestions = new ArrayList<>();

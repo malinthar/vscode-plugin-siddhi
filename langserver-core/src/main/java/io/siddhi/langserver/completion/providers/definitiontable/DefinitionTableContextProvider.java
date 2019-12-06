@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.definitiontable;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -41,7 +41,7 @@ public class DefinitionTableContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
 
         List<Object[]> suggestions = new ArrayList<>();
-        ParserRuleContext definitionTableContext = (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap()
+        ParserRuleContext definitionTableContext = (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap()
                 .get(SiddhiQLParser.Definition_tableContext.class.getName());
         int childCount = definitionTableContext.getChildCount();
         if (childCount > 0) {

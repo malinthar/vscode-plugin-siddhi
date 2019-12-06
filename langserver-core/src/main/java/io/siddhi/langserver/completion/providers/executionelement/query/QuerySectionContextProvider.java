@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.executionelement.query;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.ParseTreeMapVisitor;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
@@ -39,16 +39,14 @@ public class QuerySectionContextProvider extends CompletionProvider {
 
     @Override
     public List<CompletionItem> getCompletions() {
-        //todo: contexts that can come under query section context
-        // output_attribute_context,group_by, having,order_by,limit,offset.
         List<CompletionItem> completions;
         List<Object[]> suggestions;
-        ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
-        completions = LSCompletionContext.INSTANCE.getProvider(
+        ParseTreeMapVisitor parseTreeMapVisitor = LSOperationContext.INSTANCE.getParseTreeMapVisitor();
+        completions = LSOperationContext.INSTANCE.getProvider(
                 SiddhiQLParser.Output_attributeContext.class.getName())
                 .getCompletions();
         suggestions = new ArrayList<>();
-        ParserRuleContext querySectionContext = (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap().get(
+        ParserRuleContext querySectionContext = (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap().get(
                 SiddhiQLParser.Query_sectionContext.class.getName());
         if (querySectionContext != null) {
             List<ParseTree> outputAttributeContexts =
@@ -60,7 +58,7 @@ public class QuerySectionContextProvider extends CompletionProvider {
         } else {
             List<ParseTree> querySectionContextList =
                     parseTreeMapVisitor.findFromImmediateSuccessors(
-                            (ParserRuleContext) LSCompletionContext.INSTANCE.getCurrentContext().parent,
+                            (ParserRuleContext) LSOperationContext.INSTANCE.getCurrentContext().parent,
                             SiddhiQLParser.Query_sectionContext.class);
             if (querySectionContextList.size() == 1) {
                 List<ParseTree> outputAttributeContexts =

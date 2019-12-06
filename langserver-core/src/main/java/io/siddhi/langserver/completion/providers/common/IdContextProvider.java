@@ -40,4 +40,3 @@ public class IdContextProvider extends CompletionProvider {
     }
 
 }
-//todo: add licence.

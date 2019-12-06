@@ -39,7 +39,6 @@ public class DocumentManager {
      * @return True if the given file is open
      */
     public boolean isFileOpen(Path filePath) {
-        //todo: ensure by checking the hashmap.
         return getPathEntry(filePath) != null;
     }
 
@@ -53,7 +52,6 @@ public class DocumentManager {
         if (isFileOpen(filePath)) {
             return;
         }
-        //todo:check whether the file path is valid/exits/readable.
         this.documents.put(filePath, content);
     }
 
@@ -68,7 +66,6 @@ public class DocumentManager {
         if (opened == null) {
             return;
         }
-        //todo: check is unnecessary
         this.documents.put(opened, updatedContent);
     }
 
@@ -82,7 +79,6 @@ public class DocumentManager {
         if (opened == null) {
             return;
         }
-        //todo: check is unnecessary
         this.documents.remove(opened);
     }
 
@@ -96,7 +92,6 @@ public class DocumentManager {
         if (!isFileOpen(filePath)) {
             return null;
         }
-        //todo: check is unnecessary
         return documents.get(filePath);
     }
 
@@ -115,5 +110,4 @@ public class DocumentManager {
             }
         }).map(Map.Entry::getKey).findFirst().orElse(null);
     }
-    //todo:remove this function
 }

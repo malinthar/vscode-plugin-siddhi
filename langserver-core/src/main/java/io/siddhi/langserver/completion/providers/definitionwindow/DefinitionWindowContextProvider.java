@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.definitionwindow;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -41,7 +41,7 @@ public class DefinitionWindowContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
 
         List<Object[]> suggestions = new ArrayList<>();
-        ParserRuleContext definitionWindowContext = (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap()
+        ParserRuleContext definitionWindowContext = (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap()
                 .get(SiddhiQLParser.Definition_windowContext.class.getName());
         int childCount = definitionWindowContext.getChildCount();
         if (childCount > 0) {

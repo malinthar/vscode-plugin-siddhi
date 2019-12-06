@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.definitionaggregation;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -40,7 +40,7 @@ public class AggregationTimeRangeContextProvider extends CompletionProvider {
         List<CompletionItem> completions;
         List<Object[]> suggestions = new ArrayList<>();
         suggestions.add(SnippetBlockUtil.TRIPLE_DOT);
-        completions = LSCompletionContext.INSTANCE
+        completions = LSOperationContext.INSTANCE
                 .getProvider(SiddhiQLParser.Aggregation_time_durationContext.class.getName()).getCompletions();
         completions.addAll(generateCompletionList(suggestions));
         return completions;

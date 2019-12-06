@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.definitionfunction;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -39,7 +39,7 @@ public class DefinitionFunctionContextProvider extends CompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
         List<Object[]> suggestions = new ArrayList<>();
-        ParserRuleContext definitionFunctionContext = (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap()
+        ParserRuleContext definitionFunctionContext = (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap()
                 .get(SiddhiQLParser.Definition_functionContext.class.getName());
         int childCount = definitionFunctionContext.getChildCount();
         if (childCount > 0) {

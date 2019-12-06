@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.executionelement.query;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.beans.LSErrorNode;
 import io.siddhi.langserver.completion.ParseTreeMapVisitor;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
@@ -46,10 +46,10 @@ public class QueryOutputContextProvider extends CompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
 
-        ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
+        ParseTreeMapVisitor parseTreeMapVisitor = LSOperationContext.INSTANCE.getParseTreeMapVisitor();
         List<Object[]> suggestions = new ArrayList<>();
         ParserRuleContext queryContext =
-                (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap()
+                (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap()
                         .get(SiddhiQLParser.QueryContext.class.getName());
         ParserRuleContext queryInputContext =
                 (ParserRuleContext) parseTreeMapVisitor.findOneFromImmediateSuccessors(queryContext,
@@ -68,7 +68,7 @@ public class QueryOutputContextProvider extends CompletionProvider {
                     List<CompletionItem> completionItems = new ArrayList<>();
                     suggestions.add(SnippetBlockUtil.KEYWORD_INTO);
                     completionItems.addAll(generateCompletionList(suggestions));
-                    completionItems.addAll(LSCompletionContext.INSTANCE
+                    completionItems.addAll(LSOperationContext.INSTANCE
                             .getProvider(SiddhiQLParser.Output_event_typeContext.class.getName()).getCompletions());
                     return completionItems;
                 } else if (children.size() > 1 && children.get(0).getText().equalsIgnoreCase("insert") &&
@@ -93,17 +93,17 @@ public class QueryOutputContextProvider extends CompletionProvider {
                     return generateCompletionList(suggestions);
                 }
             } else {
-                if (LSCompletionContext.INSTANCE.getParseTreeMap()
+                if (LSOperationContext.INSTANCE.getParseTreeMap()
                         .get(LSErrorNode.class.getName()) instanceof LSErrorNode) {
                     LSErrorNode errorNode =
-                            (LSErrorNode) LSCompletionContext.INSTANCE.getParseTreeMap()
+                            (LSErrorNode) LSOperationContext.INSTANCE.getParseTreeMap()
                                     .get(LSErrorNode.class.getName());
                     if (errorNode.getErroneousSymbol().equalsIgnoreCase("update") ||
                             errorNode.getPreviousSymbol().equalsIgnoreCase("update")) {
                         List<String> sourceNames = new ArrayList<>();
                         List<CompletionItem> completionItems = new ArrayList<>();
                         suggestions.add(SnippetBlockUtil.KEYWORD_UPDATE_OR_INSERT_INTO);
-                        sourceNames.addAll(((SourceContextProvider) LSCompletionContext.INSTANCE
+                        sourceNames.addAll(((SourceContextProvider) LSOperationContext.INSTANCE
                                 .getProvider(SiddhiQLParser.SourceContext.class.getName())).getDefinedSources());
                         completionItems
                                 .addAll(generateCompletionList(SnippetBlockUtil.generateSourceReferences(sourceNames)));
@@ -119,7 +119,7 @@ public class QueryOutputContextProvider extends CompletionProvider {
                             SnippetBlockUtil.KEYWORD_UPDATE_OR_INSERT_INTO, SnippetBlockUtil.KEYWORD_INSERT,
                             SnippetBlockUtil.KEYWORD_RETURN, SnippetBlockUtil.KEYWORD_OUTPUT));
                     completionItems.addAll(generateCompletionList(suggestions));
-                    completionItems.addAll(LSCompletionContext.INSTANCE
+                    completionItems.addAll(LSOperationContext.INSTANCE
                             .getProvider(SiddhiQLParser.Query_sectionContext.class.getName()).getCompletions());
                     return completionItems;
                 } else if (queryInputContext != null) {
@@ -128,10 +128,10 @@ public class QueryOutputContextProvider extends CompletionProvider {
                     if (queryInputContext.getChild(childCount - 1) instanceof
                             SiddhiQLParser.Standard_streamContext) {
                         List<Object> sourceNames = new ArrayList<>();
-                        sourceNames.addAll(((SourceContextProvider) LSCompletionContext.INSTANCE
+                        sourceNames.addAll(((SourceContextProvider) LSOperationContext.INSTANCE
                                 .getProvider(SiddhiQLParser.SourceContext.class.getName())).getDefinedSources());
                         List<ParseTree> queryInputContextSources =
-                                LSCompletionContext.INSTANCE.getParseTreeMapVisitor()
+                                LSOperationContext.INSTANCE.getParseTreeMapVisitor()
                                         .findSuccessorContexts((ParserRuleContext) queryInputContext,
                                                 SiddhiQLParser.SourceContext.class);
                         AtomicReference<Boolean> status = new AtomicReference<>(true);
@@ -141,7 +141,7 @@ public class QueryOutputContextProvider extends CompletionProvider {
                             }
                         });
                         if (!status.get()) {
-                            return LSCompletionContext.INSTANCE
+                            return LSOperationContext.INSTANCE
                                     .getProvider(SiddhiQLParser.Query_inputContext.class.getName()).getCompletions();
                         } else {
                             suggestions.addAll(Arrays
@@ -166,4 +166,4 @@ public class QueryOutputContextProvider extends CompletionProvider {
         return generateCompletionList(suggestions);
     }
 }
-//todo:reduce complexity.
+

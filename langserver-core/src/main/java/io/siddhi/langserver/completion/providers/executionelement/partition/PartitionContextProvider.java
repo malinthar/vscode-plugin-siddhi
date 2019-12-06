@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.executionelement.partition;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -42,13 +42,13 @@ public class PartitionContextProvider extends CompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
 
-        ParserRuleContext partitionContext = (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap().get(
+        ParserRuleContext partitionContext = (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap().get(
                 SiddhiQLParser.PartitionContext.class.getName());
         int childCount = partitionContext.getChildCount();
         List<ParseTree> children = partitionContext.children;
         if (childCount > 1 && children.get(childCount - 1) instanceof TerminalNodeImpl) {
             if ("with".equalsIgnoreCase(children.get(childCount - 1).getText())) {
-                return LSCompletionContext.INSTANCE
+                return LSOperationContext.INSTANCE
                         .getProvider(SiddhiQLParser.Partition_with_streamContext.class.getName()).getCompletions();
             } else if (children.get(childCount - 2) instanceof SiddhiQLParser.Partition_with_streamContext) {
                 return generateCompletionList(Arrays.asList(SnippetBlockUtil.PARTITION_BLOCK_SNIPPET,

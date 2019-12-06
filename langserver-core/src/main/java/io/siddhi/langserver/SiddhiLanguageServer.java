@@ -46,12 +46,12 @@ public class SiddhiLanguageServer implements LanguageServer {
     private int shutDownStatus = 1;
 
     public SiddhiLanguageServer() {
-        LSCompletionContext.INSTANCE.setSiddhiLanguageServer(this);
-        LSCompletionContext.INSTANCE.setSiddhiManager(new SiddhiManager());
-        LSCompletionContext.INSTANCE.setDiagnosticProvider(DiagnosticProvider.getInstance());
-        LSCompletionContext.INSTANCE.setMetaDataProvider(MetaDataProvider.getInstance());
-        LSCompletionContext.INSTANCE.setParseTreeMapVisitor(ParseTreeMapVisitor.getInstance());
-        LSCompletionContext.INSTANCE.setCompletionProviderFactory(LSCompletionProviderFactory.getInstance());
+        LSOperationContext.INSTANCE.setSiddhiLanguageServer(this);
+        LSOperationContext.INSTANCE.setSiddhiManager(new SiddhiManager());
+        LSOperationContext.INSTANCE.setDiagnosticProvider(DiagnosticProvider.getInstance());
+        LSOperationContext.INSTANCE.setMetaDataProvider(MetaDataProvider.getInstance());
+        LSOperationContext.INSTANCE.setParseTreeMapVisitor(ParseTreeMapVisitor.getInstance());
+        LSOperationContext.INSTANCE.setCompletionProviderFactory(LSCompletionProviderFactory.getInstance());
         this.textDocumentService = new SiddhiTextDocumentService();
         this.workspaceService = new SiddhiWorkspaceService();
     }

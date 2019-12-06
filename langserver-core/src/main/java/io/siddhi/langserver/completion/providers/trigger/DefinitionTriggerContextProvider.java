@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.trigger;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -44,7 +44,7 @@ public class DefinitionTriggerContextProvider extends CompletionProvider {
 
         List<Object[]> suggestions = new ArrayList<>();
         ParserRuleContext definitionTriggerContext = (ParserRuleContext)
-                LSCompletionContext.INSTANCE.getParseTreeMap()
+                LSOperationContext.INSTANCE.getParseTreeMap()
                         .get(SiddhiQLParser.Definition_triggerContext.class.getName());
         int childCount = definitionTriggerContext.getChildCount();
         ParseTree lastChild = definitionTriggerContext.getChild(childCount - 1);

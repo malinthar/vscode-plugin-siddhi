@@ -16,7 +16,7 @@
 package io.siddhi.langserver.diagnostic;
 
 import io.siddhi.core.exception.SiddhiAppCreationException;
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.query.api.exception.SiddhiAppContextException;
 import io.siddhi.query.compiler.exception.SiddhiParserException;
 import org.eclipse.lsp4j.Diagnostic;
@@ -34,8 +34,6 @@ import java.util.List;
  */
 public class DiagnosticProvider {
 
-    //todo: remove the  dummay
-    private static final ArrayList dummyDiagnostics = new ArrayList();
     private static final DiagnosticProvider INSTANCE = new DiagnosticProvider();
 
     private DiagnosticProvider() {
@@ -54,9 +52,9 @@ public class DiagnosticProvider {
      */
     public void compileAndSendDiagnostics(LanguageClient client, String fileUri, String sourceContent) {
         try {
-            //todo: create the siddhiapp run time, don't use validate siddhi app.
-            LSCompletionContext.INSTANCE.getSiddhiManager().createSiddhiAppRuntime(sourceContent);
-            client.publishDiagnostics(new PublishDiagnosticsParams(fileUri, dummyDiagnostics));
+            LSOperationContext.INSTANCE.getSiddhiManager().createSiddhiAppRuntime(sourceContent);
+            List<Diagnostic> diagnostics = new ArrayList<>();
+            client.publishDiagnostics(new PublishDiagnosticsParams(fileUri, diagnostics));
         } catch (SiddhiAppCreationException | SiddhiParserException exception) {
             client.publishDiagnostics(new PublishDiagnosticsParams(fileUri, generateDiagnostics(exception)));
         }
@@ -80,7 +78,6 @@ public class DiagnosticProvider {
                 (exception.getQueryContextEndIndex() != null) ? exception.getQueryContextEndIndex()[0] - 1 : 0;
         int endChar =
                 (exception.getQueryContextEndIndex() != null) ? exception.getQueryContextEndIndex()[1] - 1 : 50;
-        //todo: set default end char;
         if (exception.getQueryContextStartIndex() != null && exception.getQueryContextEndIndex() != null) {
             startLine = (startLine < 0) ? startLine + 1 : startLine;
             startChar = (startChar < 0) ? startChar + 1 : startChar;

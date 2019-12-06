@@ -30,7 +30,7 @@
  */
 package io.siddhi.langserver.completion.providers;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.CompletionItem;
@@ -55,7 +55,7 @@ public abstract class CompletionProvider {
     }
 
     public ParserRuleContext getParent() {
-        Map<String, ParseTree> map = LSCompletionContext.INSTANCE.getParseTreeMap();
+        Map<String, ParseTree> map = LSOperationContext.INSTANCE.getParseTreeMap();
         ParserRuleContext parent = (ParserRuleContext) map.get(this.providerName).getParent();
         return parent;
     }

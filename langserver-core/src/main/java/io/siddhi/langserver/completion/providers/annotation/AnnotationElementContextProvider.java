@@ -42,7 +42,6 @@ public class AnnotationElementContextProvider extends CompletionProvider {
             List<Object[]> suggestions = Arrays.asList(SnippetBlockUtil.APP_ANNOTATION_ELEMENT_NAME_DEFINITION,
                     SnippetBlockUtil.APP_ANNOTATION_ELEMENT_DESCRIPTION_DEFINITION,
                     SnippetBlockUtil.APP_ANNOTATION_ELEMENT_STATISTICS_DEFINITION);
-            //todo:add proper naming conventions.
             return generateCompletionList(suggestions);
         } else {
             //If the ExecutionElement's parent is AnnotationContext there is no defined completions yet.

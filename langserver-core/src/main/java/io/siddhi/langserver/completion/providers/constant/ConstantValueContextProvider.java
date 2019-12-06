@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.constant;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -36,7 +36,7 @@ public class ConstantValueContextProvider extends CompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
         List<CompletionItem> completions;
-        completions = LSCompletionContext.INSTANCE
+        completions = LSOperationContext.INSTANCE
                 .getProvider(SiddhiQLParser.Bool_valueContext.class.getName()).getCompletions();
         return completions;
     }

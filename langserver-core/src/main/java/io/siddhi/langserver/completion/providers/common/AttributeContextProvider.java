@@ -15,7 +15,7 @@
  */
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -37,7 +37,7 @@ public class AttributeContextProvider extends CompletionProvider {
          * Attribute context has only one child in SiddhiQL grammar. Therefore, getCompletions is directed to
          * {@link MathOperationContextProvider}.
          */
-        return LSCompletionContext.INSTANCE.getProvider(SiddhiQLParser.Math_operationContext.class.getName())
+        return LSOperationContext.INSTANCE.getProvider(SiddhiQLParser.Math_operationContext.class.getName())
                 .getCompletions();
     }
 }

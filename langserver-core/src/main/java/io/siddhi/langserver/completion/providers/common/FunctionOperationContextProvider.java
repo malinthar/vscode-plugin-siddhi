@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.completion.providers.ScopeCompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
@@ -35,14 +35,12 @@ import java.util.List;
 public class FunctionOperationContextProvider extends ScopeCompletionProvider {
 
     public FunctionOperationContextProvider() {
-
         this.scopes = new ArrayList<>();
         this.scopes.add(SiddhiQLParser.Definition_windowContext.class.getName());
         this.scopes.add(SiddhiQLParser.Definition_aggregationContext.class.getName());
         this.scopes.add(SiddhiQLParser.QueryContext.class.getName());
         this.scopes.add(SiddhiQLParser.Query_outputContext.class.getName());
         this.providerName = SiddhiQLParser.Function_operationContext.class.getName();
-        //todo: add super()
     }
 
     @Override
@@ -59,12 +57,12 @@ public class FunctionOperationContextProvider extends ScopeCompletionProvider {
                 return generateCompletionList(suggestions);
             }
             ParserRuleContext functionOperationContext =
-                    (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap().get(providerName);
+                    (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap().get(providerName);
             if (functionOperationContext != null) {
-                List<ParseTree> contexts = LSCompletionContext.INSTANCE.getParseTreeMapVisitor()
+                List<ParseTree> contexts = LSOperationContext.INSTANCE.getParseTreeMapVisitor()
                         .findFromImmediateSuccessors(functionOperationContext, SiddhiQLParser.Function_idContext.class);
                 if (contexts.size() == 1) {
-                    CompletionProvider attributeListContextProvider = LSCompletionContext.INSTANCE
+                    CompletionProvider attributeListContextProvider = LSOperationContext.INSTANCE
                             .getProvider(SiddhiQLParser.Attribute_listContext.class.getName());
                     return attributeListContextProvider.getCompletions();
                 } else if (contexts.size() == 0) {

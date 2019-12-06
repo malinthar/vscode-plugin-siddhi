@@ -1,6 +1,6 @@
 package io.siddhi.langserver.completion.providers.definitionaggregation;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -21,7 +21,7 @@ public class AggregationTimeContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
         List<CompletionItem> completions;
         completions =
-                LSCompletionContext.INSTANCE.getProvider(SiddhiQLParser.Aggregation_time_rangeContext.class.getName())
+                LSOperationContext.INSTANCE.getProvider(SiddhiQLParser.Aggregation_time_rangeContext.class.getName())
                         .getCompletions();
         return completions;
     }

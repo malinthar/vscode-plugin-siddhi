@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -38,7 +38,7 @@ public class OutputAttributeContextProvider  extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
         List<CompletionItem> completions = new ArrayList<>();
         List<Object[]> suggestions = new ArrayList<>();
-        completions.addAll(LSCompletionContext.INSTANCE
+        completions.addAll(LSOperationContext.INSTANCE
                        .getProvider(SiddhiQLParser.AttributeContext.class.getName()).getCompletions());
         suggestions.add(SnippetBlockUtil.KEYWORD_AS);
         completions.addAll(generateCompletionList(suggestions));

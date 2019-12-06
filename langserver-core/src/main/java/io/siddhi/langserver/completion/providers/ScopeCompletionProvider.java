@@ -15,7 +15,7 @@
  */
 package io.siddhi.langserver.completion.providers;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.eclipse.lsp4j.CompletionItem;
 
@@ -38,7 +38,7 @@ public abstract class ScopeCompletionProvider extends CompletionProvider {
         }
     }
     public ParserRuleContext findScope() {
-        ParserRuleContext currentContext = LSCompletionContext.INSTANCE.getCurrentContext();
+        ParserRuleContext currentContext = LSOperationContext.INSTANCE.getCurrentContext();
         if (currentContext != null) {
             ParserRuleContext scopeContext = findPredecessorContext(currentContext);
             return scopeContext;

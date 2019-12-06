@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.executionelement.partition;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.ParseTreeMapVisitor;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
@@ -45,9 +45,9 @@ public class PartitionWithStreamContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
 
         Map<String, List<String>> map = new LinkedHashMap<>();
-        ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
+        ParseTreeMapVisitor parseTreeMapVisitor = LSOperationContext.INSTANCE.getParseTreeMapVisitor();
         ParserRuleContext siddhiAppContext =
-                (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap()
+                (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap()
                         .get(SiddhiQLParser.Siddhi_appContext.class.getName());
         List<ParseTree> streamDefinitionContexts = parseTreeMapVisitor.findSuccessorContexts(siddhiAppContext,
                 SiddhiQLParser.Definition_streamContext.class);

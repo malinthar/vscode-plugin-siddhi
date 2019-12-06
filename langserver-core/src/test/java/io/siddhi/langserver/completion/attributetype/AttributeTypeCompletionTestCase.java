@@ -31,7 +31,7 @@ public class AttributeTypeCompletionTestCase extends CompletionTest {
     public Object[][] dataProvider() {
         log.info("Test textDocument/completion for attribute type");
         return new Object[][]{
-                {"completion/attributetype/AttributeTypeCompletionTest.json", "attributetype"},
+                {"completion/attributetype/AttributeTypeCompletionTest.json", "completion/attributetype"},
         };
     }
 

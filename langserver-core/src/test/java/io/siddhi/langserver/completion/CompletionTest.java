@@ -52,16 +52,19 @@ public abstract class CompletionTest {
 
     @BeforeClass
     public void init() {
+
         this.serviceEndpoint = TestUtil.initializeLanguageServer();
     }
 
     @Test(dataProvider = "completion-data-provider")
     public void test(String config, String configPath) throws IOException {
-        String configJsonPath = File.separator + config;
+
+        String configJsonPath = config;
         JsonObject configJsonObject = FileUtil.fileContentAsObject(configJsonPath);
         String response = getResponse(configJsonObject);
         JsonObject json = parser.parse(response).getAsJsonObject();
-        Type collectionType = new TypeToken<List<CompletionItem>>() {}.getType();
+        Type collectionType = new TypeToken<List<CompletionItem>>() {
+        }.getType();
         JsonArray resultList = json.getAsJsonObject("result").getAsJsonArray("left");
         List<CompletionItem> responseItemList = gson.fromJson(resultList, collectionType);
         List<CompletionItem> expectedList = getExpectedList(configJsonObject);
@@ -72,7 +75,8 @@ public abstract class CompletionTest {
     }
 
     String getResponse(JsonObject configJsonObject) throws IOException {
-        Path sourcePath = sourcesPath.resolve(configJsonObject.get("completion/attributetype/source").getAsString());
+
+        Path sourcePath = sourcesPath.resolve(configJsonObject.get("attributetype/source").getAsString());
         String responseString;
         Position position = new Position();
         JsonObject positionObj = configJsonObject.get("position").getAsJsonObject();
@@ -88,12 +92,14 @@ public abstract class CompletionTest {
     public abstract Object[][] dataProvider();
 
     List<CompletionItem> getExpectedList(JsonObject configJsonObject) {
+
         JsonArray expectedItems = configJsonObject.get("items").getAsJsonArray();
         return CompletionTestUtil.getExpectedItemList(expectedItems);
     }
 
     @AfterClass
     public void stopLanguageServer() {
+
         TestUtil.shutdownLanguageServer(this.serviceEndpoint);
     }
 }

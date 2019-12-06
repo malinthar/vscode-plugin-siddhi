@@ -17,17 +17,11 @@
 package io.siddhi.langserver.utils;
 
 import io.siddhi.langserver.DocumentManager;
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.completion.providers.siddhiapp.ParseContextProvider;
-import io.siddhi.langserver.visitor.LanguageServerParserErrorStrategy;
-import io.siddhi.langserver.visitor.SiddhiQLLSVisitorImpl;
-import io.siddhi.query.compiler.SiddhiQLLexer;
-import io.siddhi.query.compiler.SiddhiQLParser;
+import io.siddhi.langserver.parser.LanguageServerParser;
 import io.siddhi.query.compiler.exception.SiddhiParserException;
-import io.siddhi.query.compiler.internal.SiddhiErrorListener;
-import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.eclipse.lsp4j.CompletionItem;
@@ -62,8 +56,8 @@ public class CompletionUtil {
         Position cursorPosition = completionParams.getPosition();
         //In VSCode line number m is indexed as m-1. Therefore line number should be added 1 in order to set the line
         // number correctly. Note: This should be changed so that it fits other editors as well.
-        LSCompletionContext.INSTANCE.setPosition(cursorPosition.getLine() + 1, cursorPosition.getCharacter());
-        LSCompletionContext.INSTANCE.setSourceContent(sourceContent);
+        LSOperationContext.INSTANCE.setPosition(cursorPosition.getLine() + 1, cursorPosition.getCharacter());
+        LSOperationContext.INSTANCE.setSourceContent(sourceContent);
         generateContextTree();
         return resolveCompletionItems();
     }
@@ -72,51 +66,17 @@ public class CompletionUtil {
      * Set the compiled result of the source code by retrieving the compiled source code as a map of context's name to
      * ParseTree.
      * {@link Map<String, ParseTree>} and
-     * store it in the {@link LSCompletionContext}
+     * store it in the {@link LSOperationContext}
      */
     public static void generateContextTree() {
         try {
             Map<String, ParseTree> parseTree =
-                    parse(LSCompletionContext.INSTANCE.getSourceContent(),
-                            LSCompletionContext.INSTANCE.getPosition());
-            LSCompletionContext.INSTANCE.setCompletionContext(parseTree);
+                    LanguageServerParser.parse(LSOperationContext.INSTANCE.getSourceContent(),
+                            LSOperationContext.INSTANCE.getPosition());
+            LSOperationContext.INSTANCE.setCompletionContext(parseTree);
         } catch (SiddhiParserException e) {
-            LSCompletionContext.INSTANCE.setCompletionContext(null);
+            LSOperationContext.INSTANCE.setCompletionContext(null);
         }
-    }
-
-    //todo:move to a package named parser
-
-    /**
-     * Used at the Siddhi Language server to parse source content and obtain a parseTreeMap.
-     *
-     * @param source
-     * @param goalPosition
-     * @return
-     * @throws RecognitionException
-     */
-    public static Map<String, ParseTree> parse(String source, int[] goalPosition) {
-        ANTLRInputStream input = new ANTLRInputStream(source);
-        SiddhiQLLexer lexer = new SiddhiQLLexer(input);
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(SiddhiErrorListener.INSTANCE);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        SiddhiQLParser parser = new SiddhiQLParser(tokens);
-        parser.setErrorHandler(new LanguageServerParserErrorStrategy());
-        parser.removeErrorListeners();
-        parser.addErrorListener(SiddhiErrorListener.INSTANCE);
-        try {
-            ParseTree parseTree = parser.parse();
-            SiddhiQLLSVisitorImpl visitor = new SiddhiQLLSVisitorImpl(goalPosition);
-            parseTree.accept(visitor);
-            return visitor.getParseTreeMap();
-        } catch (SiddhiParserException ignored) {
-            //todo: e has been ignored until it will be written to a log file.
-            return ((LanguageServerParserErrorStrategy)
-                    parser.getErrorHandler()).getParseTreeMap();
-
-        }
-        //todo: setCompletionContext here.
     }
 
     /**
@@ -127,7 +87,7 @@ public class CompletionUtil {
     public static List<CompletionItem> resolveCompletionItems() {
 
         List<CompletionItem> completionItems;
-        CompletionProvider currentContextProvider = LSCompletionContext.INSTANCE.
+        CompletionProvider currentContextProvider = LSOperationContext.INSTANCE.
                 getCurrentContextProvider();
         if (currentContextProvider != null && !(currentContextProvider instanceof ParseContextProvider)) {
             completionItems = traverseUp(currentContextProvider);
@@ -150,10 +110,10 @@ public class CompletionUtil {
             completionItems.addAll(currentContextProvider.getCompletions());
             if (completionItems.isEmpty()) {
                 ParserRuleContext parentContext =
-                        (ParserRuleContext) LSCompletionContext.INSTANCE.getCurrentContext().parent;
-                LSCompletionContext.INSTANCE.setCurrentContext(parentContext);
+                        (ParserRuleContext) LSOperationContext.INSTANCE.getCurrentContext().parent;
+                LSOperationContext.INSTANCE.setCurrentContext(parentContext);
                 currentContextProvider =
-                        LSCompletionContext.INSTANCE.getProvider(parentContext.getClass().getName());
+                        LSOperationContext.INSTANCE.getProvider(parentContext.getClass().getName());
                 completionItems.addAll(traverseUp(currentContextProvider));
             }
         }

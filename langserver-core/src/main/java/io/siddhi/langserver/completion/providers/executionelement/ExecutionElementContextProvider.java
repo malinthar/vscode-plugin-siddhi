@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.executionelement;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.beans.LSErrorNode;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -39,10 +39,10 @@ public class ExecutionElementContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
 
         List<Object[]> suggestions = new ArrayList<>();
-        LSErrorNode errorNode = (LSErrorNode) LSCompletionContext.INSTANCE
+        LSErrorNode errorNode = (LSErrorNode) LSOperationContext.INSTANCE
                 .getParseTreeMap().get(LSErrorNode.class.getName());
         if (errorNode.getPreviousSymbol().contains("@")) {
-            return LSCompletionContext.INSTANCE
+            return LSOperationContext.INSTANCE
                     .getProvider(SiddhiQLParser.AnnotationContext.class.getName()).getCompletions();
 
         }

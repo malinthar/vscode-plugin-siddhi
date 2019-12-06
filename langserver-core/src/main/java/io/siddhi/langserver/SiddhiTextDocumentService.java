@@ -54,10 +54,8 @@ public class SiddhiTextDocumentService implements TextDocumentService {
 
     public SiddhiTextDocumentService() {
         this.documentManager = DocumentManager.INSTANCE;
-        this.siddhiLanguageServer = LSCompletionContext.INSTANCE.getSiddhiLanguageServer();
-        this.diagnosticProvider = LSCompletionContext.INSTANCE.getDiagnosticProvider();
-        //todo: rename the LSCompletionContext as LSOPerationContext and comment out that other features should have
-        // separate contexts too.
+        this.siddhiLanguageServer = LSOperationContext.INSTANCE.getSiddhiLanguageServer();
+        this.diagnosticProvider = LSOperationContext.INSTANCE.getDiagnosticProvider();
     }
 
     /**
@@ -130,7 +128,8 @@ public class SiddhiTextDocumentService implements TextDocumentService {
         String documentUri = didChangeTextDocumentParams.getTextDocument().getUri();
         Optional<Path> changedPath = CommonUtil.getPathFromURI(documentUri);
         if (!changedPath.isPresent()) {
-            String msg = "Operation 'text/didChange' failed!: changed path is not present";
+            //todo: log message should be printed once the once the logging framework is integrated.
+            //String msg = "Operation 'text/didChange' failed!: changed path is not present";
         }
         try {
             List<TextDocumentContentChangeEvent> changes = didChangeTextDocumentParams.getContentChanges();
@@ -140,15 +139,14 @@ public class SiddhiTextDocumentService implements TextDocumentService {
             try {
                 this.diagnosticProvider.compileAndSendDiagnostics(siddhiLanguageServer.getClient(), documentUri,
                         documentManager.getFileContent(Paths.get(URI.create(documentUri))));
-            } catch (Throwable e) {
+            } catch (Throwable ignored) {
                 String msg = "Computing 'diagnostics' failed!";
-                //logError(msg, e, params.getTextDocument(), (Position) null);
+                //logError(msg, ignored, params.getTextDocument(), (Position) null);
             }
-        } catch (Throwable e) {
+        } catch (Throwable ignored) {
             String msg = "Operation 'text/didChange' failed!";
-            //logError(msg, e, params.getTextDocument(), (Position) null);
+            //logError(msg, ignored, params.getTextDocument(), (Position) null);
         }
-        //todo:exception types.
     }
 
     /**

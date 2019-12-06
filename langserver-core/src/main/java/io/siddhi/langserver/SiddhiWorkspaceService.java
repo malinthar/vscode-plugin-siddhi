@@ -36,10 +36,6 @@ public class SiddhiWorkspaceService implements WorkspaceService {
      */
     @Override
     public void didChangeConfiguration(DidChangeConfigurationParams params) {
-
-        return;
-        //operation not supported;
-        //todo:check what comes here.
     }
 
     /**

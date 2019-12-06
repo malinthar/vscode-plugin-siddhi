@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.constant;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -52,7 +52,7 @@ public class AttributeTypeContextProvider extends CompletionProvider {
 
         @Override
         public List<CompletionItem> getCompletions() {
-            List<CompletionItem> completions = LSCompletionContext.INSTANCE
+            List<CompletionItem> completions = LSOperationContext.INSTANCE
                     .getProvider(SiddhiQLParser.Attribute_referenceContext.class.getName()).getCompletions();
             if (getParent() instanceof SiddhiQLParser.Group_by_query_selectionContext) {
                 if (getParent().getParent() instanceof SiddhiQLParser.Definition_aggregationContext) {

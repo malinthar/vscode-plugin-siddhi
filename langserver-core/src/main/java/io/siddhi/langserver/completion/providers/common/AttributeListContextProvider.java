@@ -15,7 +15,7 @@
  */
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -33,7 +33,7 @@ public class AttributeListContextProvider extends CompletionProvider {
 
     @Override
     public List<CompletionItem> getCompletions() {
-        return LSCompletionContext.INSTANCE.getProvider(SiddhiQLParser.AttributeContext.class.getName())
+        return LSOperationContext.INSTANCE.getProvider(SiddhiQLParser.AttributeContext.class.getName())
                 .getCompletions();
     }
 }

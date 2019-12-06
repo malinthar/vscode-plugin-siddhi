@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.executionelement.query;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.beans.LSErrorNode;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
@@ -39,26 +39,26 @@ public class QueryInputContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
         //first check whether there is a query input context on context tree and then try to provide completions
         // based on the factor whether  a context exist or not.
-        if (LSCompletionContext.INSTANCE.getParseTreeMap().containsKey(LSErrorNode.class.getName())) {
+        if (LSOperationContext.INSTANCE.getParseTreeMap().containsKey(LSErrorNode.class.getName())) {
             LSErrorNode errorNode =
-                    (LSErrorNode) LSCompletionContext.INSTANCE.getParseTreeMap().get(LSErrorNode.class.getName());
+                    (LSErrorNode) LSOperationContext.INSTANCE.getParseTreeMap().get(LSErrorNode.class.getName());
             if (errorNode.getErroneousSymbol().contains("#[")) {
                 List<CompletionItem> completions = new ArrayList<>();
-                completions.addAll(LSCompletionContext.INSTANCE
+                completions.addAll(LSOperationContext.INSTANCE
                         .getProvider(SiddhiQLParser.FilterContext.class.getName())
                         .getCompletions());
                 return completions;
             } else if (errorNode.getErroneousSymbol().contains("#")) {
                 List<CompletionItem> completions = new ArrayList<>();
-                completions.addAll(LSCompletionContext.INSTANCE
+                completions.addAll(LSOperationContext.INSTANCE
                         .getProvider(SiddhiQLParser.WindowContext.class.getName()).getCompletions());
-                completions.addAll(LSCompletionContext.INSTANCE
+                completions.addAll(LSOperationContext.INSTANCE
                         .getProvider(SiddhiQLParser.Stream_functionContext.class.getName()).getCompletions());
 
                 return completions;
             }
         }
-        return LSCompletionContext.INSTANCE
+        return LSOperationContext.INSTANCE
                 .getProvider(SiddhiQLParser.Standard_streamContext.class.getName())
                 .getCompletions();
     }

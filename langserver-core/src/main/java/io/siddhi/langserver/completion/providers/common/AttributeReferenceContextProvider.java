@@ -15,7 +15,7 @@
  */
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.beans.LSErrorNode;
 import io.siddhi.langserver.completion.ParseTreeMapVisitor;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
@@ -28,6 +28,7 @@ import org.eclipse.lsp4j.CompletionItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,55 +55,43 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
      */
     @Override
     public List<CompletionItem> getCompletions() {
-        //todo: move the return to the bottom.
         ParserRuleContext scopeContext = findScope();
-        if (scopeContext == null) {
-            return generateCompletionList(null);
-        } else {
+        List<Object[]> suggestions = new ArrayList<>();
+        if (scopeContext != null) {
             Map<String, List<String>> attributeNames = new HashMap<>();
             Map<String, String> sources = new HashMap<>();
-            List<Object[]> suggestions = new ArrayList<>();
             if (scopeContext instanceof SiddhiQLParser.Definition_windowContext) {
-                List<String> sourceProviderContextsForWindowDef = new ArrayList<>();
-                //todo: collection.singletonList(), use this for passing an object instead of an array.
-                sourceProviderContextsForWindowDef.add(SiddhiQLParser.Definition_windowContext.class.getName());
+                String sourceProviderContextsForWindowDef = SiddhiQLParser.Definition_windowContext.class.getName();
                 // finding the available source names in the window definition.
                 sources.putAll(findSourcesInScope(scopeContext, SiddhiQLParser.Stream_idContext.class.getName()));
-                List<ParseTree> sourceProviderContexts = findSourceProviderContexts(sourceProviderContextsForWindowDef);
-                //todo: have a method to generate attribute reference for a given source.
+                List<ParseTree> sourceProviderContexts =
+                        findSourceProviderContexts(Collections.singletonList(sourceProviderContextsForWindowDef));
                 attributeNames.putAll(findAttributesOfSources(sourceProviderContexts, sources));
                 suggestions.addAll(SnippetBlockUtil.generateAttributeReferences(attributeNames));
-                return generateCompletionList(suggestions);
-                //todo: don't use put all pass them in the constructor.
             } else if (scopeContext instanceof SiddhiQLParser.Definition_aggregationContext) {
-                List<String> sourceProviderContextsForAggregationDef = new ArrayList<>();
-                sourceProviderContextsForAggregationDef.add(SiddhiQLParser.Definition_streamContext.class.getName());
+                String sourceProviderContextsForAggregationDef = SiddhiQLParser.Definition_streamContext.class.getName();
                 // finding the available source names in the aggregation definition.
                 sources.putAll(findSourcesInScope(scopeContext, SiddhiQLParser.Standard_streamContext.class.getName()));
                 List<ParseTree> sourceProviderContexts =
-                        findSourceProviderContexts(sourceProviderContextsForAggregationDef);
+                        findSourceProviderContexts(Collections.singletonList(sourceProviderContextsForAggregationDef));
                 attributeNames.putAll(findAttributesOfSources(sourceProviderContexts, sources));
                 suggestions.addAll(SnippetBlockUtil.generateAttributeReferences(attributeNames));
-                return generateCompletionList(suggestions);
-
             } else if (scopeContext instanceof SiddhiQLParser.QueryContext) {
                 List<String> sourceProviderContextsForQuery = new ArrayList<>();
-                sourceProviderContextsForQuery
-                        .addAll(Arrays.asList(SiddhiQLParser.Definition_streamContext.class.getName(),
+                sourceProviderContextsForQuery = new ArrayList<>(
+                                (Arrays.asList(SiddhiQLParser.Definition_streamContext.class.getName(),
                                 SiddhiQLParser.Definition_aggregationContext.class.getName(),
                                 SiddhiQLParser.Definition_tableContext.class.getName(),
-                                SiddhiQLParser.Definition_windowContext.class.getName()));
+                                SiddhiQLParser.Definition_windowContext.class.getName())));
                 // finding the available source names in the query context.
                 sources.putAll(findSourcesInScope(scopeContext, SiddhiQLParser.Query_inputContext.class.getName()));
                 List<ParseTree> sourceProviderContexts = findSourceProviderContexts(sourceProviderContextsForQuery);
                 attributeNames.putAll(findAttributesOfSources(sourceProviderContexts, sources));
                 suggestions.addAll(SnippetBlockUtil.generateAttributeReferences(attributeNames));
-                return generateCompletionList(suggestions);
-
             } else if (scopeContext instanceof SiddhiQLParser.Query_outputContext) {
                 List<String> sourceProviderContextsForQueryOutput = new ArrayList<>();
-                sourceProviderContextsForQueryOutput
-                        .addAll(Arrays.asList(SiddhiQLParser.Definition_streamContext.class.getName(),
+                sourceProviderContextsForQueryOutput = new ArrayList<>(
+                         Arrays.asList(SiddhiQLParser.Definition_streamContext.class.getName(),
                                 SiddhiQLParser.Definition_aggregationContext.class.getName(),
                                 SiddhiQLParser.Definition_tableContext.class.getName(),
                                 SiddhiQLParser.Definition_windowContext.class.getName()));
@@ -112,12 +101,9 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
                         findSourceProviderContexts(sourceProviderContextsForQueryOutput);
                 attributeNames.putAll(findAttributesOfSources(sourceProviderContexts, sources));
                 suggestions.addAll(SnippetBlockUtil.generateAttributeReferences(attributeNames));
-                return generateCompletionList(suggestions);
-
-            } else {
-                return generateCompletionList(null);
             }
         }
+        return generateCompletionList(suggestions);
     }
 
     /**
@@ -134,8 +120,8 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
          * should be improved to visit a certain context specifically if needed.
          */
         List<ParseTree> sourceContexts = new ArrayList<>();
-        ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
-        Map<String, ParseTree> contextTree = LSCompletionContext.INSTANCE.getParseTreeMap();
+        ParseTreeMapVisitor parseTreeMapVisitor = LSOperationContext.INSTANCE.getParseTreeMapVisitor();
+        Map<String, ParseTree> contextTree = LSOperationContext.INSTANCE.getParseTreeMap();
         Map<String, String> sourceToAliasMap = new HashMap<>();
         if (SiddhiQLParser.Query_inputContext.class.getName().equalsIgnoreCase(sourceContainerContext)) {
             ParseTree queryInputContext = parseTreeMapVisitor
@@ -203,11 +189,9 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
      * @return {@link List<ParseTree> } list of definitions of sources.
      */
     public List<ParseTree> findSourceProviderContexts(List<String> sourceDefinitionContexts) {
-
-        //todo: find the stream name here it self Map<String, ParseTree>
         List<ParseTree> sourceProviderContexts = new ArrayList<>();
-        ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
-        Map<String, ParseTree> contextTree = LSCompletionContext.INSTANCE.getParseTreeMap();
+        ParseTreeMapVisitor parseTreeMapVisitor = LSOperationContext.INSTANCE.getParseTreeMapVisitor();
+        Map<String, ParseTree> contextTree = LSOperationContext.INSTANCE.getParseTreeMap();
         ParserRuleContext siddhiAppContext =
                 (ParserRuleContext) contextTree.get(SiddhiQLParser.Siddhi_appContext.class.getName());
 
@@ -249,7 +233,7 @@ public class AttributeReferenceContextProvider extends ScopeCompletionProvider {
     private Map<String, List<String>> findAttributesOfSources(List<ParseTree> sourceProviderContexts,
                                                               Map<String, String> sourceToAliasMap) {
         Map<String, List<String>> attributeNameMap = new HashMap<>();
-        ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
+        ParseTreeMapVisitor parseTreeMapVisitor = LSOperationContext.INSTANCE.getParseTreeMapVisitor();
         ArrayList<String> sources = new ArrayList(sourceToAliasMap.keySet());
         for (ParseTree sourceProviderContext : sourceProviderContexts) {
             ParseTree streamIdContext;

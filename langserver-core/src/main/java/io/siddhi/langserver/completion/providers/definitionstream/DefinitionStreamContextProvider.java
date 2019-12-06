@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.definitionstream;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
 import io.siddhi.query.compiler.SiddhiQLParser.Definition_streamContext;
@@ -41,7 +41,7 @@ public class DefinitionStreamContextProvider extends CompletionProvider {
     public List<CompletionItem> getCompletions() {
 
         List<Object[]> suggestions = new ArrayList<>();
-        ParserRuleContext definitionStreamContext = (ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap()
+        ParserRuleContext definitionStreamContext = (ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap()
                 .get(Definition_streamContext.class.getName());
         int childCount = definitionStreamContext.getChildCount();
         if (childCount > 0) {

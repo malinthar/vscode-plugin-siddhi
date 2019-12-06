@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.siddhi.langserver;
 
 import io.siddhi.core.SiddhiManager;
@@ -32,9 +33,8 @@ import java.util.Map;
 /**
  * A process local context for language server completion process.
  */
-public class LSCompletionContext {
+public class LSOperationContext {
 
-    //todo: add static instances into document manager.
     private Map<String, Integer> position;
     private Map<String, ParseTree> parseTreeMap = null;
     private ParserRuleContext currentParserContext;
@@ -47,9 +47,9 @@ public class LSCompletionContext {
     private MetaDataProvider metaDataProvider;
     private LSCompletionProviderFactory completionProviderFactory;
     private ParseTreeMapVisitor parseTreeMapVisitor;
-    public static final LSCompletionContext INSTANCE = new LSCompletionContext();
+    public static final LSOperationContext INSTANCE = new LSOperationContext();
 
-    private LSCompletionContext() {
+    private LSOperationContext() {
         position = new HashMap<>(2);
     }
 
@@ -62,13 +62,11 @@ public class LSCompletionContext {
     }
 
     public void setPosition(int line, int col) {
-
         this.position.put("line", line);
         this.position.put("column", col);
     }
 
     public int[] getPosition() {
-
         return new int[]{this.position.get("line"), this.position.get("column")};
     }
 
@@ -81,9 +79,6 @@ public class LSCompletionContext {
      */
     public void setCompletionContext(Map<String, ParseTree> contextTree) {
 
-        //todo: in the parser error strategy flip the map and search here for the last node
-        //todo: use a hashmap instead of a linkedhashmap.
-        //todo: Have an object that return the hashmap and the ternminal node or errornode
         if (contextTree != null) {
             this.parseTreeMap = contextTree;
             if (this.parseTreeMap.containsKey(LSErrorNode.class.getName())) {
@@ -95,33 +90,32 @@ public class LSCompletionContext {
                 this.currentParserContext = (ParserRuleContext)
                         this.parseTreeMap.get(this.currentTerminalNode.getParent().getClass().getName());
             }
-            //todo: when the cursor position is after a valid siddhi app, set the current parser context to
-            // SiddhiParseContext
+            else{
+                this.currentParserContext =
+                        (ParserRuleContext) this.parseTreeMap.entrySet().toArray()[parseTreeMap.size() -1];
+            }
+            //when the cursor position is after a valid siddhi app, set the current parser context seen by Siddhi
+            // parser is ParseContext.
         }
     }
 
     public Map<String, ParseTree> getParseTreeMap() {
-
         return this.parseTreeMap;
     }
 
     public ParserRuleContext getCurrentContext() {
-
         return this.currentParserContext;
     }
 
     public void setCurrentContext(ParserRuleContext currentContext) {
-
         this.currentParserContext = currentContext;
     }
 
     public void setSourceContent(String sourceContent) {
-
         this.sourceContent = sourceContent;
     }
 
     public String getSourceContent() {
-
         return this.sourceContent;
     }
 
@@ -154,7 +148,6 @@ public class LSCompletionContext {
     }
 
     public MetaDataProvider getMetaDataProvider() {
-        //todo: use snippet provider in Snippet block
         return this.metaDataProvider;
     }
 
@@ -174,4 +167,5 @@ public class LSCompletionContext {
         this.parseTreeMapVisitor = parseTreeMapVisitor;
     }
 }
-
+//todo: this class should be renamed to LSCompletionContext once other features are added and they have their own
+// context for their processes.

@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.utils;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.utils.metadata.AttributeMetaData;
 import io.siddhi.langserver.utils.metadata.ParameterMetaData;
 import io.siddhi.langserver.utils.metadata.ProcessorMetaData;
@@ -477,7 +477,7 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getFunctions() {
         if (functionSuggestions.isEmpty()) {
-            List<ProcessorMetaData> functions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+            List<ProcessorMetaData> functions = LSOperationContext.INSTANCE.getMetaDataProvider().
                     getFunctionMetaData();
             for (ProcessorMetaData function : functions) {
                 if (!function.getParameterOverloads().isEmpty()) {
@@ -499,7 +499,7 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getWindowProcessorFunctions() {
         if (windowSuggestions.isEmpty()) {
-            List<ProcessorMetaData> windowProcessorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+            List<ProcessorMetaData> windowProcessorFunctions = LSOperationContext.INSTANCE.getMetaDataProvider().
                     getWindowProcessorFunctions();
             for (ProcessorMetaData function : windowProcessorFunctions) {
                 if (!function.getParameterOverloads().isEmpty()) {
@@ -520,7 +520,7 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getStreamProcessorFunctions() {
         if (streamFunctionSuggestions.isEmpty()) {
-            List<ProcessorMetaData> streamProcessorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+            List<ProcessorMetaData> streamProcessorFunctions = LSOperationContext.INSTANCE.getMetaDataProvider().
                     getStreamProcessorFunctions();
             for (ProcessorMetaData function : streamProcessorFunctions) {
                 if (!function.getParameterOverloads().isEmpty()) {
@@ -571,7 +571,7 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getAggregatorFunctions() {
         if (aggregatorFunctionSuggestions.isEmpty()) {
-            List<ProcessorMetaData> aggregatorFunctions = LSCompletionContext.INSTANCE.getMetaDataProvider().
+            List<ProcessorMetaData> aggregatorFunctions = LSOperationContext.INSTANCE.getMetaDataProvider().
                     getAggregatorFunctions();
             for (ProcessorMetaData function : aggregatorFunctions) {
                 if (!function.getParameterOverloads().isEmpty()) {
@@ -616,7 +616,7 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getStoreAnnotations() {
         if (storeSuggestions.isEmpty()) {
-            List<ProcessorMetaData> stores = LSCompletionContext.INSTANCE.getMetaDataProvider().getStores();
+            List<ProcessorMetaData> stores = LSOperationContext.INSTANCE.getMetaDataProvider().getStores();
             for (ProcessorMetaData store : stores) {
                 List<ParameterMetaData> parameters = store.getParameters().stream().filter(mandatoryPredicate).collect(
                         Collectors.toList());
@@ -629,7 +629,7 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getSinkAnnotations() {
         if (sinkSuggestions.isEmpty()) {
-            List<ProcessorMetaData> sinks = LSCompletionContext.INSTANCE.getMetaDataProvider().getSinks();
+            List<ProcessorMetaData> sinks = LSOperationContext.INSTANCE.getMetaDataProvider().getSinks();
             for (ProcessorMetaData sink : sinks) {
                 List<ParameterMetaData> parameters = sink.getParameters().stream().filter(mandatoryPredicate).collect(
                         Collectors.toList());
@@ -642,7 +642,7 @@ public class SnippetBlockUtil {
 
     public static List<Object[]> getSourceAnnotations() {
         if (sourceSuggestions.isEmpty()) {
-            List<ProcessorMetaData> sources = LSCompletionContext.INSTANCE.getMetaDataProvider().getSources();
+            List<ProcessorMetaData> sources = LSOperationContext.INSTANCE.getMetaDataProvider().getSources();
             for (ProcessorMetaData source : sources) {
                 List<ParameterMetaData> parameters = source.getParameters().stream().filter(mandatoryPredicate).collect(
                         Collectors.toList());

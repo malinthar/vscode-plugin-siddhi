@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.common;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.query.compiler.SiddhiQLParser;
 import org.eclipse.lsp4j.CompletionItem;
@@ -36,7 +36,7 @@ public class FilterContextProvider extends CompletionProvider {
     @Override
     public List<CompletionItem> getCompletions() {
         //MathOperationContext is the only context that can be contained by filter context.
-        return LSCompletionContext.INSTANCE
+        return LSOperationContext.INSTANCE
                 .getProvider(SiddhiQLParser.Math_operationContext.class.getName())
                 .getCompletions();
     }

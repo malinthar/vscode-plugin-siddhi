@@ -16,7 +16,7 @@
 
 package io.siddhi.langserver.completion.providers.executionelement.query;
 
-import io.siddhi.langserver.LSCompletionContext;
+import io.siddhi.langserver.LSOperationContext;
 import io.siddhi.langserver.completion.ParseTreeMapVisitor;
 import io.siddhi.langserver.completion.providers.CompletionProvider;
 import io.siddhi.langserver.utils.SnippetBlockUtil;
@@ -39,10 +39,10 @@ public class JoinSourceContextProvider extends CompletionProvider {
         this.providerName = SiddhiQLParser.Join_sourceContext.class.getName();
     }
 
-    //todo:don't have to produce terminals can straightly get text out of source
+
     @Override
     public List<CompletionItem> getCompletions() {
-        ParseTreeMapVisitor parseTreeMapVisitor = LSCompletionContext.INSTANCE.getParseTreeMapVisitor();
+        ParseTreeMapVisitor parseTreeMapVisitor = LSOperationContext.INSTANCE.getParseTreeMapVisitor();
         ParserRuleContext joinStreamContext = getParent();
         List<ParseTree> joinSources = parseTreeMapVisitor.findSuccessorContexts(joinStreamContext,
                 SiddhiQLParser.Stream_idContext.class);
@@ -59,22 +59,22 @@ public class JoinSourceContextProvider extends CompletionProvider {
         List<ParseTree> streamIdContexts = new ArrayList<>();
         List<ParseTree> sourceProviderContexts =
                 parseTreeMapVisitor
-                        .findSuccessorContexts((ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap().get(
+                        .findSuccessorContexts((ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap().get(
                                 SiddhiQLParser.Siddhi_appContext.class.getName()),
                                 SiddhiQLParser.Definition_streamContext.class);
 
         sourceProviderContexts.addAll(parseTreeMapVisitor
-                .findSuccessorContexts((ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap().get(
+                .findSuccessorContexts((ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap().get(
                         SiddhiQLParser.Siddhi_appContext.class.getName()),
                         SiddhiQLParser.Definition_tableContext.class));
 
         sourceProviderContexts.addAll(parseTreeMapVisitor
-                .findSuccessorContexts((ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap().get(
+                .findSuccessorContexts((ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap().get(
                         SiddhiQLParser.Siddhi_appContext.class.getName()),
                         SiddhiQLParser.Definition_windowContext.class));
 
         List<ParseTree> definitionAggregationContexts = parseTreeMapVisitor
-                        .findSuccessorContexts((ParserRuleContext) LSCompletionContext.INSTANCE.getParseTreeMap().get(
+                        .findSuccessorContexts((ParserRuleContext) LSOperationContext.INSTANCE.getParseTreeMap().get(
                                 SiddhiQLParser.Siddhi_appContext.class.getName()),
                                 SiddhiQLParser.Definition_aggregationContext.class);
 
